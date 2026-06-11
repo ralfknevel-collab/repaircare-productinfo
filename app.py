@@ -35,6 +35,13 @@ GEEL = "#FFDC00"          # accent
 BODYGRIJS = "#6F6F6E"     # bodytekst
 ACHTERGROND = "#F5F5F5"   # paginavlak
 
+VOORBEELDVRAGEN = [
+    "Wat is de mengverhouding van BIO FLEX ALLROUND?",
+    "Welke gevarenklasse heeft DRY FLEX 4 component A?",
+    "Hoe lang is de verwerkingstijd van DRY SEAL MP?",
+    "Welke producten zijn 2-componenten?",
+]
+
 SYSTEEM_INSTRUCTIE = """Je bent een interne assistent voor medewerkers van Repair Care.
 Je beantwoordt vragen over de Repair Care producten op basis van de product-
 databladen en veiligheidsbladen die hieronder staan.
@@ -69,31 +76,54 @@ def pas_huisstijl_toe() -> None:
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 
-    html, body, [class*="css"], .stApp, .stMarkdown, .stChatMessage,
-    button, input, textarea, p, div, span, h1, h2, h3, h4 {{
+    /* Lettertype overal afdwingen */
+    html, body, [class*="st-"], [data-testid="stAppViewContainer"] *,
+    .stMarkdown, .stChatMessage, button, input, textarea {{
         font-family: 'Inter Tight', Arial, sans-serif !important;
     }}
+
+    /* Streamlit-balk en menu verbergen voor een schone, app-achtige look */
+    [data-testid="stHeader"], [data-testid="stToolbar"],
+    [data-testid="stDecoration"], #MainMenu, footer {{
+        display: none !important;
+    }}
+
     .stApp {{ background-color: {ACHTERGROND}; }}
-    .block-container {{ padding-top: 2rem; }}
+    .block-container {{ padding-top: 2.5rem; max-width: 820px; }}
 
     h1, h2, h3 {{ color: {DONKERGROEN} !important; font-weight: 700; }}
 
-    /* Knoppen in de huisstijl-groen */
+    /* Knoppen in huisstijl-groen, normale breedte/hoeken */
     .stButton button {{
         background-color: {LICHTGROEN};
         color: #FFFFFF;
         border: none;
-        border-radius: 10px;
+        border-radius: 8px;
         font-weight: 600;
+        padding: 8px 16px;
     }}
     .stButton button:hover {{ background-color: {DONKERGROEN}; color: #FFFFFF; }}
+
+    /* Voorbeeldvragen als zachte kaartjes (secundaire knoppen) */
+    .stButton button[kind="secondary"] {{
+        background-color: #FFFFFF;
+        color: {BODYGRIJS};
+        border: 1px solid #E0E0E0;
+        text-align: left;
+        font-weight: 500;
+    }}
+    .stButton button[kind="secondary"]:hover {{
+        border-color: {LICHTGROEN};
+        color: {DONKERGROEN};
+        background-color: #FFFFFF;
+    }}
 
     /* Chatbubbels op witte kaarten met afgeronde hoeken */
     .stChatMessage {{
         background-color: #FFFFFF;
         border: 1px solid #E0E0E0;
         border-radius: 12px;
-        padding: 4px 12px;
+        padding: 4px 14px;
     }}
 
     /* Invoerveld */
@@ -107,16 +137,16 @@ def pas_huisstijl_toe() -> None:
 
 
 def toon_header() -> None:
-    """Toon het Repair Care logo met een groene accentlijn eronder."""
+    """Toon het Repair Care logo met een groene accentlijn en de titel."""
     if LOGO_FILE.exists():
         logo_b64 = base64.b64encode(LOGO_FILE.read_bytes()).decode("utf-8")
         st.markdown(
             f"""
-            <div style="display:flex; align-items:center; padding:4px 0 10px;">
-                <img src="data:image/png;base64,{logo_b64}" style="height:56px;">
+            <div style="display:flex; align-items:center; padding:0 0 8px;">
+                <img src="data:image/png;base64,{logo_b64}" style="height:52px;">
             </div>
             <hr style="border:none; border-top:3px solid {DONKERGROEN};
-                       margin:0 0 18px;">
+                       margin:0 0 16px;">
             """,
             unsafe_allow_html=True,
         )
@@ -169,48 +199,8 @@ def bouw_kennisbank_tekst(documenten: list[dict]) -> str:
     return "\n\n".join(delen)
 
 
-def main() -> None:
-    st.set_page_config(page_title="Repair Care Productinfo", page_icon="🔧")
-    pas_huisstijl_toe()
-    toon_header()
-
-    if not check_wachtwoord():
-        return
-
-    api_key = get_secret("ANTHROPIC_API_KEY")
-    if not api_key:
-        st.error("Geen ANTHROPIC_API_KEY gevonden. Stel deze in als secret "
-                 "(cloud) of als omgevingsvariabele (lokaal).")
-        st.stop()
-
-    documenten = laad_kennisbank()
-    if not documenten:
-        st.warning("Geen kennisbank gevonden. Draai eerst:  python3 ingest.py")
-        st.stop()
-
-    # Kennisbank-tekst en client cachen over reruns heen.
-    if "kennisbank_tekst" not in st.session_state:
-        st.session_state.kennisbank_tekst = bouw_kennisbank_tekst(documenten)
-    if "client" not in st.session_state:
-        st.session_state.client = anthropic.Anthropic(api_key=api_key)
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    # Zijbalk: alleen een knop om het gesprek te wissen (geen documentenlijst).
-    with st.sidebar:
-        if st.button("Gesprek wissen"):
-            st.session_state.messages = []
-            st.rerun()
-
-    # Eerdere berichten tonen.
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
-
-    vraag = st.chat_input("Stel je vraag over een product...")
-    if not vraag:
-        return
-
+def beantwoord(vraag: str) -> None:
+    """Voeg de vraag toe, toon hem, en stream het antwoord van Claude."""
     st.session_state.messages.append({"role": "user", "content": vraag})
     with st.chat_message("user"):
         st.markdown(vraag)
@@ -242,6 +232,75 @@ def main() -> None:
             plek.markdown(antwoord)
 
     st.session_state.messages.append({"role": "assistant", "content": antwoord})
+
+
+def main() -> None:
+    st.set_page_config(
+        page_title="Repair Care Productinfo",
+        page_icon="🔧",
+        initial_sidebar_state="collapsed",
+    )
+    pas_huisstijl_toe()
+    toon_header()
+
+    if not check_wachtwoord():
+        return
+
+    api_key = get_secret("ANTHROPIC_API_KEY")
+    if not api_key:
+        st.error("Geen ANTHROPIC_API_KEY gevonden. Stel deze in als secret "
+                 "(cloud) of als omgevingsvariabele (lokaal).")
+        st.stop()
+
+    documenten = laad_kennisbank()
+    if not documenten:
+        st.warning("Geen kennisbank gevonden. Draai eerst:  python3 ingest.py")
+        st.stop()
+
+    if "kennisbank_tekst" not in st.session_state:
+        st.session_state.kennisbank_tekst = bouw_kennisbank_tekst(documenten)
+    if "client" not in st.session_state:
+        st.session_state.client = anthropic.Anthropic(api_key=api_key)
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    # Knop om het gesprek te wissen (rechtsboven, alleen tijdens een gesprek).
+    if st.session_state.messages:
+        _, rechts = st.columns([4, 1])
+        if rechts.button("Wissen", use_container_width=True):
+            st.session_state.messages = []
+            st.rerun()
+
+    # Welkomstscherm met voorbeeldvragen zolang er nog niets gevraagd is.
+    gekozen_voorbeeld = None
+    if not st.session_state.messages:
+        st.markdown(
+            f"<p style='color:{BODYGRIJS}; margin-bottom:6px;'>"
+            "Waar kan ik je mee helpen? Probeer bijvoorbeeld:</p>",
+            unsafe_allow_html=True,
+        )
+        kolommen = st.columns(2)
+        for i, v in enumerate(VOORBEELDVRAGEN):
+            if kolommen_klik(kolommen=kolommen, index=i, vraag=v):
+                gekozen_voorbeeld = v
+
+    # Eerdere berichten tonen.
+    for msg in st.session_state.messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
+
+    getypt = st.chat_input("Stel je vraag over een product...")
+    vraag = getypt or gekozen_voorbeeld
+    if vraag:
+        beantwoord(vraag)
+        st.rerun()
+
+
+def kolommen_klik(kolommen, index: int, vraag: str) -> bool:
+    """Render een voorbeeldvraag-knop in de juiste kolom; True bij klik."""
+    kol = kolommen[index % 2]
+    return kol.button(vraag, key=f"voorbeeld_{index}", type="secondary",
+                      use_container_width=True)
 
 
 if __name__ == "__main__":
