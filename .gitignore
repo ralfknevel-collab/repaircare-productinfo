@@ -1,0 +1,15 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Geheimen — NOOIT pushen
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Zware bronbestanden (app heeft alleen kennisbank.json nodig)
+Productdatabladen/
+Veiligheidsbladen/
+*.xlsx
+*.zip
