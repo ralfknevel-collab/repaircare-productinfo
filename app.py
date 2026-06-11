@@ -36,10 +36,10 @@ BODYGRIJS = "#6F6F6E"     # bodytekst
 ACHTERGROND = "#F5F5F5"   # paginavlak
 
 VOORBEELDVRAGEN = [
-    "Wat is de mengverhouding van BIO FLEX ALLROUND?",
-    "Welke gevarenklasse heeft DRY FLEX 4 component A?",
-    "Hoe lang is de verwerkingstijd van DRY SEAL MP?",
-    "Welke producten zijn 2-componenten?",
+    "Wat is het brutogewicht per doos van DRY FLEX 4?",
+    "Welke gevarenklasse heeft BIO FLEX COOL component A?",
+    "Wat is de UN-code en ADR-transportcategorie van DRY SEAL MP?",
+    "Hoe lang is de verwerkingstijd van DRY FLEX SF?",
 ]
 
 SYSTEEM_INSTRUCTIE = """Je bent een interne assistent voor medewerkers van Repair Care.
