@@ -89,60 +89,84 @@ def pas_huisstijl_toe() -> None:
     }}
 
     .stApp {{ background-color: {ACHTERGROND}; }}
-    .block-container {{ padding-top: 2.5rem; max-width: 820px; }}
+    .block-container {{ padding-top: 2.2rem; padding-bottom: 6rem; max-width: 780px; }}
 
-    h1, h2, h3 {{ color: {DONKERGROEN} !important; font-weight: 700; }}
+    h1, h2, h3 {{ color: {DONKERGROEN} !important; font-weight: 700;
+                  letter-spacing: -0.01em; }}
 
-    /* Knoppen in huisstijl-groen, normale breedte/hoeken */
-    .stButton button {{
+    /* Primaire knoppen: groen, afgerond, zachte schaduw, subtiele hover-lift */
+    .stButton button[kind="primary"], .stButton button[kind="primaryFormSubmit"],
+    [data-testid="stFormSubmitButton"] button {{
         background-color: {LICHTGROEN};
         color: #FFFFFF;
         border: none;
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 600;
-        padding: 8px 16px;
+        padding: 9px 18px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
+        transition: transform .08s ease, background-color .15s ease, box-shadow .15s ease;
     }}
-    .stButton button:hover {{ background-color: {DONKERGROEN}; color: #FFFFFF; }}
-
-    /* Voorbeeldvragen als zachte kaartjes (secundaire knoppen) */
+    .stButton button[kind="primary"]:hover,
+    [data-testid="stFormSubmitButton"] button:hover {{
+        background-color: {DONKERGROEN};
+        color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0,118,49,0.25);
+    }}
+    /* Standaard 'Wissen'-knop subtieler */
     .stButton button[kind="secondary"] {{
         background-color: #FFFFFF;
         color: {BODYGRIJS};
-        border: 1px solid #E0E0E0;
-        text-align: left;
+        border: 1px solid #E5E7E4;
+        border-radius: 10px;
         font-weight: 500;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
     }}
     .stButton button[kind="secondary"]:hover {{
         border-color: {LICHTGROEN};
         color: {DONKERGROEN};
-        background-color: #FFFFFF;
+        transform: translateY(-1px);
+        box-shadow: 0 3px 10px rgba(0,0,0,0.07);
     }}
 
-    /* Chatbubbels op witte kaarten met afgeronde hoeken */
-    .stChatMessage {{
+    /* Chatbubbels: zachte witte kaarten met schaduw i.p.v. harde rand */
+    [data-testid="stChatMessage"] {{
+        border-radius: 16px;
+        padding: 6px 18px;
+        margin-bottom: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        border: none;
         background-color: #FFFFFF;
-        border: 1px solid #E0E0E0;
-        border-radius: 12px;
-        padding: 4px 14px;
     }}
+    /* Vraag van de gebruiker krijgt een zachte groene tint */
+    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {{
+        background-color: #ECF6EF;
+    }}
+    /* Avatars verbergen voor een strakke, moderne look */
+    [data-testid="stChatMessageAvatarUser"],
+    [data-testid="stChatMessageAvatarAssistant"] {{ display: none; }}
 
-    /* Invoervelden (chat + tekst) zichtbare rand */
+    /* Invoerbalk onderaan: afgerond, zachte schaduw */
     [data-testid="stChatInput"] {{
-        border: 1px solid #E0E0E0;
-        border-radius: 12px;
+        border: 1px solid #E5E7E4;
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }}
     [data-testid="stTextInput"] div[data-baseweb="input"],
     [data-testid="stTextInput"] div[data-baseweb="base-input"] {{
-        border: 1px solid #E0E0E0;
-        border-radius: 8px;
+        border: 1px solid #E5E7E4;
+        border-radius: 10px;
         background-color: #FFFFFF;
     }}
-    /* Inlogkader iets luchtiger */
+
+    /* Inlogkaart: gecentreerd, wit, zachte schaduw */
     [data-testid="stForm"] {{
-        border: 1px solid #E0E0E0;
-        border-radius: 12px;
+        border: 1px solid #ECECEC;
+        border-radius: 16px;
         background-color: #FFFFFF;
-        padding: 16px;
+        padding: 22px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     }}
     </style>
     """
