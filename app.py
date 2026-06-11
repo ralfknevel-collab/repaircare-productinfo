@@ -12,6 +12,8 @@ In de cloud (Streamlit Community Cloud): zet ANTHROPIC_API_KEY en (optioneel)
 APP_PASSWORD als secrets in de app-instellingen. Zie README.
 """
 
+from __future__ import annotations
+
 import json
 import os
 from pathlib import Path
@@ -122,7 +124,7 @@ def main() -> None:
     with st.sidebar:
         st.subheader("Geladen documenten")
         st.write(f"{len(documenten)} documenten in de kennisbank.")
-        producten = sorted({d.get("product", "?") for d in documenten})
+        producten = sorted({d.get("product", "?").upper() for d in documenten})
         st.write("**Producten:**")
         for p in producten:
             st.write(f"- {p}")
