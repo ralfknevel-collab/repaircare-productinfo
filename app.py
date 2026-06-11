@@ -38,7 +38,7 @@ ACHTERGROND = "#F5F5F5"   # paginavlak
 VOORBEELDVRAGEN = [
     "Wat is het brutogewicht per doos van DRY FLEX 4?",
     "Welke gevarenklasse heeft BIO FLEX COOL component A?",
-    "Wat is de UN-code en ADR-transportcategorie van DRY SEAL MP?",
+    "Wat is de UN-code van DRY FIX UNI?",
     "Hoe lang is de verwerkingstijd van DRY FLEX SF?",
 ]
 
@@ -113,15 +113,25 @@ def pas_huisstijl_toe() -> None:
         transform: translateY(-1px);
         box-shadow: 0 3px 8px rgba(0,118,49,0.25);
     }}
-    /* Standaard 'Wissen'-knop subtieler */
+    /* Voorbeeldvraag-kaarten: links uitgelijnd, gelijke hoogte, nette hover */
     .stButton button[kind="secondary"] {{
         background-color: #FFFFFF;
         color: {BODYGRIJS};
         border: 1px solid #E5E7E4;
-        border-radius: 10px;
+        border-radius: 12px;
         font-weight: 500;
+        min-height: 60px;
+        padding: 12px 18px;
+        justify-content: flex-start;
+        text-align: left;
+        line-height: 1.35;
         box-shadow: 0 1px 2px rgba(0,0,0,0.04);
         transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+    }}
+    .stButton button[kind="secondary"] p {{
+        text-align: left;
+        width: 100%;
+        margin: 0;
     }}
     .stButton button[kind="secondary"]:hover {{
         border-color: {LICHTGROEN};
