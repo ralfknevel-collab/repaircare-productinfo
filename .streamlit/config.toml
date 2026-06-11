@@ -1,0 +1,7 @@
+# Repair Care huisstijl (afgeleid uit de bestaande Repair Care app)
+[theme]
+primaryColor = "#00953F"            # lichtgroen — knoppen en accenten
+backgroundColor = "#FFFFFF"         # hoofdvlak
+secondaryBackgroundColor = "#F5F5F5"  # zijbalk / invoervelden
+textColor = "#6F6F6E"               # bodytekst grijs
+font = "sans serif"
