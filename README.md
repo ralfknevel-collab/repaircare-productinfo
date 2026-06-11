@@ -38,6 +38,18 @@ python3 ingest.py
 Dit leest alle PDF's en schrijft `kennisbank.json`. Kost eenmalig een paar
 cent/euro. Mislukt een bestand? Draai het script gewoon opnieuw.
 
+### Stap 1b — Excel-artikeloverzicht toevoegen
+
+`Product Data Sheet december 2024.xlsx` bevat artikel-/logistiekgegevens
+(artikelcodes, EAN-codes, verpakking, VOC, transport). Voeg toe met:
+
+```bash
+python3 ingest_excel.py
+```
+
+Dit gebruikt geen API (puur lokaal) en voegt de Excel als één bron toe aan
+`kennisbank.json`. Opnieuw draaien is veilig — het oude Excel-item wordt vervangen.
+
 ## Stap 2 — De chatbot starten
 
 ```bash
@@ -104,7 +116,8 @@ GitHub via https://share.streamlit.io).
 
 Komen er nieuwe of gewijzigde PDF's in `Productdatabladen/` of
 `Veiligheidsbladen/`? Draai `python3 ingest.py` opnieuw; `kennisbank.json` wordt
-dan ververst. Bij de online versie: commit en push de nieuwe `kennisbank.json`
+dan ververst. Nieuwe Excel? Draai daarna ook `python3 ingest_excel.py`.
+Bij de online versie: commit en push de nieuwe `kennisbank.json`
 naar GitHub — Streamlit Cloud werkt dan automatisch bij.
 
 ## Belangrijk
