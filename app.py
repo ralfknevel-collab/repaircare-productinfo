@@ -126,10 +126,23 @@ def pas_huisstijl_toe() -> None:
         padding: 4px 14px;
     }}
 
-    /* Invoerveld */
+    /* Invoervelden (chat + tekst) zichtbare rand */
     [data-testid="stChatInput"] {{
         border: 1px solid #E0E0E0;
         border-radius: 12px;
+    }}
+    [data-testid="stTextInput"] div[data-baseweb="input"],
+    [data-testid="stTextInput"] div[data-baseweb="base-input"] {{
+        border: 1px solid #E0E0E0;
+        border-radius: 8px;
+        background-color: #FFFFFF;
+    }}
+    /* Inlogkader iets luchtiger */
+    [data-testid="stForm"] {{
+        border: 1px solid #E0E0E0;
+        border-radius: 12px;
+        background-color: #FFFFFF;
+        padding: 16px;
     }}
     </style>
     """
@@ -159,19 +172,32 @@ def toon_header() -> None:
 
 
 def check_wachtwoord() -> bool:
-    """Toon een wachtwoordslot als APP_PASSWORD is ingesteld. True = toegang."""
+    """Toon een net inlogkader als APP_PASSWORD is ingesteld. True = toegang."""
     verwacht = get_secret("APP_PASSWORD")
     if not verwacht:
         return True  # geen wachtwoord ingesteld -> open (bv. lokaal)
     if st.session_state.get("toegang"):
         return True
-    invoer = st.text_input("Wachtwoord", type="password")
-    if invoer == "":
-        st.stop()
-    if invoer == verwacht:
-        st.session_state.toegang = True
-        return True
-    st.error("Onjuist wachtwoord.")
+
+    midden = st.columns([1, 2, 1])[1]
+    with midden:
+        st.markdown(
+            f"<p style='color:{BODYGRIJS}; margin-bottom:4px;'>"
+            "Voer het wachtwoord in om toegang te krijgen.</p>",
+            unsafe_allow_html=True,
+        )
+        with st.form("inlogformulier"):
+            invoer = st.text_input(
+                "Wachtwoord", type="password",
+                label_visibility="collapsed", placeholder="Wachtwoord",
+            )
+            ingelogd = st.form_submit_button("Inloggen", use_container_width=True)
+        if ingelogd:
+            if invoer == verwacht:
+                st.session_state.toegang = True
+                st.rerun()
+            else:
+                st.error("Onjuist wachtwoord.")
     st.stop()
 
 
