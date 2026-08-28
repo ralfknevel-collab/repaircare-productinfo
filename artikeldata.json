@@ -1,4 +1,8 @@
 {
+ "bron_documenten": {
+  "bestand": "kennisbank.json",
+  "artikelen_met_documenten": 21
+ },
  "bron": "Product Data Sheet december 2024.xlsx",
  "gemaakt_op": "2026-08-28",
  "ruwe_kolommen": [
@@ -104,7 +108,78 @@
       "GHS07",
       "GHS05",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "5.0 (herziening 3-2-2025)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H318, H411",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,08 (Water=1)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C (± 10°C); vermijd > 50°C of < 5°C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "90",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -152,7 +227,87 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "4.0",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H314, H318, H411",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "0,99 (Water=1)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C (± 10°C); vermijd > 50°C of < 5°C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -224,7 +379,59 @@
     "GHS05",
     "GHS09",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "mengverhouding": {
+     "waarde": "A:B = 2:1 (volumedelen)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "dichtheid": {
+     "waarde": "1,05 kg/dm³ (gemengd)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (= 100 gew.%)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "Component A: >62ºC; Component B: >62ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "1 uur",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 35ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "Ca. 250 g/m²",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "Tussen 5 - 50ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "33333 (BRL-0807)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "A: 200 ml, B: 100 ml, totaal 300 ml; doos met 10 sets",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2010105": {
    "artikelcode": "2010105",
@@ -273,7 +480,78 @@
       "GHS07",
       "GHS05",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "5.0 (herziening 3-2-2025)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H318, H411",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,08 (Water=1)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C (± 10°C); vermijd > 50°C of < 5°C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "90",
+       "bron": "Veiligheidsblad DRY FIX UNI - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -321,7 +599,87 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "4.0",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H314, H318, H411",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "0,99 (Water=1)",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C (± 10°C); vermijd > 50°C of < 5°C",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FIX UNI - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -393,7 +751,59 @@
     "GHS05",
     "GHS09",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "mengverhouding": {
+     "waarde": "A:B = 2:1 (volumedelen)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "dichtheid": {
+     "waarde": "1,05 kg/dm³ (gemengd)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (= 100 gew.%)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "Component A: >62ºC; Component B: >62ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "1 uur",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 35ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "Ca. 250 g/m²",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "Tussen 5 - 50ºC",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "33333 (BRL-0807)",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "A: 200 ml, B: 100 ml, totaal 300 ml; doos met 10 sets",
+     "bron": "Productsheet DRY FIX UNI.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2021005": {
    "artikelcode": "2021005",
@@ -440,7 +850,92 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "0%",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Groen",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,13",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "7-10-2024",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -486,7 +981,82 @@
      "ghs": [
       "GHS07",
       "GHS05"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H318, H412, EUH071",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Kleurloos",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,07",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.1",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "7-10-2024",
+       "bron": "Veiligheidsblad DRY FLEX 16 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -551,7 +1121,69 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 : B 1 volumedelen",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "1,5 - 2 uur",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "10 - 35°C",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5 - 50 mm",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "ca. 16 uur",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "A 300 ml + B 100 ml = 400 ml, doos 20 sets",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "> 62°C",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "33333 (BRL-0807)",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5 - 40°C",
+     "bron": "Productsheet DRY FLEX 16.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2022005": {
    "artikelcode": "2022005",
@@ -598,7 +1230,87 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "oranje",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water = 1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -646,7 +1358,78 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -712,7 +1495,69 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20–25 minuten",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0–35°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml, totaal 400 ml",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "A oranje transparant, B transparant, gemengd transparante massa",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2022003": {
    "artikelcode": "2022003",
@@ -759,7 +1604,87 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "oranje",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water = 1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -808,7 +1733,78 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -880,7 +1876,69 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20–25 minuten",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0–35°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml, totaal 400 ml",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "A oranje transparant, B transparant, gemengd transparante massa",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2022205": {
    "artikelcode": "2022205",
@@ -927,7 +1985,52 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -960,7 +2063,53 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410/H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1029,7 +2178,84 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "voc": {
+     "waarde": "Bevat geen VOS",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5-40°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 09*",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "sds_datum": {
+     "waarde": "7-10-2024",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 : B 1 volumedelen",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20-25 minuten",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0-35°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "na ca. 4 uur (bij 20°C)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-50mm (0-10°C); 5-20mm (10-35°C)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A+B 150 ml; doos 10 kokers",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "A >62°C, B >62°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnr. 33333",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2023005": {
    "artikelcode": "2023005",
@@ -1076,7 +2302,97 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,16 (Water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "rood",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10–30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "90",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.0",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1122,7 +2438,88 @@
      "ghs": [
       "GHS07",
       "GHS05"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "8.0",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H335, H410",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,28 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C ± 10 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1187,7 +2584,74 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,20 kg/dm³",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "Component A >100ºC, Component B >110ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 2 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "15-20 minuten",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0-25ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-15mm (0-10ºC: 5-15mm; 10-25ºC: 5-10mm)",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar/overschilderbaar na ca. 1 uur",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "Ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Component A 200 ml + Component B 100 ml = 300 ml",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5-40ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2023003": {
    "artikelcode": "2023003",
@@ -1234,7 +2698,97 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,16 (Water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "rood",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10–30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "90",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.0",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1281,7 +2835,88 @@
      "ghs": [
       "GHS07",
       "GHS05"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "8.0",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "3-12-2024",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H335, H410",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,28 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C ± 10 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 1 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1352,7 +2987,74 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,20 kg/dm³",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "Component A >100ºC, Component B >110ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 2 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "15-20 minuten",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0-25ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-15mm (0-10ºC: 5-15mm; 10-25ºC: 5-10mm)",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar/overschilderbaar na ca. 1 uur",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "Ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Component A 200 ml + Component B 100 ml = 300 ml",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5-40ºC",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2023205": {
    "artikelcode": "2023205",
@@ -1399,7 +3101,57 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411, EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,16 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Rood, pasta",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1430,7 +3182,58 @@
      "ghs": [
       "GHS07",
       "GHS05"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H335, H410",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,28 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C ± 10°C",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Wit, pasta",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1498,7 +3301,74 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "sds_datum": {
+     "waarde": "3-12-2024",
+     "bron": "Veiligheidsblad DRY FLEX 1 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,20 kg/dm³",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (= 100 gew.%)",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "> 62°C",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A: 2 volumedelen / B: 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "15 - 20 minuten",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 25°C",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5 - 15 mm (10-25°C: 5-10 mm)",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuur- en overschilderbaar na ca. 1 uur",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "Ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A+B 150 ml; doos 10 kokers",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5 - 40°C",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "33333 (BRL-0807)",
+     "bron": "Productsheet DRY FLEX 1 2-in-1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2024005": {
    "artikelcode": "2024005",
@@ -1545,7 +3415,82 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water = 1)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 65 °C",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C (± 10°C)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "90",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "2.0 (14-06-21)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1593,7 +3538,72 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07"
+       ],
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H412 (incl. H318)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,06 (water=1)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 62 °C",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "rood, bruin",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C ± 10 °C",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "C7, Kemler-nr. 80, tunnelcode E",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "4.0 (herzien 31-8-2022)",
+       "bron": "Veiligheidsblad BIO FLEX COOL - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1659,7 +3669,74 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "biobased_gehalte": {
+     "waarde": "35% (OK Biobased, TüV Austria, 1 ster)",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "dichtheid": {
+     "waarde": "1,10 kg/dm³",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "A >65°C, B >65°C",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 : B 1 (volumedelen)",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20 - 25 minuten",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 20°C",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-50mm bij 0-10°C; 5-25mm bij 10-20°C",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuur- en overschilderbaar na ca. 15 uur",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "A 300ml + B 100ml = 400ml; doos met 20 sets",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5 - 40°C",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "KOMO BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 250 g/m²",
+     "bron": "Productsheet BIO FLEX COOL.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2025005": {
    "artikelcode": "2025005",
@@ -1706,7 +3783,87 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "gevarenklassen": {
+       "waarde": "Skin Irrit. 2, Eye Irrit. 2, Skin Sens. 1, Aquatic Chronic 2",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Groen",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,1 (water = 1)",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6 (Kemler 90)",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "2.0",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "11-11-21",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1754,7 +3911,88 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "sds_versie": {
+       "waarde": "3.0",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "11-11-21",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H314, H317, H410 (etiket); H318, H400, H411 (indeling)",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Oranje/bruin",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,02 (water = 1)",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "20 °C ± 10 °C",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad BIO FLEX ALLROUND - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1818,7 +4056,74 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "biobased_gehalte": {
+     "waarde": "40% biobased grondstoffen",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "OK-biobased gecertificeerd, 1 ster",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "dichtheid": {
+     "waarde": "1.08 kg/dm³",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "15-20 min",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0-35°C",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-50 mm",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "ca. 12 uur",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml = 400 ml",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 250 g/m²",
+     "bron": "Productsheet BIO FLEX ALLROUND.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2026205": {
    "artikelcode": "2026205",
@@ -1865,7 +4170,57 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411, EUH205",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "wit",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -1898,7 +4253,57 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H314, H317, H412",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "beige",
+       "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -1967,7 +4372,74 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "sds_versie": {
+     "waarde": "5.1",
+     "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "sds_datum": {
+     "waarde": "20-2-2025",
+     "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 09*",
+     "bron": "Veiligheidsblad DRY FLEX IN 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1.17 kg/dm³",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol. % (=100 gew. %)",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A : B = 2 : 1 (volumedelen)",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20 minuten (20-25 min)",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 30°C (verpakking: 0-35°C)",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "0 - 20 mm (minimaal 5 mm bij systeemopbouw)",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A + B: 150 ml",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 10 kokers",
+     "bron": "Productsheet DRY FLEX IN 2-in-1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2027005": {
    "artikelcode": "2027005",
@@ -2014,7 +4486,87 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS (vluchtige organische stoffen)",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,43 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10–30 °C",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "6.0",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "11-11-2024",
+       "bron": "Veiligheidsblad DRY FLEX SF - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -2060,7 +4612,78 @@
       "GHS07",
       "GHS05",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410 (ook H318, H400)",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,32 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Wit",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 100 °C",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.0 (herzien 11-11-2024)",
+       "bron": "Veiligheidsblad DRY FLEX SF - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -2123,7 +4746,64 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1.40 kg/dm³",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A: 2 volumedelen, B: 1 volumedeel",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "7 tot 10 minuten",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 30°C",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "0 - 6 mm",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 30 minuten",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, nr. 33333 (toepassingen 1a, 1b, 2a, 2b, 3a, 4a)",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 200 ml + B 100 ml = 300 ml totaal",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 30°C",
+     "bron": "Productsheet DRY FLEX SF.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2027205": {
    "artikelcode": "2027205",
@@ -2170,7 +4850,47 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411 (EUH205)",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,43 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Beige",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 103°C (DIN 53213)",
+       "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+       "categorie": "productdatablad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -2202,7 +4922,48 @@
       "GHS07",
       "GHS05",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H318, H400, H410",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,32 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Wit",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93°C (DIN 53213)",
+       "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+       "categorie": "productdatablad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -2267,7 +5028,79 @@
     "GHS07",
     "GHS09",
     "GHS05"
-   ]
+   ],
+   "documenten": {
+    "voc": {
+     "waarde": "Bevat geen VOS (beide componenten)",
+     "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "vlampunt": {
+     "waarde": "> 100 °C (beide componenten)",
+     "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 30°C",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 09*",
+     "bron": "Veiligheidsblad DRY FLEX SF 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,40 kg/dm³",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A : B = 2 : 1 (volumedelen)",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "7 - 10 minuten",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 30°C",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "0 - 6 mm",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar/overschilderbaar na ca. 30 min",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A + B: 150 ml",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 10 kokers",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, nr. 33333 (toepassingen 1a,1b,2a,2b,3a,4a)",
+     "bron": "Productsheet DRY FLEX SF 2-in-1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2031001": {
    "artikelcode": "2031001",
@@ -2315,7 +5148,98 @@
      "ghs": [
       "GHS07",
       "GHS09"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H318, H411",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "Blauw/Paars",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 62 °C",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,17 (water=1)",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "milieugevaarlijk": {
+       "waarde": "Ja",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "6.0",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_datum": {
+       "waarde": "16-1-2023",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakking": {
+       "waarde": "200 ml",
+       "bron": "Productsheet DRY SHIELD SK.pdf",
+       "categorie": "productdatablad"
+      }
+     }
     },
     {
      "naam": "B",
@@ -2363,7 +5287,88 @@
       "GHS05",
       "GHS09",
       "GHS08"
-     ]
+     ],
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410/H411",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen of zeer weinig vluchtige organische stoffen",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "lichtgeel",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 62 °C",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,02 (water=1)",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 - 30 °C",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.0 (16-1-2023)",
+       "bron": "Veiligheidsblad DRY SHIELD SK - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakking": {
+       "waarde": "80 ml",
+       "bron": "Productsheet DRY SHIELD SK.pdf",
+       "categorie": "productdatablad"
+      }
+     }
     }
    ],
    "ruw": {
@@ -2435,7 +5440,49 @@
     "GHS09",
     "GHS05",
     "GHS08"
-   ]
+   ],
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1.10 kg/dm³",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 2,5 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "15 minuten",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0 - 25ºC",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 1100 g/m²",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "6 uur",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 10 sets",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 25°C",
+     "bron": "Productsheet DRY SHIELD SK.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2511105": {
    "artikelcode": "2511105",
@@ -2514,7 +5561,74 @@
    "gn_code": "32141010",
    "invoerrechten": 0.05,
    "netto_g": 452.0,
-   "bruto_g": 525.0
+   "bruto_g": 525.0,
+   "documenten": {
+    "signaalwoord": {
+     "waarde": "Geen",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "euh_zinnen": {
+     "waarde": "EUH208, EUH212, EUH210",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "voc": {
+     "waarde": "2,76 %, 42,4 g/l",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,55 kg/dm³",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "> 60 °C",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 30°C, R.V. max. 65%",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 10",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "sds_versie": {
+     "waarde": "3.1 (19-05-2022)",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (= 100 gew.%)",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "Standaard wit en reebruin",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "3 mm in 24 uur",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "5 - 40°C",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker van 290 ml (doos met 24 kokers)",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "2511162": {
    "artikelcode": "2511162",
@@ -2593,7 +5707,74 @@
    "gn_code": "32141010",
    "invoerrechten": 0.05,
    "netto_g": 452.0,
-   "bruto_g": 525.0
+   "bruto_g": 525.0,
+   "documenten": {
+    "signaalwoord": {
+     "waarde": "Geen",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "euh_zinnen": {
+     "waarde": "EUH208, EUH212, EUH210",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "voc": {
+     "waarde": "2,76 %, 42,4 g/l",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,55 kg/dm³",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "> 60 °C",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 30°C, R.V. max. 65%",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 10",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "sds_versie": {
+     "waarde": "3.1 (19-05-2022)",
+     "bron": "Veiligheidsblad DRY SEAL MP.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (= 100 gew.%)",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "Standaard wit en reebruin",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "3 mm in 24 uur",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "5 - 40°C",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker van 290 ml (doos met 24 kokers)",
+     "bron": "Productsheet DRY SEAL MP.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "3500200": {
    "artikelcode": "3500200",
@@ -5828,7 +9009,167 @@
   "4571114": {
    "artikelcode": "4571114",
    "omschrijving": "DRY FLEX 4 pakket High Performance",
-   "componenten": [],
+   "componenten": [
+    {
+     "naam": "A",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "oranje",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water = 1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    },
+    {
+     "naam": "B",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    }
+   ],
    "ruw": {
     "Omschrijving": "DRY FLEX 4 pakket High Performance",
     "Language version": "NL",
@@ -5865,7 +9206,69 @@
    "productgroep": "450, PACKAGES",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "ja",
-   "inhoud": "1 set"
+   "inhoud": "1 set",
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20–25 minuten",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0–35°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml, totaal 400 ml",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "A oranje transparant, B transparant, gemengd transparante massa",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "4571116": {
    "artikelcode": "4571116",
@@ -7975,7 +11378,107 @@
   "ZD22106": {
    "artikelcode": "ZD22106",
    "omschrijving": "DRY FLEX 4 2-in-1 semi-manufactured",
-   "componenten": [],
+   "componenten": [
+    {
+     "naam": "A",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    },
+    {
+     "naam": "B",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410/H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "7.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    }
+   ],
    "ruw": {
     "Omschrijving": "DRY FLEX 4 2-in-1 semi-manufactured",
     "Status": "Halffabrikaat",
@@ -7986,7 +11489,84 @@
    "status": "Halffabrikaat",
    "productgroep": "700, SEMI-MANUFACTURED",
    "min_verkoophoeveelheid": 1.0,
-   "samengesteld": "nee"
+   "samengesteld": "nee",
+   "documenten": {
+    "voc": {
+     "waarde": "Bevat geen VOS",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5-40°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "eural_code": {
+     "waarde": "08 04 09*",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "sds_datum": {
+     "waarde": "7-10-2024",
+     "bron": "Veiligheidsblad DRY FLEX 4 2-in-1.pdf",
+     "categorie": "veiligheidsblad"
+    },
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 : B 1 volumedelen",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20-25 minuten",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0-35°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "na ca. 4 uur (bij 20°C)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5-50mm (0-10°C); 5-20mm (10-35°C)",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A+B 150 ml; doos 10 kokers",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "vlampunt": {
+     "waarde": "A >62°C, B >62°C",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "verbruik": {
+     "waarde": "ca. 250 g/m²",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnr. 33333",
+     "bron": "Productsheet DRY FLEX 4 2-in-1.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "ZD22107": {
    "artikelcode": "ZD22107",
@@ -8044,7 +11624,167 @@
   "ZD2210A": {
    "artikelcode": "ZD2210A",
    "omschrijving": "DRY FLEX 4 component A",
-   "componenten": [],
+   "componenten": [
+    {
+     "naam": "A",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "oranje",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water = 1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    },
+    {
+     "naam": "B",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    }
+   ],
    "ruw": {
     "Omschrijving": "DRY FLEX 4 component A",
     "Status": "Halffabrikaat",
@@ -8057,12 +11797,234 @@
    "productgroep": "700, SEMI-MANUFACTURED",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "nee",
-   "gn_code": "32141010"
+   "gn_code": "32141010",
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20–25 minuten",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0–35°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml, totaal 400 ml",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "A oranje transparant, B transparant, gemengd transparante massa",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "ZD2210B": {
    "artikelcode": "ZD2210B",
    "omschrijving": "DRY FLEX 4 component B",
-   "componenten": [],
+   "componenten": [
+    {
+     "naam": "A",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Waarschuwing",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H315, H317, H319, H411",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH205",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kleur": {
+       "waarde": "oranje",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 93 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,19 (water = 1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "3082",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "9",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "III",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "adr_classificatiecode": {
+       "waarde": "M6",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "sds_versie": {
+       "waarde": "8.1",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component A.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    },
+    {
+     "naam": "B",
+     "ruw": {},
+     "documenten": {
+      "signaalwoord": {
+       "waarde": "Gevaar",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "ghs": {
+       "waarde": [
+        "GHS05",
+        "GHS07",
+        "GHS09"
+       ],
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "h_zinnen": {
+       "waarde": "H302, H314, H317, H410",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "euh_zinnen": {
+       "waarde": "EUH071 - Bijtend voor de luchtwegen",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "voc": {
+       "waarde": "Bevat geen VOS",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "dichtheid": {
+       "waarde": "1,12 (water=1)",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "vlampunt": {
+       "waarde": "> 104 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "opslagtemperatuur": {
+       "waarde": "10 – 30 °C",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "un_code": {
+       "waarde": "2735",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "klasse": {
+       "waarde": "8",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "verpakkingsgroep": {
+       "waarde": "II",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "eural_code": {
+       "waarde": "08 04 09*",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      },
+      "kemler": {
+       "waarde": "80",
+       "bron": "Veiligheidsblad DRY FLEX 4 - component B.pdf",
+       "categorie": "veiligheidsblad"
+      }
+     }
+    }
+   ],
    "ruw": {
     "Omschrijving": "DRY FLEX 4 component B",
     "Status": "Halffabrikaat",
@@ -8075,7 +12037,69 @@
    "productgroep": "700, SEMI-MANUFACTURED",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "nee",
-   "gn_code": "32141010"
+   "gn_code": "32141010",
+   "documenten": {
+    "dichtheid": {
+     "waarde": "1,11 kg/dm³",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "vaste_stofgehalte": {
+     "waarde": "100 vol.% (=100 gew.%)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "mengverhouding": {
+     "waarde": "A 3 volumedelen : B 1 volumedeel",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstijd": {
+     "waarde": "20–25 minuten",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verwerkingstemperatuur": {
+     "waarde": "0–35°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "laagdikte": {
+     "waarde": "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "uitharding": {
+     "waarde": "Schuurbaar en overschilderbaar na ca. 4 uur",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakking": {
+     "waarde": "Koker A 300 ml + Koker B 100 ml, totaal 400 ml",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "verpakkingseenheid": {
+     "waarde": "Kartonnen doos met 20 sets",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "opslagtemperatuur": {
+     "waarde": "5°C tot 40°C",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "certificaat": {
+     "waarde": "BRL-0807, certificaatnummer 33333",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    },
+    "kleur": {
+     "waarde": "A oranje transparant, B transparant, gemengd transparante massa",
+     "bron": "Productsheet DRY FLEX 4.pdf",
+     "categorie": "productdatablad"
+    }
+   }
   },
   "ZD27139": {
    "artikelcode": "ZD27139",

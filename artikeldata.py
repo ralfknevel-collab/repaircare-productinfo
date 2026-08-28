@@ -157,18 +157,26 @@ class Artikeldata:
             if maat.get("vorm") == "rond" and as_ in ("l", "b"):
                 regel = f"ronde verpakking: L = B = Ø {maat['diameter']:g} mm"
             return Waarde(maat[as_], "mm", "Product Data Sheet", regel)
-        if veld_id in _COMPONENTVELDEN:
-            # Staat het veld op artikelniveau, dan is dat de samengevoegde waarde
-            # (bv. de GHS-unie) en zijn componentverschillen geen afwijking.
+        if veld_id in _COMPONENTVELDEN or v.soort == "document":
+            # Volgorde: PDS op artikelniveau (samengevoegd, bv. GHS-unie) -> per
+            # component (PDS, anders product-/veiligheidsblad) -> document op artikelniveau.
             if veld_id in artikel:
                 return Waarde(_als_tekst(artikel[veld_id]), None, "Product Data Sheet")
-            houders = [(c["naam"], _als_tekst(c[veld_id]))
-                       for c in artikel.get("componenten", []) if veld_id in c]
+            houders = []  # (componentnaam, waarde, bron)
+            for c in artikel.get("componenten", []):
+                if veld_id in c:
+                    houders.append((c["naam"], _als_tekst(c[veld_id]), "Product Data Sheet"))
+                elif veld_id in c.get("documenten", {}):
+                    d = c["documenten"][veld_id]
+                    houders.append((c["naam"], _als_tekst(d["waarde"]), f"{d['categorie']} {d['bron']}"))
             if not houders:
-                return None
-            naam, w = houders[0]
-            afwijkend = [(n, x) for n, x in houders[1:] if x != w]
-            bron = f"Product Data Sheet, component {naam}"
+                doc = artikel.get("documenten", {}).get(veld_id)
+                if doc is None:
+                    return None
+                return Waarde(_als_tekst(doc["waarde"]), None, f"{doc['categorie']} {doc['bron']}")
+            naam, w, bronnaam = houders[0]
+            afwijkend = [(n, x) for n, x, _ in houders[1:] if x != w]
+            bron = f"{bronnaam}, component {naam}"
             regel = None
             if afwijkend:
                 # Het dealerbestand krijgt alleen de waarde van het eerste component;

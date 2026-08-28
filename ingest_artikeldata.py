@@ -19,6 +19,8 @@ from pathlib import Path
 
 import openpyxl
 
+import documentdata
+
 LEEG = {"", "--", "-", "n.v.t.", "nvt", "inapplicable", "none"}
 
 # Datafouten in het sheet die de ingest niet kan oplossen. lees_artikelen() leegt
@@ -299,13 +301,22 @@ def lees_artikelen(ws) -> tuple[dict[str, dict], list[str]]:
     return artikelen, ruwe_kolommen
 
 
-def bouw_artikeldata(pad: Path) -> dict:
+def bouw_artikeldata(pad: Path, kennisbank_pad: Path | None = None) -> dict:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)
         wb = openpyxl.load_workbook(pad, data_only=True)
     ws = wb["Sheet1"] if "Sheet1" in wb.sheetnames else wb.worksheets[0]
     artikelen, ruwe_kolommen = lees_artikelen(ws)
+    # Product- en veiligheidsbladen (kennisbank.json) koppelen, als die er zijn.
+    kennisbank_pad = Path(kennisbank_pad) if kennisbank_pad else documentdata.KENNISBANK_FILE
+    bron_documenten = None
+    if kennisbank_pad.exists():
+        kennisbank = json.loads(kennisbank_pad.read_text(encoding="utf-8"))
+        gekoppeld, meldingen = documentdata.koppel_documenten(artikelen, kennisbank)
+        WAARSCHUWINGEN.extend(meldingen)
+        bron_documenten = {"bestand": kennisbank_pad.name, "artikelen_met_documenten": gekoppeld}
     return {
+        "bron_documenten": bron_documenten,
         "bron": pad.name,
         "gemaakt_op": date.today().isoformat(),
         "ruwe_kolommen": ruwe_kolommen,

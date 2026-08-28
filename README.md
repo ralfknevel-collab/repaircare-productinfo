@@ -82,6 +82,12 @@ data is, zijn geel; het tabblad *Controle* laat per cel de bron en rekenregel zi
 - Artikelen worden gezocht op Repair Care-artikelnummer, daarna EAN, daarna
   omschrijving (die laatste krijgt status "controleer").
 - Tweecomponentproducten: gewicht = A + B; afmeting = bussen naast elkaar.
+- Product- en veiligheidsbladen uit `kennisbank.json` worden bij de ingest aan
+  de artikelen gekoppeld (via de productnaam). Zo zijn ook signaalwoord,
+  H-zinnen, Kemler-nummer, EURAL-code, dichtheid, opslagtemperatuur,
+  verwerkingstijd/-temperatuur, mengverhouding, laagdikte, uitharding en
+  certificering invulbaar. Het PDS gaat vóór; afwijkingen tussen
+  veiligheidsblad en PDS (bv. verpakkingsgroep) meldt de ingest.
 - Gegevens die niet in het sheet staan (land van oorsprong, Bundesland) komen
   uit `vaste_waarden.json`. Vul daar `standaard`, `per_prefix` (bv. `"2": "NLD"`)
   of `per_artikel` in.
