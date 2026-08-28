@@ -16,12 +16,22 @@ APP_PASSWORD als secrets in de app-instellingen. Zie README.
 from __future__ import annotations
 
 import base64
+import hashlib
+import io
 import json
 import os
 from pathlib import Path
 
 import anthropic
+import pandas as pd
 import streamlit as st
+
+from artikeldata import Artikeldata
+from dealer_invuller import (
+    bepaal_mapping, kies_tabblad, koppen, laad_werkboek, lees_rijen, match_rijen, verwerk,
+)
+from mapping import KolomMapping, Mapping, lege_mapping
+from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt
 
 BASE_DIR = Path(__file__).resolve().parent
 KENNISBANK_FILE = BASE_DIR / "kennisbank.json"
@@ -317,10 +327,22 @@ def main() -> None:
         st.warning("Geen kennisbank gevonden. Draai eerst:  python3 ingest.py")
         st.stop()
 
-    if "kennisbank_tekst" not in st.session_state:
-        st.session_state.kennisbank_tekst = bouw_kennisbank_tekst(documenten)
     if "client" not in st.session_state:
         st.session_state.client = anthropic.Anthropic(api_key=api_key)
+
+    keuze = st.segmented_control(
+        "Onderdeel", ["Productinfo-chat", "Dealer-Excel"],
+        default="Productinfo-chat", label_visibility="collapsed",
+    )
+    if keuze == "Dealer-Excel":
+        toon_dealer_excel()
+    else:
+        toon_chat(documenten)
+
+
+def toon_chat(documenten: list[dict]) -> None:
+    if "kennisbank_tekst" not in st.session_state:
+        st.session_state.kennisbank_tekst = bouw_kennisbank_tekst(documenten)
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -354,6 +376,109 @@ def main() -> None:
     if vraag:
         beantwoord(vraag)
         st.rerun()
+
+
+def toon_dealer_excel() -> None:
+    st.markdown(
+        f"<p style='color:{BODYGRIJS};'>Upload een invulbestand van een dealer. De tool herkent de "
+        "kolommen, jij controleert de mapping, daarna worden de lege cellen ingevuld.</p>",
+        unsafe_allow_html=True,
+    )
+    try:
+        artikeldata = Artikeldata.laad()
+    except FileNotFoundError:
+        st.error("artikeldata.json ontbreekt. Draai eerst:  python3 ingest_artikeldata.py")
+        return
+
+    bestand = st.file_uploader("Dealerbestand", type=["xlsx", "csv"], label_visibility="collapsed")
+    if bestand is None:
+        st.session_state.pop("dealer", None)
+        return
+    inhoud = bestand.getvalue()
+    sleutel = hashlib.sha256(inhoud).hexdigest()
+
+    try:
+        wb = laad_werkboek(inhoud, bestand.name)
+    except ValueError as e:
+        st.error(str(e))
+        return
+    tabblad = None
+    if len(wb.sheetnames) > 1:
+        tabblad = st.selectbox("Tabblad", wb.sheetnames, index=wb.sheetnames.index(kies_tabblad(wb, None).title))
+    ws = kies_tabblad(wb, tabblad)
+
+    staat = st.session_state.get("dealer")
+    if not staat or staat["sleutel"] != (sleutel, ws.title):
+        with st.spinner("Kolommen herkennen…"):
+            mapping = bepaal_mapping(st.session_state.client, ws, artikeldata)
+        staat = {"sleutel": (sleutel, ws.title), "mapping": mapping}
+        st.session_state.dealer = staat
+    mapping: Mapping = staat["mapping"]
+    if mapping.opmerkingen:
+        st.info(mapping.opmerkingen)
+    if not mapping.kolommen:
+        # Geen kopregel herkend: gebruiker wijst de rij aan.
+        rijen = lees_rijen(ws, 10)
+        opties = [f"rij {i + 1}: " + " | ".join(str(c) for c in r if c is not None)[:80]
+                  for i, r in enumerate(rijen)]
+        gekozen = st.selectbox("Kopregel niet herkend — kies de rij met de kolomkoppen",
+                               list(range(len(opties))), format_func=lambda i: opties[i])
+        mapping = lege_mapping(gekozen, list(koppen(ws, gekozen).keys()))
+        staat["mapping"] = mapping
+
+    catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
+    labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
+    ids_per_label = {v: k for k, v in labels.items()}
+    voorbeeld = {}
+    kolomindex = koppen(ws, mapping.kopregel_index)
+    for rij in ws.iter_rows(min_row=mapping.kopregel_index + 2, max_row=mapping.kopregel_index + 4, values_only=True):
+        for naam, i in kolomindex.items():
+            if naam not in voorbeeld and i < len(rij) and rij[i] is not None:
+                voorbeeld[naam] = str(rij[i])
+
+    st.markdown("**Mapping** — pas aan waar nodig, dan *Invullen*.")
+    tabel = pd.DataFrame([{
+        "Kolom": k.kolom,
+        "Voorbeeld": voorbeeld.get(k.kolom, ""),
+        "Doelveld": labels.get(k.doelveld, labels["geen"]),
+        "Eenheid": k.eenheid or "",
+        "Zekerheid": k.zekerheid,
+        "Toelichting": k.toelichting,
+    } for k in mapping.kolommen])
+    bewerkt = st.data_editor(
+        tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}",
+        disabled=["Kolom", "Voorbeeld", "Zekerheid", "Toelichting"],
+        column_config={
+            "Doelveld": st.column_config.SelectboxColumn(options=list(labels.values()), required=True),
+            "Eenheid": st.column_config.SelectboxColumn(options=[o or "" for o in EENHEID_OPTIES]),
+        },
+    )
+    mapping = Mapping(mapping.kopregel_index, [
+        KolomMapping(r["Kolom"], ids_per_label[r["Doelveld"]], r["Eenheid"] or None, r["Zekerheid"], r["Toelichting"])
+        for _, r in bewerkt.iterrows()
+    ], mapping.opmerkingen)
+
+    try:
+        res = match_rijen(ws, mapping, artikeldata)
+    except ValueError as e:
+        st.warning(str(e))
+        return
+    gevonden = [r for r in res if r.match]
+    niet = [r.sleutel for r in res if not r.match]
+    st.markdown(f"**{len(gevonden)} van {len(res)} artikelen gevonden.**"
+                + (f" Niet gevonden: {', '.join(niet[:10])}{'…' if len(niet) > 10 else ''}" if niet else ""))
+    if res and not gevonden:
+        st.warning("Geen enkel artikel gevonden. Controleer de sleutelkolom (artikelnummer of EAN).")
+
+    overschrijven = st.checkbox("Ook gevulde cellen overschrijven", value=False)
+    if st.button("Invullen", type="primary"):
+        uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
+        s = rapport.samenvatting()
+        st.success(f"Ingevuld: {s['ingevuld']} cellen. Gaten (geel): {s['gaten']}. "
+                   f"Zie tabblad 'Controle' in het bestand.")
+        naam = bestand.name.rsplit(".", 1)[0] + "_ingevuld.xlsx"
+        st.download_button("Download ingevuld bestand", data=uit, file_name=naam,
+                           mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 def kolommen_klik(kolommen, index: int, vraag: str) -> bool:
