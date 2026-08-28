@@ -125,6 +125,7 @@ class RijResultaat:
 @dataclass
 class Rapport:
     rijen: list[RijResultaat]
+    overgeslagen_kolommen: list[str] = field(default_factory=list)
 
     def samenvatting(self) -> dict:
         via: dict[str, int] = {}
@@ -192,9 +193,19 @@ def match_rijen(ws, mapping: Mapping, artikeldata: Artikeldata) -> list[RijResul
     return uit
 
 
+def overgeslagen_kolommen(mapping: Mapping, kolomindex: dict[str, int]) -> list[str]:
+    """Kolommen uit de mapping die niet in de kopregel staan (worden niet gevuld of gezocht)."""
+    uit: list[str] = []
+    for k in mapping.kolommen:
+        if k.doelveld != "geen" and k.kolom not in kolomindex and k.kolom not in uit:
+            uit.append(k.kolom)
+    return uit
+
+
 def vul_in(ws, mapping: Mapping, artikeldata: Artikeldata, overschrijven: bool = False) -> Rapport:
     rijen = match_rijen(ws, mapping, artikeldata)
     kolomindex = koppen(ws, mapping.kopregel_index)
+    overgeslagen = overgeslagen_kolommen(mapping, kolomindex)
     doelen = [(k, kolomindex[k.kolom]) for k in mapping.doelen() if k.kolom in kolomindex]
     for r in rijen:
         for k, i in doelen:
@@ -212,7 +223,7 @@ def vul_in(ws, mapping: Mapping, artikeldata: Artikeldata, overschrijven: bool =
             cel.value = maak_waarde(w, k.eenheid)
             status = "controleer" if r.match.via == "omschrijving" else "ingevuld"
             r.velden.append(VeldResultaat(k.kolom, k.doelveld, cel.value, k.eenheid, w.bron, w.regel, status))
-    return Rapport(rijen)
+    return Rapport(rijen, overgeslagen)
 
 
 def schrijf_controle(wb, rapport: Rapport) -> None:
@@ -225,6 +236,8 @@ def schrijf_controle(wb, rapport: Rapport) -> None:
                f"Ingevuld: {s['ingevuld']}", f"Gaten: {s['gaten']}"])
     ct.append(["Gevonden via: " + ", ".join(f"{k} {v}" for k, v in s["via"].items())])
     ct.append(["Gaten per kolom: " + ", ".join(f"{k} {v}" for k, v in s["gaten_per_kolom"].items())])
+    if rapport.overgeslagen_kolommen:
+        ct.append(["Overgeslagen kolommen (niet in kopregel): " + ", ".join(rapport.overgeslagen_kolommen)])
     ct.append([])
     ct.append(["Rij", "Sleutel", "Artikelcode", "Gevonden via", "Kolom", "Doelveld", "Waarde", "Eenheid",
                "Status", "Bron", "Rekenregel"])
@@ -245,6 +258,24 @@ def werkboek_naar_bytes(wb) -> bytes:
     buf = io.BytesIO()
     wb.save(buf)
     return buf.getvalue()
+
+
+def controleer_eenheden(mapping: Mapping) -> list[str]:
+    """Meldingen voor doelkolommen waarvan de gekozen eenheid niet bij het doelveld past.
+
+    Het schema staat elke eenheid bij elk veld toe, dus 'cm' bij een gewicht komt voor.
+    Zonder deze controle klapt het invullen halverwege op een ValueError uit converteer().
+    """
+    meldingen: list[str] = []
+    for k in mapping.doelen():
+        v = veld(k.doelveld)
+        if v is None or not k.eenheid or not v.eenheid:
+            continue
+        try:
+            converteer(1.0, v.eenheid, k.eenheid)
+        except ValueError:
+            meldingen.append(f"Kolom {k.kolom!r}: eenheid {k.eenheid} past niet bij {v.label} ({v.eenheid})")
+    return meldingen
 
 
 def verwerk(inhoud: bytes, bestandsnaam: str, mapping: Mapping, artikeldata: Artikeldata,
@@ -271,15 +302,36 @@ def bepaal_mapping(client, ws, artikeldata: Artikeldata) -> Mapping:
     catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
     try:
         m = vraag_mapping(client, rijen, ws.title, ws.max_row - kopregel - 1, catalogus)
-    except (anthropic.APIError, ValueError, StopIteration, json.JSONDecodeError) as e:
+    except (anthropic.APIError, ValueError, KeyError) as e:
         m = lege_mapping(kopregel, namen)
         m.opmerkingen = f"Mapping door Claude mislukt ({e}). Kies de velden handmatig."
         return m
+    # Claude bouwt kolomnamen uit het ruwe fragment: die kunnen in hoofdletters of
+    # whitespace afwijken van koppen(), dat lege koppen ook nog een naam geeft.
+    # Zonder deze reconciliatie valt zo'n kolom stilzwijgend buiten het invullen.
+    namen = list(koppen(ws, m.kopregel_index).keys())
+    losjes = {" ".join(n.split()).casefold(): n for n in namen}
+    gereconcilieerd, ontbreekt = [], []
+    for k in m.kolommen:
+        if k.kolom in namen:
+            gereconcilieerd.append(k)
+            continue
+        echt = losjes.get(" ".join(str(k.kolom).split()).casefold())
+        if echt is None:
+            ontbreekt.append(k.kolom)
+            continue
+        k.kolom = echt
+        gereconcilieerd.append(k)
+    m.kolommen = gereconcilieerd
+    if ontbreekt:
+        melding = " ".join(f"Kolom '{n}' uit het Claude-voorstel niet gevonden in de kopregel."
+                           for n in ontbreekt)
+        m.opmerkingen = (m.opmerkingen + " " + melding).strip()
     # Kolommen die Claude niet noemde toevoegen als 'geen', zodat de UI compleet is.
     genoemd = {k.kolom for k in m.kolommen}
     for naam in namen:
         if naam not in genoemd:
-            m.kolommen.append(lege_mapping(kopregel, [naam]).kolommen[0])
+            m.kolommen.append(lege_mapping(m.kopregel_index, [naam]).kolommen[0])
     return m
 
 
@@ -311,6 +363,13 @@ def main(argv: list[str] | None = None) -> int:
                                               encoding="utf-8")
     for k in mapping.kolommen:
         print(f"  {k.kolom:30} -> {k.doelveld:24} {k.eenheid or '':4} [{k.zekerheid}] {k.toelichting}")
+
+    meldingen = controleer_eenheden(mapping)
+    if meldingen:
+        for melding in meldingen:
+            print("Eenheid past niet:", melding)
+        print("Pas de eenheid in de mapping aan en probeer opnieuw.")
+        return 1
 
     try:
         uit_bytes, rapport = verwerk(inhoud, pad.name, mapping, artikeldata, ws.title, args.overschrijven)

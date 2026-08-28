@@ -1,4 +1,5 @@
 from pathlib import Path
+from types import SimpleNamespace
 
 import csv
 import io
@@ -10,6 +11,8 @@ from artikeldata import Artikeldata, Waarde
 from dealer_invuller import (
     CONTROLE_TAB,
     Rapport,
+    bepaal_mapping,
+    controleer_eenheden,
     kies_tabblad,
     koppen,
     laad_werkboek,
@@ -25,6 +28,7 @@ from dealer_invuller import (
 from dealer_invuller import main as cli_main
 from mapping import KolomMapping, Mapping
 from tests.conftest import SEEFELDER_KOPPEN, SEEFELDER_RIJEN, maak_dealerbestand
+from tests.test_mapping import _nep_client
 
 
 def test_laad_xlsx(seefelder_bestand):
@@ -244,3 +248,101 @@ def test_cli_zonder_sleutel_geeft_melding(seefelder_bestand, tmp_path, artikelda
     pm.write_text(json.dumps(Mapping(0, []).naar_dict()), encoding="utf-8")
     assert cli_main([str(seefelder_bestand), "--mapping", str(pm), "--uit", str(tmp_path / "u.xlsx")]) == 1
     assert "Geen sleutelkolom" in capsys.readouterr().out
+
+
+def test_controleer_eenheden():
+    m = Mapping(0, [
+        KolomMapping("HerstellerArtNr", "sleutel_artikelcode", None, "hoog", ""),
+        KolomMapping("Nettogewicht", "netto_gewicht", "cm", "middel", ""),
+        KolomMapping("Länge", "lengte", "cm", "hoog", ""),
+        KolomMapping("Zolltarifnummer", "gn_code", None, "hoog", ""),
+    ])
+    meldingen = controleer_eenheden(m)
+    assert len(meldingen) == 1
+    assert meldingen[0] == "Kolom 'Nettogewicht': eenheid cm past niet bij Nettogewicht per stuk (g)"
+
+    m.kolommen[1].eenheid = "kg"
+    assert controleer_eenheden(m) == []
+
+
+def test_vul_in_meldt_kolommen_buiten_de_kopregel(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    m = Mapping(0, SEEFELDER_MAPPING.kolommen + [
+        KolomMapping("Bestaat niet", "bruto_gewicht", "g", "laag", ""),
+        KolomMapping("Ook weg", "sleutel_ean", None, "laag", ""),
+        KolomMapping("Genegeerd", "geen", None, "laag", ""),
+    ])
+    rapport = vul_in(ws, m, ad)
+    assert rapport.overgeslagen_kolommen == ["Bestaat niet", "Ook weg"]
+
+
+def test_schrijf_controle_meldt_overgeslagen_kolommen(seefelder_bestand, ad):
+    wb = laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name)
+    ws = kies_tabblad(wb, None)
+    rapport = vul_in(ws, SEEFELDER_MAPPING, ad)
+    rapport.overgeslagen_kolommen = ["Bestaat niet"]
+    schrijf_controle(wb, rapport)
+    tekst = "\n".join(" ".join(str(c) for c in rij if c is not None)
+                      for rij in wb[CONTROLE_TAB].iter_rows(values_only=True))
+    assert "Overgeslagen kolommen (niet in kopregel): Bestaat niet" in tekst
+
+
+# --- bepaal_mapping ---------------------------------------------------------
+
+def _antwoord_een_kolom(kolom: str) -> dict:
+    return {"kopregel_index": 0, "kolommen": [
+        {"kolom": kolom, "doelveld": "sleutel_artikelcode", "eenheid": "",
+         "zekerheid": "hoog", "toelichting": ""}], "opmerkingen": ""}
+
+
+def test_bepaal_mapping_vult_aan_en_reconcilieert_kolomnamen(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    # Claude noemt de kolom met afwijkende hoofdletters en extra whitespace.
+    client, aanroepen = _nep_client(_antwoord_een_kolom("  herstellerartnr "))
+    m = bepaal_mapping(client, ws, ad)
+
+    assert m.kopregel_index == 0
+    assert len(aanroepen) == 1
+    # Claude's kolom eerst, daarna de rest in kopregelvolgorde als 'geen'.
+    assert sorted(k.kolom for k in m.kolommen) == sorted(SEEFELDER_KOPPEN)
+    assert m.kolommen[0].kolom == "HerstellerArtNr" and m.kolommen[0].doelveld == "sleutel_artikelcode"
+    assert all(k.doelveld == "geen" for k in m.kolommen[1:])
+    assert m.opmerkingen == ""
+
+
+def test_bepaal_mapping_verwijdert_onbekende_kolom(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    client, _ = _nep_client(_antwoord_een_kolom("Bestaat niet"))
+    m = bepaal_mapping(client, ws, ad)
+    assert "Bestaat niet" not in [k.kolom for k in m.kolommen]
+    assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
+    assert "Kolom 'Bestaat niet' uit het Claude-voorstel niet gevonden in de kopregel." in m.opmerkingen
+
+
+def test_bepaal_mapping_zonder_client(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    m = bepaal_mapping(None, ws, ad)
+    assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
+    assert all(k.doelveld == "geen" for k in m.kolommen)
+    assert "handmatig" in m.opmerkingen
+
+
+def test_bepaal_mapping_bij_fout_lege_mapping(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+
+    def create(**kwargs):
+        raise ValueError("API stuk")
+
+    client = SimpleNamespace(messages=SimpleNamespace(create=create))
+    m = bepaal_mapping(client, ws, ad)
+    assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
+    assert all(k.doelveld == "geen" for k in m.kolommen)
+    assert "API stuk" in m.opmerkingen
+
+
+def test_bepaal_mapping_zonder_kopregel(tmp_path, ad):
+    pad = maak_dealerbestand(tmp_path / "geenkop.xlsx", [1, 2, 3], [[4, 5, 6]])
+    ws = kies_tabblad(laad_werkboek(pad.read_bytes(), pad.name), None)
+    m = bepaal_mapping(None, ws, ad)
+    assert m.kopregel_index == 0 and m.kolommen == []
+    assert "kopregel" in m.opmerkingen.lower()

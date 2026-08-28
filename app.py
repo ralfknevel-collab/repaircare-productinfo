@@ -28,7 +28,8 @@ import streamlit as st
 
 from artikeldata import Artikeldata
 from dealer_invuller import (
-    bepaal_mapping, kies_tabblad, koppen, laad_werkboek, lees_rijen, match_rijen, verwerk,
+    bepaal_mapping, controleer_eenheden, kies_tabblad, koppen, laad_werkboek, lees_rijen,
+    match_rijen, verwerk,
 )
 from mapping import KolomMapping, Mapping, lege_mapping
 from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt
@@ -466,15 +467,28 @@ def toon_dealer_excel() -> None:
         st.warning(str(e))
         return
     gevonden = [r for r in res if r.match]
-    niet = [r.sleutel for r in res if not r.match]
+    niet = [f"rij {r.rij}: {r.sleutel or '(leeg)'}" for r in res if not r.match]
+    via: dict[str, int] = {}
+    for r in gevonden:
+        via[r.match.via] = via.get(r.match.via, 0) + 1
+    delen = ", ".join(f"{n} op {sleuteltype}" for sleuteltype, n in via.items())
     st.markdown(f"**{len(gevonden)} van {len(res)} artikelen gevonden.**"
+                + (f" ({delen})" if delen else "")
                 + (f" Niet gevonden: {', '.join(niet[:10])}{'…' if len(niet) > 10 else ''}" if niet else ""))
     if res and not gevonden:
         st.warning("Geen enkel artikel gevonden. Controleer de sleutelkolom (artikelnummer of EAN).")
 
+    meldingen = controleer_eenheden(mapping)
+    for melding in meldingen:
+        st.warning(melding)
+
     overschrijven = st.checkbox("Ook gevulde cellen overschrijven", value=False)
-    if st.button("Invullen", type="primary"):
-        uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
+    if st.button("Invullen", type="primary", disabled=bool(meldingen)):
+        try:
+            uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
+        except Exception as e:                      # ook openpyxl-fouten bij opslaan
+            st.error(f"Invullen mislukt: {e}")
+            return
         s = rapport.samenvatting()
         st.success(f"Ingevuld: {s['ingevuld']} cellen. Gaten (geel): {s['gaten']}. "
                    f"Zie tabblad 'Controle' in het bestand.")
