@@ -71,6 +71,40 @@ def test_kies_tabblad_slaat_lege_over(tmp_path):
     assert kies_tabblad(wb2, "Leeg").title == "Leeg"
 
 
+def test_kies_tabblad_slaat_formuleblad_en_blad_zonder_kopregel_over(tmp_path):
+    wb = openpyxl.Workbook()
+    hulp = wb.active
+    hulp.title = "Attribuutlijst"
+    hulp.append(["Regel", "Kolom", "Artikelnummer", "Waarde"])
+    for r in (2, 3, 4):
+        hulp.append([f"=Invoerblad!A{r}", f"=Invoerblad!B{r}", f'=CONCATENATE(INDIRECT("Invoerblad!A"&A{r}))', f"=B{r}&C{r}"])
+    los = wb.create_sheet("Notities")
+    los.append(["alleen wat tekst"])
+    los.append([1, 2, 3])
+    invoer = wb.create_sheet("Invoerblad")
+    invoer.append(["Unieke sleutel", None, '=IF(COUNTA(B3:B3)=COUNTA(C3:C3),"Correct","Niet Goed")'])
+    invoer.append(["Artikelnummer", "GTIN", "ArtikelnummerLeverancier", "Hoogte"])
+    invoer.append([575817, 8714748004382, "2022105", None])
+    pad = tmp_path / "lkp.xlsx"
+    wb.save(pad)
+    wb2 = laad_werkboek(pad.read_bytes(), pad.name)
+    assert kies_tabblad(wb2, None).title == "Invoerblad"
+    assert kies_tabblad(wb2, "Attribuutlijst").title == "Attribuutlijst"
+
+
+def test_kies_tabblad_valt_terug_op_eerste_blad_met_data(tmp_path):
+    wb = openpyxl.Workbook()
+    wb.active.title = "Leeg"
+    alleen_formules = wb.create_sheet("Formules")
+    alleen_formules.append(["a", "b", "c"])
+    alleen_formules.append(["=1+1", "=2+2", "=3+3"])
+    alleen_formules.append(["=4+4", "=5+5", "=6+6"])
+    pad = tmp_path / "f.xlsx"
+    wb.save(pad)
+    wb2 = laad_werkboek(pad.read_bytes(), pad.name)
+    assert kies_tabblad(wb2, None).title == "Formules"
+
+
 def test_lees_rijen_en_kopregel_met_voorloop(tmp_path):
     pad = maak_dealerbestand(tmp_path / "v.xlsx", ["ArtNr", "EAN", "Gewicht (kg)"], [["1", "2", None]],
                              voorloop=[["Anfrage Stammdaten"], [], ["Bitte ausfüllen", None, None]])

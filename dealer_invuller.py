@@ -66,14 +66,47 @@ def laad_werkboek(inhoud: bytes, bestandsnaam: str) -> openpyxl.Workbook:
     raise ValueError(f"Bestandsformaat {ext or '(geen)'} wordt niet ondersteund. Sla het bestand op als .xlsx of .csv.")
 
 
+def _heeft_data(ws) -> bool:
+    return any(any(c is not None for c in rij) for rij in ws.iter_rows(values_only=True))
+
+
+def _is_formuleblad(rijen: list[list]) -> bool:
+    """Meer dan de helft van de gevulde cellen is een formule: hulpblad, geen invulblad."""
+    gevuld = [c for rij in rijen for c in rij if c is not None and str(c).strip() != ""]
+    formules = [c for c in gevuld if isinstance(c, str) and c.startswith("=")]
+    return bool(gevuld) and len(formules) * 2 > len(gevuld)
+
+
+def _heeft_kopregel(rijen: list[list]) -> bool:
+    try:
+        vind_kopregel(rijen)
+        return True
+    except ValueError:
+        return False
+
+
 def kies_tabblad(wb: openpyxl.Workbook, naam: str | None):
+    """Gegeven naam, anders het eerste tabblad dat op een invulblad lijkt.
+
+    Voorkeur: een blad met een herkenbare kopregel en zonder formules in de
+    eerste rijen — meer dan de helft van de cellen (hulpbladen zoals 'Attribuutlijst' trekken data via formules
+    en zijn niet het blad dat de dealer ingevuld wil hebben). Daarna: eerste
+    blad met een kopregel, dan eerste blad met data, dan het eerste blad.
+    """
     if naam:
         return wb[naam]
-    for ws in wb.worksheets:
-        for rij in ws.iter_rows(values_only=True):
-            if any(c is not None for c in rij):
-                return ws
-    return wb.worksheets[0]
+    met_data = [ws for ws in wb.worksheets if _heeft_data(ws)]
+    if not met_data:
+        return wb.worksheets[0]
+    eerste_rijen = {ws.title: lees_rijen(ws, 10) for ws in met_data}
+    for ws in met_data:
+        rijen = eerste_rijen[ws.title]
+        if _heeft_kopregel(rijen) and not _is_formuleblad(rijen):
+            return ws
+    for ws in met_data:
+        if _heeft_kopregel(eerste_rijen[ws.title]):
+            return ws
+    return met_data[0]
 
 
 def lees_rijen(ws, n: int = 10) -> list[list]:
