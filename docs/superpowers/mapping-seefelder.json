@@ -1,0 +1,97 @@
+{
+ "kopregel_index": 0,
+ "kolommen": [
+  {
+   "kolom": "ArtNr",
+   "doelveld": "geen",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": "eigen nummer dealer"
+  },
+  {
+   "kolom": "Bundesland",
+   "doelveld": "vast:bundesland",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Ursprungsland",
+   "doelveld": "vast:ursprungsland",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Zolltarifnummer",
+   "doelveld": "gn_code",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Nettogewicht",
+   "doelveld": "netto_gewicht",
+   "eenheid": "g",
+   "zekerheid": "middel",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Länge",
+   "doelveld": "lengte",
+   "eenheid": "cm",
+   "zekerheid": "middel",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Breite",
+   "doelveld": "breedte",
+   "eenheid": "cm",
+   "zekerheid": "middel",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Höhe",
+   "doelveld": "hoogte",
+   "eenheid": "cm",
+   "zekerheid": "middel",
+   "toelichting": ""
+  },
+  {
+   "kolom": "ArtBeschreibung",
+   "doelveld": "geen",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "Primärlieferant",
+   "doelveld": "geen",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "VKEinheit",
+   "doelveld": "geen",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "HerstellerArtNr",
+   "doelveld": "sleutel_artikelcode",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  },
+  {
+   "kolom": "EAN13",
+   "doelveld": "sleutel_ean",
+   "eenheid": null,
+   "zekerheid": "hoog",
+   "toelichting": ""
+  }
+ ],
+ "opmerkingen": ""
+}

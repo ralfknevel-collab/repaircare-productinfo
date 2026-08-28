@@ -2,6 +2,7 @@ from pathlib import Path
 
 import csv
 import io
+import json
 import openpyxl
 import pytest
 
@@ -21,6 +22,7 @@ from dealer_invuller import (
     vul_in,
     werkboek_naar_bytes,
 )
+from dealer_invuller import main as cli_main
 from mapping import KolomMapping, Mapping
 from tests.conftest import SEEFELDER_KOPPEN, SEEFELDER_RIJEN, maak_dealerbestand
 
@@ -211,3 +213,22 @@ def test_verwerk_csv_met_kg_en_cm(tmp_path, ad):
     uit, _ = verwerk(inhoud, "lijst.csv", m, ad)
     ws = openpyxl.load_workbook(io.BytesIO(uit))["Sheet1"]
     assert ws["B2"].value == 0.318 and ws["C2"].value == 18.4
+
+
+def test_cli_met_mapping_bestand(seefelder_bestand, tmp_path, artikeldata_dict, monkeypatch):
+    pj = tmp_path / "artikeldata.json"
+    pj.write_text(json.dumps(artikeldata_dict), encoding="utf-8")
+    pv = tmp_path / "vaste.json"
+    pv.write_text(json.dumps(VASTE_TEST), encoding="utf-8")
+    import artikeldata as ad_mod
+    monkeypatch.setattr(ad_mod, "ARTIKELDATA_FILE", pj)
+    monkeypatch.setattr(ad_mod, "VASTE_WAARDEN_FILE", pv)
+
+    pm = tmp_path / "mapping.json"
+    pm.write_text(json.dumps(SEEFELDER_MAPPING.naar_dict()), encoding="utf-8")
+    uit = tmp_path / "uit.xlsx"
+    code = cli_main([str(seefelder_bestand), "--mapping", str(pm), "--uit", str(uit)])
+    assert code == 0
+    wb = openpyxl.load_workbook(uit)
+    assert wb["Sheet1"]["E2"].value == 318
+    assert CONTROLE_TAB in wb.sheetnames

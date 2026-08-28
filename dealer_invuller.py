@@ -10,18 +10,23 @@ Ook bruikbaar als script:
 
 from __future__ import annotations
 
+import argparse
 import csv
 import io
+import json
+import os
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
+import anthropic
 import openpyxl
 from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 
 from artikeldata import Artikeldata, Match, Waarde
-from mapping import Mapping
-from veldcatalogus import converteer, veld
+from mapping import Mapping, lege_mapping, vraag_mapping
+from veldcatalogus import catalogus_voor_prompt, converteer, veld
 
 SLEUTELTYPE_ARG = {
     "sleutel_artikelcode": "artikelcode",
@@ -249,3 +254,73 @@ def verwerk(inhoud: bytes, bestandsnaam: str, mapping: Mapping, artikeldata: Art
     rapport = vul_in(ws, mapping, artikeldata, overschrijven)
     schrijf_controle(wb, rapport)
     return werkboek_naar_bytes(wb), rapport
+
+
+def bepaal_mapping(client, ws, artikeldata: Artikeldata) -> Mapping:
+    """Kopregel zoeken en Claude om een mapping vragen; bij een fout een lege mapping."""
+    rijen = lees_rijen(ws, 10)
+    try:
+        kopregel = vind_kopregel(rijen)
+    except ValueError as e:
+        return Mapping(0, [], opmerkingen=str(e))
+    namen = list(koppen(ws, kopregel).keys())
+    if client is None:
+        m = lege_mapping(kopregel, namen)
+        m.opmerkingen = "Geen API-client: mapping handmatig kiezen."
+        return m
+    catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
+    try:
+        m = vraag_mapping(client, rijen, ws.title, ws.max_row - kopregel - 1, catalogus)
+    except (anthropic.APIError, ValueError, StopIteration, json.JSONDecodeError) as e:
+        m = lege_mapping(kopregel, namen)
+        m.opmerkingen = f"Mapping door Claude mislukt ({e}). Kies de velden handmatig."
+        return m
+    # Kolommen die Claude niet noemde toevoegen als 'geen', zodat de UI compleet is.
+    genoemd = {k.kolom for k in m.kolommen}
+    for naam in namen:
+        if naam not in genoemd:
+            m.kolommen.append(lege_mapping(kopregel, [naam]).kolommen[0])
+    return m
+
+
+def main(argv: list[str] | None = None) -> int:
+    p = argparse.ArgumentParser(description="Vul een dealer-Excelbestand met Repair Care-productdata.")
+    p.add_argument("bestand")
+    p.add_argument("--mapping", help="mapping.json gebruiken in plaats van Claude")
+    p.add_argument("--schrijf-mapping", help="gebruikte mapping opslaan als JSON")
+    p.add_argument("--overschrijven", action="store_true")
+    p.add_argument("--tabblad")
+    p.add_argument("--uit")
+    args = p.parse_args(argv)
+
+    pad = Path(args.bestand)
+    inhoud = pad.read_bytes()
+    artikeldata = Artikeldata.laad()
+    wb = laad_werkboek(inhoud, pad.name)
+    ws = kies_tabblad(wb, args.tabblad)
+
+    if args.mapping:
+        mapping = Mapping.uit_dict(json.loads(Path(args.mapping).read_text(encoding="utf-8")))
+    else:
+        client = anthropic.Anthropic() if os.environ.get("ANTHROPIC_API_KEY") else None
+        mapping = bepaal_mapping(client, ws, artikeldata)
+        if mapping.opmerkingen:
+            print("Opmerking:", mapping.opmerkingen)
+    if args.schrijf_mapping:
+        Path(args.schrijf_mapping).write_text(json.dumps(mapping.naar_dict(), ensure_ascii=False, indent=1),
+                                              encoding="utf-8")
+    for k in mapping.kolommen:
+        print(f"  {k.kolom:30} -> {k.doelveld:24} {k.eenheid or '':4} [{k.zekerheid}] {k.toelichting}")
+
+    uit_bytes, rapport = verwerk(inhoud, pad.name, mapping, artikeldata, ws.title, args.overschrijven)
+    uit = Path(args.uit) if args.uit else pad.with_name(pad.stem + "_ingevuld.xlsx")
+    uit.write_bytes(uit_bytes)
+    s = rapport.samenvatting()
+    print(f"Geschreven: {uit}")
+    print(f"Rijen {s['totaal']}, gevonden {s['gevonden']}, niet gevonden {s['niet_gevonden']}, "
+          f"ingevuld {s['ingevuld']}, gaten {s['gaten']}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
