@@ -141,13 +141,39 @@ def test_waarde_uit_documenten(artikelen):
     a = artikelen["2022005"]
     w = ad.waarde(a, "signaalwoord")
     assert w.waarde == "Waarschuwing"
-    assert w.bron.startswith("veiligheidsblad Veiligheidsblad DRY FLEX 4 - component A.pdf, component A")
+    assert w.bron.startswith("Veiligheidsblad DRY FLEX 4 - component A.pdf, component A")
     assert w.regel == "ook B: Gevaar"
     w = ad.waarde(a, "un_code")                                          # PDS gaat vóór het veiligheidsblad
     assert w.waarde == "3082" and w.bron.startswith("Product Data Sheet, component A")
     w = ad.waarde(a, "verwerkingstijd")
-    assert w.waarde == "20 - 25 minuten" and w.bron == "productdatablad Productsheet DRY FLEX 4.pdf" and w.regel is None
+    assert w.waarde == "20 - 25 minuten" and w.bron == "Productsheet DRY FLEX 4.pdf" and w.regel is None
+    # Productbladwaarde op artikelniveau gaat vóór de SDS-waarde per component (kleur: Groen, niet Lichtgroen).
+    w = ad.waarde(a, "kleur")
+    assert w.waarde == "Groen" and w.bron == "Productsheet DRY FLEX 4.pdf" and w.regel is None
     assert ad.waarde(a, "ghs").waarde == "GHS07, GHS09"
     assert ad.waarde(artikelen["4513032"], "signaalwoord") is None
     s = artikelen["2022205"]
     assert ad.waarde(s, "signaalwoord").waarde == "Gevaar"
+
+
+def test_los_component_artikel_krijgt_alleen_eigen_blad():
+    artikelen = {
+        "ZD2210A": _art("ZD2210A", "DRY FLEX 4 component A", [("A", {})]),
+        "ZD2210B": _art("ZD2210B", "DRY FLEX 4 component B", [("B", {})]),
+    }
+    koppel_documenten(artikelen, KENNISBANK)
+    a = artikelen["ZD2210A"]
+    assert [c["naam"] for c in a["componenten"]] == ["A"]
+    assert a["componenten"][0]["documenten"]["signaalwoord"]["waarde"] == "Waarschuwing"
+    assert "vlampunt" in a["componenten"][0]["documenten"]          # 'Vlampunt Component A' uit het productblad
+    b = artikelen["ZD2210B"]
+    assert [c["naam"] for c in b["componenten"]] == ["B"]
+    assert b["componenten"][0]["documenten"]["signaalwoord"]["waarde"] == "Gevaar"
+    ad = Artikeldata({"artikelen": artikelen, "ruwe_kolommen": []})
+    assert ad.waarde(a, "signaalwoord").regel is None                # geen 'ook B: ...'
+
+
+def test_vergelijking_schoont_beide_kanten():
+    artikelen = {"2023005": _art("2023005", "DRY FLEX 1", [("A", {"un_code": "UN 9999"}), ("B", {})])}
+    _, meldingen = koppel_documenten(artikelen, KENNISBANK)
+    assert meldingen == []                                            # 'UN 9999' == '9999' na opschonen

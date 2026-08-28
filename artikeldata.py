@@ -12,6 +12,7 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+from documentdata import VOORKEUR_PRODUCTBLAD
 from veldcatalogus import veld
 
 FUZZY_DREMPEL = 0.85
@@ -162,18 +163,22 @@ class Artikeldata:
             # component (PDS, anders product-/veiligheidsblad) -> document op artikelniveau.
             if veld_id in artikel:
                 return Waarde(_als_tekst(artikel[veld_id]), None, "Product Data Sheet")
+            doc = artikel.get("documenten", {}).get(veld_id)
+            # Toepassingsvelden (dichtheid, kleur, opslagtemperatuur, ...): het productblad
+            # beschrijft het product als geheel en gaat vóór losse componentwaarden uit de SDS.
+            if doc is not None and veld_id in VOORKEUR_PRODUCTBLAD:
+                return Waarde(_als_tekst(doc["waarde"]), None, doc["bron"])
             houders = []  # (componentnaam, waarde, bron)
             for c in artikel.get("componenten", []):
                 if veld_id in c:
                     houders.append((c["naam"], _als_tekst(c[veld_id]), "Product Data Sheet"))
                 elif veld_id in c.get("documenten", {}):
                     d = c["documenten"][veld_id]
-                    houders.append((c["naam"], _als_tekst(d["waarde"]), f"{d['categorie']} {d['bron']}"))
+                    houders.append((c["naam"], _als_tekst(d["waarde"]), d["bron"]))
             if not houders:
-                doc = artikel.get("documenten", {}).get(veld_id)
                 if doc is None:
                     return None
-                return Waarde(_als_tekst(doc["waarde"]), None, f"{doc['categorie']} {doc['bron']}")
+                return Waarde(_als_tekst(doc["waarde"]), None, doc["bron"])
             naam, w, bronnaam = houders[0]
             afwijkend = [(n, x) for n, x, _ in houders[1:] if x != w]
             bron = f"{bronnaam}, component {naam}"

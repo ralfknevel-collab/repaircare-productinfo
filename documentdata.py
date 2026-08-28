@@ -89,6 +89,7 @@ def normaliseer_veld(naam: str, productnamen: list[str] = ()) -> tuple[str | Non
 def _tokens(naam: str) -> list[str]:
     s = str(naam or "").replace("®", "").casefold().split(" / ")[0]
     s = re.sub(r"\b\d+\s*ml\b", " ", s)
+    s = re.sub(r"[^\w-]+", " ", s)
     return s.split()
 
 
@@ -132,13 +133,24 @@ def _zet_document(houder: dict, veld_id: str, waarde, doc: dict) -> None:
                      "categorie": doc["categorie"]}
 
 
+def _artikel_component(omschrijving: str) -> str | None:
+    """'DRY FLEX 4 component A' -> 'A': het artikel is één los component."""
+    m = re.search(r"\bcomponent\s*([AB])\b", str(omschrijving or ""), re.I)
+    return m.group(1).upper() if m else None
+
+
 def _verwerk_document(artikel: dict, doc: dict, productnamen: list[str]) -> None:
     doc_component = doc.get("component") if doc.get("component") in ("A", "B") else None
+    alleen = _artikel_component(artikel.get("omschrijving", ""))
+    if alleen and doc_component and doc_component != alleen:
+        return  # los component A krijgt niet het veiligheidsblad van B
     for spec in doc.get("specs", []):
         veld_id, naam_component = normaliseer_veld(str(spec.get("veld", "")), productnamen)
         if not veld_id or spec.get("waarde") in (None, ""):
             continue
         component = naam_component or doc_component
+        if alleen and component and component != alleen:
+            continue
         houder = _houder(artikel, component) if component else artikel
         _zet_document(houder, veld_id, spec["waarde"], doc)
 
@@ -149,8 +161,8 @@ def _vergelijk(artikel: dict) -> list[str]:
         docs = houder.get("documenten", {})
         for veld_id in VERGELIJK_MET_PDS:
             if veld_id in houder and veld_id in docs:
-                pds = " ".join(str(houder[veld_id]).split()).casefold()
-                sds = " ".join(str(docs[veld_id]["waarde"]).split()).casefold()
+                pds = str(_schoon_waarde(veld_id, houder[veld_id])).casefold()
+                sds = str(_schoon_waarde(veld_id, docs[veld_id]["waarde"])).casefold()
                 if pds != sds:
                     waar = f"component {houder['naam']}" if "naam" in houder else "artikel"
                     meldingen.append(f"{artikel['artikelcode']} {waar}: {veld_id} in PDS '{houder[veld_id]}' "
