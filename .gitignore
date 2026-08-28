@@ -16,3 +16,4 @@ Veiligheidsbladen/
 
 # Sessielog van de task-observer skill
 skill-observations/
+.playwright-mcp/
