@@ -83,3 +83,82 @@ def test_alleen_cijfers():
 def test_normaliseer_kop():
     assert normaliseer_kop("Dimensions per piece    (mm) (LxBxH)") == "Dimensions per piece (mm) (LxBxH)"
     assert normaliseer_kop("  Artikelcode ") == "Artikelcode"
+
+
+from pathlib import Path
+
+import openpyxl
+
+from ingest_artikeldata import bouw_artikeldata, lees_artikelen
+
+ECHT_SHEET = Path(__file__).resolve().parent.parent / "Product Data Sheet december 2024.xlsx"
+
+
+def test_lees_artikelen_fixture(artikeldata_dict):
+    art = artikeldata_dict["artikelen"]
+    assert set(art) == {"2010005", "2511105", "4513032", "4570042"}
+    assert "Dimensions per piece (mm) (LxBxH)" in artikeldata_dict["ruwe_kolommen"]
+
+    dfu = art["2010005"]
+    assert dfu["artikelcode"] == "2010005"
+    assert dfu["ean"] == "8714748004368"
+    assert dfu["gn_code"] == "32141010"
+    assert dfu["min_verkoophoeveelheid"] == 10
+    assert [c["naam"] for c in dfu["componenten"]] == ["A", "B"]
+    assert dfu["componenten"][0]["netto_g"] == 222
+    assert dfu["componenten"][1]["netto_g"] == 96
+    assert dfu["netto_g"] == 318
+    assert "222" in dfu["netto_regel"] and "96" in dfu["netto_regel"]
+    assert dfu["bruto_g"] == 360
+    assert dfu["maat_mm"]["vorm"] == "samengesteld"
+    assert (dfu["maat_mm"]["l"], dfu["maat_mm"]["b"], dfu["maat_mm"]["h"]) == (89, 48, 184)
+    assert dfu["collo_mm"] == {"vorm": "blok", "l": 180, "b": 226, "h": 200}
+    assert dfu["omdoos_cm"] == {"vorm": "blok", "l": 39, "b": 26, "h": 42}
+    assert dfu["componenten"][0]["un_code"] == "3082"
+    assert dfu["componenten"][1]["un_code"] == "2735"
+    assert dfu["componenten"][0]["ghs"] == ["GHS07", "GHS05", "GHS09"]
+    assert dfu["componenten"][1]["ghs"] == ["GHS07", "GHS05", "GHS09", "GHS08"]
+    assert dfu["componenten"][0]["ufi"] == "EMM3-M8KP-4PK7-HVPV"
+    assert dfu["ruw"]["Bruto gewicht per doos (kg)"] == "3.8"
+    assert "un_code" not in dfu  # alleen op componentniveau
+
+    seal = art["2511105"]
+    assert seal["componenten"] == []
+    assert seal["netto_g"] == 452 and "netto_regel" not in seal
+    assert seal["maat_mm"]["vorm"] == "rond" and seal["maat_mm"]["l"] == 49
+    assert "un_code" not in seal  # 'inapplicable' telt als leeg
+
+    spatel = art["4513032"]
+    assert spatel["maat_mm"] == {"vorm": "blok", "l": 25, "b": 50, "h": 222}
+    assert spatel["gn_code"] == "82055910"
+
+    box = art["4570042"]
+    assert "gn_code" not in box
+    assert "maat_mm" not in box
+    assert "collo_mm" not in box
+    assert box["netto_g"] == 8710
+
+
+def test_ontbrekende_kolom_geeft_duidelijke_fout(tmp_path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Items"]); ws.append([]); ws.append(["Artikelcode", "Omschrijving"])
+    ws.append([1, "x"])
+    pad = tmp_path / "kapot.xlsx"
+    wb.save(pad)
+    with pytest.raises(ValueError) as e:
+        bouw_artikeldata(pad)
+    assert "GN-code" in str(e.value)
+
+
+@pytest.mark.skipif(not ECHT_SHEET.exists(), reason="echt Product Data Sheet niet aanwezig")
+def test_echt_sheet():
+    data = bouw_artikeldata(ECHT_SHEET)
+    art = data["artikelen"]
+    assert len(art) == 167
+    assert art["2010005"]["netto_g"] == 318
+    assert art["2010005"]["gn_code"] == "32141010"
+    assert art["2010005"]["maat_mm"]["l"] == 89
+    assert art["2022003"]["omschrijving"] == "DRY FLEX 4 JP"   # string-artikelcode
+    assert art["4012100"]["maat_mm"]["vorm"] == "rond"           # 'B: Ø: 50 H: 6' zonder componentrij
+    assert art["4012100"]["netto_g"] == 7
