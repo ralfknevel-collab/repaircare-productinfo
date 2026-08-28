@@ -47,7 +47,8 @@ def test_schema_is_strict_en_bevat_enums():
     kolom = s["properties"]["kolommen"]["items"]
     assert kolom["additionalProperties"] is False
     assert kolom["properties"]["doelveld"]["enum"] == ["gn_code", "geen", "sleutel_ean"]
-    assert None in kolom["properties"]["eenheid"]["enum"]
+    assert kolom["properties"]["eenheid"]["type"] == "string"
+    assert "" in kolom["properties"]["eenheid"]["enum"] and None not in kolom["properties"]["eenheid"]["enum"]
     assert set(kolom["properties"]["zekerheid"]["enum"]) == {"hoog", "middel", "laag"}
 
 
@@ -75,7 +76,7 @@ def test_vraag_mapping_gebruikt_schema_en_parset_antwoord():
     antwoord = {
         "kopregel_index": 0,
         "kolommen": [
-            {"kolom": "HerstellerArtNr", "doelveld": "sleutel_artikelcode", "eenheid": None,
+            {"kolom": "HerstellerArtNr", "doelveld": "sleutel_artikelcode", "eenheid": "",
              "zekerheid": "hoog", "toelichting": ""},
             {"kolom": "Nettogewicht", "doelveld": "netto_gewicht", "eenheid": "g",
              "zekerheid": "middel", "toelichting": "gram volgens mail"},
@@ -89,6 +90,7 @@ def test_vraag_mapping_gebruikt_schema_en_parset_antwoord():
     assert isinstance(m, Mapping)
     assert m.kolommen[1].doelveld == "netto_gewicht" and m.kolommen[1].eenheid == "g"
     assert m.opmerkingen == "ok"
+    assert m.kolommen[0].eenheid is None
 
     kw = aanroepen[0]
     assert kw["model"] == MODEL

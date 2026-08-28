@@ -312,7 +312,12 @@ def main(argv: list[str] | None = None) -> int:
     for k in mapping.kolommen:
         print(f"  {k.kolom:30} -> {k.doelveld:24} {k.eenheid or '':4} [{k.zekerheid}] {k.toelichting}")
 
-    uit_bytes, rapport = verwerk(inhoud, pad.name, mapping, artikeldata, ws.title, args.overschrijven)
+    try:
+        uit_bytes, rapport = verwerk(inhoud, pad.name, mapping, artikeldata, ws.title, args.overschrijven)
+    except ValueError as e:
+        print(f"Invullen niet mogelijk: {e}")
+        print("Tip: geef een mapping mee met --mapping, of kies een sleutelkolom.")
+        return 1
     uit = Path(args.uit) if args.uit else pad.with_name(pad.stem + "_ingevuld.xlsx")
     uit.write_bytes(uit_bytes)
     s = rapport.samenvatting()

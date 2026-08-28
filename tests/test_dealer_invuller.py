@@ -232,3 +232,15 @@ def test_cli_met_mapping_bestand(seefelder_bestand, tmp_path, artikeldata_dict, 
     wb = openpyxl.load_workbook(uit)
     assert wb["Sheet1"]["E2"].value == 318
     assert CONTROLE_TAB in wb.sheetnames
+
+
+def test_cli_zonder_sleutel_geeft_melding(seefelder_bestand, tmp_path, artikeldata_dict, monkeypatch, capsys):
+    pj = tmp_path / "artikeldata.json"
+    pj.write_text(json.dumps(artikeldata_dict), encoding="utf-8")
+    import artikeldata as ad_mod
+    monkeypatch.setattr(ad_mod, "ARTIKELDATA_FILE", pj)
+    monkeypatch.setattr(ad_mod, "VASTE_WAARDEN_FILE", tmp_path / "geen.json")
+    pm = tmp_path / "leeg.json"
+    pm.write_text(json.dumps(Mapping(0, []).naar_dict()), encoding="utf-8")
+    assert cli_main([str(seefelder_bestand), "--mapping", str(pm), "--uit", str(tmp_path / "u.xlsx")]) == 1
+    assert "Geen sleutelkolom" in capsys.readouterr().out

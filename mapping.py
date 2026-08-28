@@ -28,7 +28,7 @@ Je krijgt de eerste rijen van een dealerbestand (Excel). Bepaal:
      krijgen 'geen'.
    - Kies bij gewichten en maten de eenheid die de dealer vraagt (uit de kop, de
      voorbeeldwaarden of de context). Onbekend: g voor gewicht, mm voor maten, en
-     zekerheid 'middel'.
+     zekerheid 'middel'. Geen eenheid van toepassing: lege tekst "".
    - Gebruik 'vast:...'-velden voor bedrijfsgegevens zoals land van oorsprong of Bundesland.
    - Gebruik 'ruw:...'-velden alleen als geen gewoon veld past.
 3. zekerheid: hoog als kop en voorbeelden eenduidig zijn, middel bij een aanname
@@ -69,7 +69,7 @@ class Mapping:
     def uit_dict(d: dict) -> "Mapping":
         return Mapping(
             kopregel_index=int(d["kopregel_index"]),
-            kolommen=[KolomMapping(k["kolom"], k["doelveld"], k.get("eenheid"),
+            kolommen=[KolomMapping(k["kolom"], k["doelveld"], (k.get("eenheid") or None),
                                    k.get("zekerheid", "laag"), k.get("toelichting", ""))
                       for k in d.get("kolommen", [])],
             opmerkingen=d.get("opmerkingen", "") or "",
@@ -88,7 +88,7 @@ def mapping_schema(doelveld_ids: list[str]) -> dict:
                     "properties": {
                         "kolom": {"type": "string"},
                         "doelveld": {"type": "string", "enum": list(doelveld_ids)},
-                        "eenheid": {"type": ["string", "null"], "enum": list(EENHEID_OPTIES)},
+                        "eenheid": {"type": "string", "enum": [o or "" for o in EENHEID_OPTIES]},
                         "zekerheid": {"type": "string", "enum": ZEKERHEDEN},
                         "toelichting": {"type": "string"},
                     },
