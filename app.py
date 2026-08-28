@@ -3,7 +3,8 @@ Chat-app voor de Repair Care productinfo-tool.
 
 Laadt kennisbank.json (gemaakt door ingest.py) en biedt een chatbot die vragen
 beantwoordt over de product- en veiligheidsbladen, met bronvermelding.
-Vormgeving volgt de Repair Care huisstijl (kleuren, logo, Inter Tight-font).
+Vormgeving volgt de Repair Care Quote-tool (witte zijbalk met navigatie, kaarten,
+merkgroen, Inter Tight-font).
 
 Lokaal draaien:
     export ANTHROPIC_API_KEY="sk-ant-..."
@@ -36,15 +37,27 @@ from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt
 
 BASE_DIR = Path(__file__).resolve().parent
 KENNISBANK_FILE = BASE_DIR / "kennisbank.json"
-LOGO_FILE = BASE_DIR / "assets" / "repair-care-logo.png"
+LOGO_SVG = BASE_DIR / "assets" / "repair-care-logo.svg"
+LOGO_PNG = BASE_DIR / "assets" / "repair-care-logo.png"
 MODEL = "claude-opus-4-8"
 
-# --- Repair Care huisstijl ---------------------------------------------------
-DONKERGROEN = "#007631"   # koppen, accenten
-LICHTGROEN = "#00953F"    # knoppen
-GEEL = "#FFDC00"          # accent
-BODYGRIJS = "#6F6F6E"     # bodytekst
-ACHTERGROND = "#F5F5F5"   # paginavlak
+# --- Repair Care huisstijl (tokens gelijk aan de Repair Care Quote-tool) -----
+BRAND = "#007A37"        # merkgroen: primaire knoppen, kaarttitels
+BRAND_700 = "#046B33"    # sectiekoppen, actieve navigatie
+BRAND_SOFT = "#E9F3EC"   # zachte groene vlakken (actieve nav, gebruikersbubbel)
+BRAND_SOFT2 = "#F3F9F5"  # nog zachter (uploader)
+GEEL = "#FFDC00"         # accentbalkje bij actieve navigatie
+INK = "#13211A"          # tekst
+MUTED = "#5C6B62"        # subtekst
+LIJN = "#E6ECE7"         # randen
+BG = "#EEF1EE"           # paginavlak
+PANEL = "#FFFFFF"        # kaarten, zijbalk
+WARN = "#C0392B"
+
+NAVIGATIE = [
+    ("chat", "Productinfo-chat", ":material/forum:"),
+    ("dealer", "Dealer-Excel", ":material/table_view:"),
+]
 
 VOORBEELDVRAGEN = [
     "Wat is het brutogewicht per doos van DRY FLEX 4?",
@@ -82,153 +95,232 @@ def get_secret(naam: str) -> str | None:
 
 
 def pas_huisstijl_toe() -> None:
-    """Injecteer Repair Care kleuren en het Inter Tight-lettertype via CSS."""
+    """Injecteer de huisstijl van de Repair Care Quote-tool: witte zijbalk met
+    navigatie, licht groengrijs paginavlak, witte kaarten, groene accenten."""
     css = f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 
-    /* Lettertype overal afdwingen */
     html, body, [class*="st-"], [data-testid="stAppViewContainer"] *,
     .stMarkdown, .stChatMessage, button, input, textarea {{
-        font-family: 'Inter Tight', Arial, sans-serif !important;
+        font-family: 'Inter Tight', Arial, Helvetica, sans-serif !important;
     }}
+    [data-testid="stIconMaterial"] {{ font-family: 'Material Symbols Rounded' !important; }}
 
-    /* Streamlit-balk en menu verbergen voor een schone, app-achtige look */
-    [data-testid="stHeader"], [data-testid="stToolbar"],
-    [data-testid="stDecoration"], #MainMenu, footer {{
+    /* Streamlit-balk, menu en zijbalk-inklapknop verbergen: app-achtige look */
+    [data-testid="stHeader"], [data-testid="stToolbar"], [data-testid="stDecoration"],
+    #MainMenu, footer, [data-testid="stSidebarCollapseButton"],
+    [data-testid="collapsedControl"], [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarHeader"], [data-testid="stLogoSpacer"] {{
         display: none !important;
     }}
 
-    .stApp {{ background-color: {ACHTERGROND}; }}
-    .block-container {{ padding-top: 2.2rem; padding-bottom: 6rem; max-width: 780px; }}
+    .stApp {{ background-color: {BG}; color: {INK}; }}
 
-    h1, h2, h3 {{ color: {DONKERGROEN} !important; font-weight: 700;
-                  letter-spacing: -0.01em; }}
-
-    /* Primaire knoppen: groen, afgerond, zachte schaduw, subtiele hover-lift */
-    .stButton button[kind="primary"], .stButton button[kind="primaryFormSubmit"],
-    [data-testid="stFormSubmitButton"] button {{
-        background-color: {LICHTGROEN};
-        color: #FFFFFF;
-        border: none;
-        border-radius: 10px;
-        font-weight: 600;
-        padding: 9px 18px;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.10);
-        transition: transform .08s ease, background-color .15s ease, box-shadow .15s ease;
+    /* ---- zijbalk: wit, 248px, dunne rand, logo + navigatie ---- */
+    [data-testid="stSidebar"] {{
+        background-color: {PANEL};
+        border-right: 1px solid {LIJN};
+        width: 248px !important; min-width: 248px !important;
     }}
-    .stButton button[kind="primary"]:hover,
-    [data-testid="stFormSubmitButton"] button:hover {{
-        background-color: {DONKERGROEN};
-        color: #FFFFFF;
-        transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(0,118,49,0.25);
+    [data-testid="stSidebar"] > div:first-child {{ width: 248px !important; }}
+    [data-testid="stSidebarUserContent"] {{ padding: 0 12px 20px; }}
+    .rc-logo {{
+        display: flex; align-items: center;
+        margin: 0 -12px 10px; padding: 22px 18px 18px;
+        border-bottom: 1px solid {LIJN};
     }}
-    /* Voorbeeldvraag-kaarten: links uitgelijnd, gelijke hoogte, nette hover */
-    .stButton button[kind="secondary"] {{
-        background-color: #FFFFFF;
-        color: {BODYGRIJS};
-        border: 1px solid #E5E7E4;
-        border-radius: 12px;
-        font-weight: 500;
-        min-height: 60px;
-        padding: 12px 18px;
-        justify-content: flex-start;
-        text-align: left;
-        line-height: 1.35;
-        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-        transition: transform .08s ease, border-color .15s ease, box-shadow .15s ease;
+    .rc-logo img {{ height: 32px; width: auto; display: block; }}
+    [data-testid="stSidebar"] .stButton button {{
+        width: 100%; justify-content: flex-start; text-align: left; gap: 11px;
+        background: transparent; border: 0; border-radius: 10px;
+        color: #3C4A42; font-weight: 600; padding: 10px 12px;
+        box-shadow: none; position: relative;
+        transition: background .12s, color .12s;
     }}
-    .stButton button[kind="secondary"] p {{
-        text-align: left;
-        width: 100%;
-        margin: 0;
+    [data-testid="stSidebar"] .stButton button p {{ font-size: 14px; }}
+    [data-testid="stSidebar"] .stButton button:hover {{
+        background: rgba(0,122,55,.06); color: {INK}; border: 0;
     }}
-    .stButton button[kind="secondary"]:hover {{
-        border-color: {LICHTGROEN};
-        color: {DONKERGROEN};
-        transform: translateY(-1px);
-        box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+    [data-testid="stSidebar"] .stButton button[kind="primary"] {{
+        background: {BRAND_SOFT}; color: {BRAND_700}; font-weight: 700;
+    }}
+    [data-testid="stSidebar"] .stButton button[kind="primary"]:hover {{
+        background: {BRAND_SOFT}; color: {BRAND_700};
+    }}
+    [data-testid="stSidebar"] .stButton button[kind="primary"]::before {{
+        content: ""; position: absolute; left: -12px; top: 8px; bottom: 8px;
+        width: 4px; border-radius: 0 3px 3px 0; background: {GEEL};
     }}
 
-    /* Chatbubbels: zachte witte kaarten met schaduw i.p.v. harde rand */
+    /* ---- content: max 1080px, kaarten ---- */
+    .block-container {{ max-width: 1080px !important; padding: 30px 34px 90px !important; }}
+    [class*="st-key-kaart"] {{
+        background: {PANEL}; border: 0 !important; border-radius: 16px;
+        box-shadow: 0 1px 2px rgba(16,40,26,.05), 0 8px 24px -16px rgba(16,40,26,.30);
+        padding: 24px !important; margin-bottom: 20px;
+    }}
+    .rc-kaarttitel {{ margin: 0 0 5px; font-size: 20px; font-weight: 800;
+                      letter-spacing: -.01em; color: {BRAND}; }}
+    .rc-sub {{ color: {MUTED}; margin: 0 0 18px; font-size: 13px; }}
+    .rc-sectie {{
+        margin: 18px 0 10px; padding-top: 14px; border-top: 1px solid {LIJN};
+        font-size: 11.5px; font-weight: 800; letter-spacing: .7px;
+        color: {BRAND_700}; text-transform: uppercase;
+    }}
+    .rc-sectie.eerste {{ border-top: 0; padding-top: 0; margin-top: 4px; }}
+    .rc-tekst {{ color: {MUTED}; font-size: 14px; line-height: 1.5; margin: 0 0 12px; }}
+    .rc-tekst b {{ color: {INK}; }}
+
+    /* ---- labels en invoer ---- */
+    [data-testid="stWidgetLabel"] p {{ font-size: 13px; font-weight: 700; color: {INK}; }}
+    [data-testid="stTextInput"] div[data-baseweb="input"],
+    [data-testid="stTextInput"] div[data-baseweb="base-input"],
+    [data-testid="stSelectbox"] div[data-baseweb="select"] > div,
+    [data-testid="stChatInput"] {{
+        border: 1px solid {LIJN}; border-radius: 9px; background: {PANEL};
+        box-shadow: none;
+    }}
+    [data-testid="stTextInput"] div[data-baseweb="input"]:focus-within,
+    [data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
+    [data-testid="stChatInput"]:focus-within {{
+        border-color: {BRAND}; box-shadow: 0 0 0 3px rgba(0,119,50,.12);
+    }}
+    [data-testid="stFileUploaderDropzone"] {{
+        border: 1px dashed #C9D6CD; border-radius: 12px; background: {BRAND_SOFT2};
+    }}
+
+    /* ---- knoppen: secundair wit met rand, primair merkgroen ---- */
+    section.stMain .stButton button,
+    [data-testid="stFormSubmitButton"] button,
+    [data-testid="stDownloadButton"] button {{
+        border: 1px solid {LIJN}; background: {PANEL}; border-radius: 9px;
+        padding: 9px 16px; font-weight: 600; color: {INK}; box-shadow: none;
+        transition: background .12s, border-color .12s, color .12s;
+    }}
+    section.stMain .stButton button:hover,
+    [data-testid="stDownloadButton"] button:hover {{
+        border-color: #C2CCC5; background: #F7F9F7; color: {INK};
+    }}
+    section.stMain .stButton button[kind="primary"],
+    [data-testid="stFormSubmitButton"] button,
+    [data-testid="stDownloadButton"] button {{
+        background: {BRAND}; border-color: {BRAND}; color: #FFFFFF;
+    }}
+    section.stMain .stButton button[kind="primary"]:hover,
+    [data-testid="stFormSubmitButton"] button:hover,
+    [data-testid="stDownloadButton"] button:hover {{
+        background: #005F28; border-color: #005F28; color: #FFFFFF;
+    }}
+    section.stMain .stButton button[kind="primary"]:disabled {{
+        background: #C9D6CD; border-color: #C9D6CD; color: #FFFFFF;
+    }}
+    /* voorbeeldvragen: kaartjes, links uitgelijnd, gelijke hoogte */
+    section.stMain .stButton button.rc-voorbeeld,
+    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"] {{
+        min-height: 60px; justify-content: flex-start; text-align: left;
+        line-height: 1.35; font-weight: 500; color: {INK};
+    }}
+    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"] p {{
+        text-align: left; width: 100%; margin: 0;
+    }}
+    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"]:hover {{
+        border-color: {BRAND}; color: {BRAND_700}; background: {BRAND_SOFT2};
+    }}
+
+    /* ---- meldingen: rustige witte notice met rand ---- */
+    [data-testid="stAlert"], [data-testid="stAlertContainer"] {{
+        background: {PANEL} !important; border: 1px solid {LIJN}; border-radius: 12px;
+        color: {MUTED};
+    }}
+    [data-testid="stAlert"] p {{ color: {MUTED}; font-size: 13px; line-height: 1.55; }}
+    [data-testid="stAlert"] [data-testid="stAlertContentWarning"] p,
+    [data-testid="stAlert"] [data-testid="stAlertContentError"] p {{ color: {WARN}; }}
+
+    /* ---- chat ---- */
     [data-testid="stChatMessage"] {{
-        border-radius: 16px;
-        padding: 6px 18px;
-        margin-bottom: 10px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        border: none;
-        background-color: #FFFFFF;
+        border-radius: 16px; padding: 6px 18px; margin-bottom: 10px;
+        background: {PANEL}; border: 1px solid {LIJN}; box-shadow: none;
     }}
-    /* Vraag van de gebruiker krijgt een zachte groene tint */
     [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {{
-        background-color: #ECF6EF;
+        background: {BRAND_SOFT}; border-color: transparent;
     }}
-    /* Avatars verbergen voor een strakke, moderne look */
     [data-testid="stChatMessageAvatarUser"],
     [data-testid="stChatMessageAvatarAssistant"] {{ display: none; }}
 
-    /* Invoerbalk onderaan: afgerond, zachte schaduw */
-    [data-testid="stChatInput"] {{
-        border: 1px solid #E5E7E4;
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }}
-    [data-testid="stTextInput"] div[data-baseweb="input"],
-    [data-testid="stTextInput"] div[data-baseweb="base-input"] {{
-        border: 1px solid #E5E7E4;
-        border-radius: 10px;
-        background-color: #FFFFFF;
+    /* ---- tabellen ---- */
+    [data-testid="stDataFrame"], [data-testid="stDataEditor"] {{
+        border: 1px solid {LIJN}; border-radius: 12px; overflow: hidden;
     }}
 
-    /* Inlogkaart: gecentreerd, wit, zachte schaduw */
-    [data-testid="stForm"] {{
-        border: 1px solid #ECECEC;
-        border-radius: 16px;
-        background-color: #FFFFFF;
-        padding: 22px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-    }}
+    /* ---- inlogkaart ---- */
+    .rc-login {{ text-align: center; padding: 8px 0 2px; }}
+    .rc-login img {{ height: 38px; width: auto; }}
+    .rc-login .merk {{ margin-top: 10px; font-size: 12px; font-weight: 800;
+                       letter-spacing: .28em; color: {BRAND}; }}
+    .rc-login h2 {{ font-size: 26px; font-weight: 800; color: {INK} !important;
+                    margin: 18px 0 4px; letter-spacing: -.02em; }}
+    .rc-login p {{ color: {MUTED}; font-size: 14px; margin: 0 0 14px; }}
+    [data-testid="stForm"] {{ border: 0; background: transparent; padding: 0; box-shadow: none; }}
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
 
 
-def toon_header() -> None:
-    """Toon het Repair Care logo met een groene accentlijn en de titel."""
-    if LOGO_FILE.exists():
-        logo_b64 = base64.b64encode(LOGO_FILE.read_bytes()).decode("utf-8")
-        st.markdown(
-            f"""
-            <div style="display:flex; align-items:center; padding:0 0 8px;">
-                <img src="data:image/png;base64,{logo_b64}" style="height:52px;">
-            </div>
-            <hr style="border:none; border-top:3px solid {DONKERGROEN};
-                       margin:0 0 16px;">
-            """,
-            unsafe_allow_html=True,
-        )
-    st.markdown(
-        f"<h2 style='margin-top:0;'>Productinfo</h2>"
-        f"<p style='color:{BODYGRIJS}; margin-top:-8px;'>"
-        "Stel je vraag over de product- en veiligheidsbladen.</p>",
-        unsafe_allow_html=True,
-    )
+def logo_data_uri() -> str | None:
+    """Het Repair Care-logo als data-URI (svg, anders png)."""
+    if LOGO_SVG.exists():
+        return "data:image/svg+xml;base64," + base64.b64encode(LOGO_SVG.read_bytes()).decode("utf-8")
+    if LOGO_PNG.exists():
+        return "data:image/png;base64," + base64.b64encode(LOGO_PNG.read_bytes()).decode("utf-8")
+    return None
+
+
+def kaarttitel(titel: str, sub: str) -> None:
+    st.markdown(f"<div class='rc-kaarttitel'>{titel}</div><p class='rc-sub'>{sub}</p>",
+                unsafe_allow_html=True)
+
+
+def sectie(titel: str, eerste: bool = False) -> None:
+    klasse = "rc-sectie eerste" if eerste else "rc-sectie"
+    st.markdown(f"<div class='{klasse}'>{titel}</div>", unsafe_allow_html=True)
+
+
+def toon_sidebar() -> str:
+    """Logo en navigatie in de zijbalk; geeft de gekozen weergave terug."""
+    huidig = st.session_state.get("weergave", NAVIGATIE[0][0])
+    with st.sidebar:
+        logo = logo_data_uri()
+        if logo:
+            st.markdown(f"<div class='rc-logo'><img src='{logo}' alt='Repair Care'></div>",
+                        unsafe_allow_html=True)
+        for sleutel, label, icoon in NAVIGATIE:
+            actief = sleutel == huidig
+            if st.button(label, key=f"nav_{sleutel}", icon=icoon,
+                         type="primary" if actief else "secondary", use_container_width=True):
+                if not actief:
+                    st.session_state.weergave = sleutel
+                    st.rerun()
+    return huidig
 
 
 def check_wachtwoord() -> bool:
-    """Toon een net inlogkader als APP_PASSWORD is ingesteld. True = toegang."""
+    """Inlogkaart zoals het welkomstscherm van de Quote-tool. True = toegang."""
     verwacht = get_secret("APP_PASSWORD")
     if not verwacht:
         return True  # geen wachtwoord ingesteld -> open (bv. lokaal)
     if st.session_state.get("toegang"):
         return True
 
-    midden = st.columns([1, 2, 1])[1]
-    with midden:
+    st.markdown("<div style='height:14vh'></div>", unsafe_allow_html=True)
+    midden = st.columns([1, 1.15, 1])[1]
+    with midden, st.container(key="kaart_login"):
+        logo = logo_data_uri()
         st.markdown(
-            f"<p style='color:{BODYGRIJS}; margin-bottom:4px;'>"
-            "Voer het wachtwoord in om toegang te krijgen.</p>",
+            "<div class='rc-login'>"
+            + (f"<img src='{logo}' alt='Repair Care'>" if logo else "")
+            + "<div class='merk'>PRODUCTINFO</div>"
+            "<h2>Welkom</h2><p>Log in om de productinfo-tools te gebruiken.</p></div>",
             unsafe_allow_html=True,
         )
         with st.form("inlogformulier"):
@@ -309,10 +401,10 @@ def main() -> None:
     st.set_page_config(
         page_title="Repair Care Productinfo",
         page_icon="🔧",
-        initial_sidebar_state="collapsed",
+        layout="wide",
+        initial_sidebar_state="expanded",
     )
     pas_huisstijl_toe()
-    toon_header()
 
     if not check_wachtwoord():
         return
@@ -331,11 +423,8 @@ def main() -> None:
     if "client" not in st.session_state:
         st.session_state.client = anthropic.Anthropic(api_key=api_key)
 
-    keuze = st.segmented_control(
-        "Onderdeel", ["Productinfo-chat", "Dealer-Excel"],
-        default="Productinfo-chat", label_visibility="collapsed",
-    )
-    if keuze == "Dealer-Excel":
+    weergave = toon_sidebar()
+    if weergave == "dealer":
         toon_dealer_excel()
     else:
         toon_chat(documenten)
@@ -347,30 +436,28 @@ def toon_chat(documenten: list[dict]) -> None:
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
-    # Knop om het gesprek te wissen (rechtsboven, alleen tijdens een gesprek).
-    if st.session_state.messages:
-        _, rechts = st.columns([4, 1])
-        if rechts.button("Wissen", use_container_width=True):
+    gekozen_voorbeeld = None
+    with st.container(key="kaart_chat"):
+        links, rechts = st.columns([4, 1])
+        with links:
+            kaarttitel("Productinfo", "Stel je vraag over de product- en veiligheidsbladen.")
+        # Knop om het gesprek te wissen (rechtsboven, alleen tijdens een gesprek).
+        if st.session_state.messages and rechts.button("Wissen", use_container_width=True):
             st.session_state.messages = []
             st.rerun()
 
-    # Welkomstscherm met voorbeeldvragen zolang er nog niets gevraagd is.
-    gekozen_voorbeeld = None
-    if not st.session_state.messages:
-        st.markdown(
-            f"<p style='color:{BODYGRIJS}; margin-bottom:6px;'>"
-            "Waar kan ik je mee helpen? Probeer bijvoorbeeld:</p>",
-            unsafe_allow_html=True,
-        )
-        kolommen = st.columns(2)
-        for i, v in enumerate(VOORBEELDVRAGEN):
-            if kolommen_klik(kolommen=kolommen, index=i, vraag=v):
-                gekozen_voorbeeld = v
+        # Welkomstscherm met voorbeeldvragen zolang er nog niets gevraagd is.
+        if not st.session_state.messages:
+            sectie("Probeer bijvoorbeeld", eerste=True)
+            kolommen = st.columns(2)
+            for i, v in enumerate(VOORBEELDVRAGEN):
+                if kolommen_klik(kolommen=kolommen, index=i, vraag=v):
+                    gekozen_voorbeeld = v
 
-    # Eerdere berichten tonen.
-    for msg in st.session_state.messages:
-        with st.chat_message(msg["role"]):
-            st.markdown(msg["content"])
+        # Eerdere berichten tonen.
+        for msg in st.session_state.messages:
+            with st.chat_message(msg["role"]):
+                st.markdown(msg["content"])
 
     getypt = st.chat_input("Stel je vraag over een product...")
     vraag = getypt or gekozen_voorbeeld
@@ -380,121 +467,124 @@ def toon_chat(documenten: list[dict]) -> None:
 
 
 def toon_dealer_excel() -> None:
-    st.markdown(
-        f"<p style='color:{BODYGRIJS};'>Upload een invulbestand van een dealer. De tool herkent de "
-        "kolommen, jij controleert de mapping, daarna worden de lege cellen ingevuld.</p>",
-        unsafe_allow_html=True,
-    )
-    try:
-        artikeldata = Artikeldata.laad()
-    except FileNotFoundError:
-        st.error("artikeldata.json ontbreekt. Draai eerst:  python3 ingest_artikeldata.py")
-        return
-
-    bestand = st.file_uploader("Dealerbestand", type=["xlsx", "csv"], label_visibility="collapsed")
-    if bestand is None:
-        st.session_state.pop("dealer", None)
-        return
-    inhoud = bestand.getvalue()
-    sleutel = hashlib.sha256(inhoud).hexdigest()
-
-    try:
-        wb = laad_werkboek(inhoud, bestand.name)
-    except ValueError as e:
-        st.error(str(e))
-        return
-    tabblad = None
-    if len(wb.sheetnames) > 1:
-        tabblad = st.selectbox("Tabblad", wb.sheetnames, index=wb.sheetnames.index(kies_tabblad(wb, None).title))
-    ws = kies_tabblad(wb, tabblad)
-
-    staat = st.session_state.get("dealer")
-    if not staat or staat["sleutel"] != (sleutel, ws.title):
-        with st.spinner("Kolommen herkennen…"):
-            mapping = bepaal_mapping(st.session_state.client, ws, artikeldata)
-        staat = {"sleutel": (sleutel, ws.title), "mapping": mapping}
-        st.session_state.dealer = staat
-    mapping: Mapping = staat["mapping"]
-    if mapping.opmerkingen:
-        st.info(mapping.opmerkingen)
-    if "kopregel_handmatig" not in staat:
-        staat["kopregel_handmatig"] = not mapping.kolommen
-    if staat["kopregel_handmatig"]:
-        # Geen kopregel herkend: gebruiker wijst de rij aan; keuze blijft over reruns bewaard.
-        rijen = lees_rijen(ws, 10)
-        opties = [f"rij {i + 1}: " + " | ".join(str(c) for c in r if c is not None)[:80]
-                  for i, r in enumerate(rijen)]
-        gekozen = st.selectbox("Kopregel niet herkend — kies de rij met de kolomkoppen",
-                               list(range(len(opties))), format_func=lambda i: opties[i],
-                               key=f"kopregel_{sleutel}_{ws.title}")
-        mapping = lege_mapping(gekozen, list(koppen(ws, gekozen).keys()))
-
-    catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
-    labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
-    ids_per_label = {v: k for k, v in labels.items()}
-    voorbeeld = {}
-    kolomindex = koppen(ws, mapping.kopregel_index)
-    for rij in ws.iter_rows(min_row=mapping.kopregel_index + 2, max_row=mapping.kopregel_index + 4, values_only=True):
-        for naam, i in kolomindex.items():
-            if naam not in voorbeeld and i < len(rij) and rij[i] is not None:
-                voorbeeld[naam] = str(rij[i])
-
-    st.markdown("**Mapping** — pas aan waar nodig, dan *Invullen*.")
-    tabel = pd.DataFrame([{
-        "Kolom": k.kolom,
-        "Voorbeeld": voorbeeld.get(k.kolom, ""),
-        "Doelveld": labels.get(k.doelveld, labels["geen"]),
-        "Eenheid": k.eenheid or "",
-        "Zekerheid": k.zekerheid,
-        "Toelichting": k.toelichting,
-    } for k in mapping.kolommen])
-    bewerkt = st.data_editor(
-        tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}_{mapping.kopregel_index}",
-        disabled=["Kolom", "Voorbeeld", "Zekerheid", "Toelichting"],
-        column_config={
-            "Doelveld": st.column_config.SelectboxColumn(options=list(labels.values()), required=True),
-            "Eenheid": st.column_config.SelectboxColumn(options=[o or "" for o in EENHEID_OPTIES]),
-        },
-    )
-    mapping = Mapping(mapping.kopregel_index, [
-        KolomMapping(r["Kolom"], ids_per_label[r["Doelveld"]], r["Eenheid"] or None, r["Zekerheid"], r["Toelichting"])
-        for _, r in bewerkt.iterrows()
-    ], mapping.opmerkingen)
-
-    try:
-        res = match_rijen(ws, mapping, artikeldata)
-    except ValueError as e:
-        st.warning(str(e))
-        return
-    gevonden = [r for r in res if r.match]
-    niet = [f"rij {r.rij}: {r.sleutel or '(leeg)'}" for r in res if not r.match]
-    via: dict[str, int] = {}
-    for r in gevonden:
-        via[r.match.via] = via.get(r.match.via, 0) + 1
-    delen = ", ".join(f"{n} op {sleuteltype}" for sleuteltype, n in via.items())
-    st.markdown(f"**{len(gevonden)} van {len(res)} artikelen gevonden.**"
-                + (f" ({delen})" if delen else "")
-                + (f" Niet gevonden: {', '.join(niet[:10])}{'…' if len(niet) > 10 else ''}" if niet else ""))
-    if res and not gevonden:
-        st.warning("Geen enkel artikel gevonden. Controleer de sleutelkolom (artikelnummer of EAN).")
-
-    meldingen = controleer_eenheden(mapping)
-    for melding in meldingen:
-        st.warning(melding)
-
-    overschrijven = st.checkbox("Ook gevulde cellen overschrijven", value=False)
-    if st.button("Invullen", type="primary", disabled=bool(meldingen)):
+    with st.container(key="kaart_dealer"):
+        kaarttitel("Dealer-Excel", "Upload een invulbestand van een dealer. De tool herkent de kolommen, "
+                   "jij controleert de mapping, daarna worden de lege cellen ingevuld.")
+        sectie("Bestand", eerste=True)
         try:
-            uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
-        except Exception as e:                      # ook openpyxl-fouten bij opslaan
-            st.error(f"Invullen mislukt: {e}")
+            artikeldata = Artikeldata.laad()
+        except FileNotFoundError:
+            st.error("artikeldata.json ontbreekt. Draai eerst:  python3 ingest_artikeldata.py")
             return
-        s = rapport.samenvatting()
-        st.success(f"Ingevuld: {s['ingevuld']} cellen. Gaten (geel): {s['gaten']}. "
-                   f"Zie tabblad 'Controle' in het bestand.")
-        naam = bestand.name.rsplit(".", 1)[0] + "_ingevuld.xlsx"
-        st.download_button("Download ingevuld bestand", data=uit, file_name=naam,
-                           mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+        bestand = st.file_uploader("Dealerbestand", type=["xlsx", "csv"], label_visibility="collapsed")
+        if bestand is None:
+            st.session_state.pop("dealer", None)
+            return
+        inhoud = bestand.getvalue()
+        sleutel = hashlib.sha256(inhoud).hexdigest()
+
+        try:
+            wb = laad_werkboek(inhoud, bestand.name)
+        except ValueError as e:
+            st.error(str(e))
+            return
+        tabblad = None
+        if len(wb.sheetnames) > 1:
+            tabblad = st.selectbox("Tabblad", wb.sheetnames, index=wb.sheetnames.index(kies_tabblad(wb, None).title))
+        ws = kies_tabblad(wb, tabblad)
+
+        staat = st.session_state.get("dealer")
+        if not staat or staat["sleutel"] != (sleutel, ws.title):
+            with st.spinner("Kolommen herkennen…"):
+                mapping = bepaal_mapping(st.session_state.client, ws, artikeldata)
+            staat = {"sleutel": (sleutel, ws.title), "mapping": mapping}
+            st.session_state.dealer = staat
+        mapping: Mapping = staat["mapping"]
+        if mapping.opmerkingen:
+            st.info(mapping.opmerkingen)
+        if "kopregel_handmatig" not in staat:
+            staat["kopregel_handmatig"] = not mapping.kolommen
+        if staat["kopregel_handmatig"]:
+            # Geen kopregel herkend: gebruiker wijst de rij aan; keuze blijft over reruns bewaard.
+            rijen = lees_rijen(ws, 10)
+            opties = [f"rij {i + 1}: " + " | ".join(str(c) for c in r if c is not None)[:80]
+                      for i, r in enumerate(rijen)]
+            gekozen = st.selectbox("Kopregel niet herkend — kies de rij met de kolomkoppen",
+                                   list(range(len(opties))), format_func=lambda i: opties[i],
+                                   key=f"kopregel_{sleutel}_{ws.title}")
+            mapping = lege_mapping(gekozen, list(koppen(ws, gekozen).keys()))
+
+        catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
+        labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
+        ids_per_label = {v: k for k, v in labels.items()}
+        voorbeeld = {}
+        kolomindex = koppen(ws, mapping.kopregel_index)
+        for rij in ws.iter_rows(min_row=mapping.kopregel_index + 2, max_row=mapping.kopregel_index + 4, values_only=True):
+            for naam, i in kolomindex.items():
+                if naam not in voorbeeld and i < len(rij) and rij[i] is not None:
+                    voorbeeld[naam] = str(rij[i])
+
+        sectie("Mapping")
+        st.markdown("<p class='rc-tekst'>Pas aan waar nodig, dan <b>Invullen</b>.</p>", unsafe_allow_html=True)
+        tabel = pd.DataFrame([{
+            "Kolom": k.kolom,
+            "Voorbeeld": voorbeeld.get(k.kolom, ""),
+            "Doelveld": labels.get(k.doelveld, labels["geen"]),
+            "Eenheid": k.eenheid or "",
+            "Zekerheid": k.zekerheid,
+            "Toelichting": k.toelichting,
+        } for k in mapping.kolommen])
+        bewerkt = st.data_editor(
+            tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}_{mapping.kopregel_index}",
+            disabled=["Kolom", "Voorbeeld", "Zekerheid", "Toelichting"],
+            column_config={
+                "Doelveld": st.column_config.SelectboxColumn(options=list(labels.values()), required=True),
+                "Eenheid": st.column_config.SelectboxColumn(options=[o or "" for o in EENHEID_OPTIES]),
+            },
+        )
+        mapping = Mapping(mapping.kopregel_index, [
+            KolomMapping(r["Kolom"], ids_per_label[r["Doelveld"]], r["Eenheid"] or None, r["Zekerheid"], r["Toelichting"])
+            for _, r in bewerkt.iterrows()
+        ], mapping.opmerkingen)
+
+        try:
+            res = match_rijen(ws, mapping, artikeldata)
+        except ValueError as e:
+            st.warning(str(e))
+            return
+        sectie("Resultaat")
+        gevonden = [r for r in res if r.match]
+        niet = [f"rij {r.rij}: {r.sleutel or '(leeg)'}" for r in res if not r.match]
+        via: dict[str, int] = {}
+        for r in gevonden:
+            via[r.match.via] = via.get(r.match.via, 0) + 1
+        delen = ", ".join(f"{n} op {sleuteltype}" for sleuteltype, n in via.items())
+        st.markdown("<p class='rc-tekst'>"
+                    f"<b>{len(gevonden)} van {len(res)} artikelen gevonden.</b>"
+                    + (f" ({delen})" if delen else "")
+                    + (f" Niet gevonden: {', '.join(niet[:10])}{'…' if len(niet) > 10 else ''}" if niet else "")
+                    + "</p>", unsafe_allow_html=True)
+        if res and not gevonden:
+            st.warning("Geen enkel artikel gevonden. Controleer de sleutelkolom (artikelnummer of EAN).")
+
+        meldingen = controleer_eenheden(mapping)
+        for melding in meldingen:
+            st.warning(melding)
+
+        overschrijven = st.checkbox("Ook gevulde cellen overschrijven", value=False)
+        if st.button("Invullen", type="primary", disabled=bool(meldingen)):
+            try:
+                uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
+            except Exception as e:                      # ook openpyxl-fouten bij opslaan
+                st.error(f"Invullen mislukt: {e}")
+                return
+            s = rapport.samenvatting()
+            st.success(f"Ingevuld: {s['ingevuld']} cellen. Gaten (geel): {s['gaten']}. "
+                       f"Zie tabblad 'Controle' in het bestand.")
+            naam = bestand.name.rsplit(".", 1)[0] + "_ingevuld.xlsx"
+            st.download_button("Download ingevuld bestand", data=uit, file_name=naam,
+                               mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 def kolommen_klik(kolommen, index: int, vraag: str) -> bool:
