@@ -1,0 +1,20 @@
+{
+  "ursprungsland": {
+    "label": "Land van oorsprong (ISO-3, bv. NLD)",
+    "standaard": null,
+    "per_prefix": {},
+    "per_artikel": {}
+  },
+  "bundesland": {
+    "label": "Duits Bundesland (2 letters, alleen bij DEU)",
+    "standaard": null,
+    "per_prefix": {},
+    "per_artikel": {}
+  },
+  "leverancier_naam": {
+    "label": "Naam leverancier",
+    "standaard": "Repair Care International B.V.",
+    "per_prefix": {},
+    "per_artikel": {}
+  }
+}
