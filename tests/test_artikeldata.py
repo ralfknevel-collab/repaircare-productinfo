@@ -107,6 +107,18 @@ def test_waarde_componentvelden_vallen_terug_op_a(ad):
     assert ad.waarde(seal, "ghs").waarde == "GHS07"
 
 
+def test_waarde_componentveld_meldt_afwijkend_component(ad):
+    a = ad.zoek(artikelcode="2010005").artikel
+    w = ad.waarde(a, "un_code")
+    assert w.regel == "ook B: 2735"
+    assert w.bron == "Product Data Sheet, component A (B wijkt af)"
+    assert ad.waarde(a, "klasse").regel == "ook B: 8"
+    # Vlampunt is gelijk in A en B: geen melding.
+    assert ad.waarde(a, "vlampunt").regel is None
+    # GHS staat als unie op artikelniveau: geen componentmelding.
+    assert ad.waarde(a, "ghs").regel is None
+
+
 def test_waarde_ruw_vast_geen(ad):
     a = ad.zoek(artikelcode="2010005").artikel
     assert ad.waarde(a, "ruw:Bruto gewicht per doos (kg)").waarde == "3.8"

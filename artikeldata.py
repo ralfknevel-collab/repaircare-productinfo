@@ -59,6 +59,11 @@ def _normaliseer_tekst(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
 
 
+def _als_tekst(w):
+    """Lijstwaarden (zoals GHS-codes) als één leesbare string."""
+    return ", ".join(w) if isinstance(w, list) else w
+
+
 def vaste_waarde(vaste: dict, sleutel: str, artikelcode: str) -> str | None:
     regel = vaste.get(sleutel)
     if not regel:
@@ -153,13 +158,23 @@ class Artikeldata:
                 regel = f"ronde verpakking: L = B = Ø {maat['diameter']:g} mm"
             return Waarde(maat[as_], "mm", "Product Data Sheet", regel)
         if veld_id in _COMPONENTVELDEN:
-            bronnen = [(artikel, "Product Data Sheet")] + [
-                (c, f"Product Data Sheet, component {c['naam']}") for c in artikel.get("componenten", [])]
-            for houder, bron in bronnen:
-                if veld_id in houder:
-                    w = houder[veld_id]
-                    if isinstance(w, list):
-                        w = ", ".join(w)
-                    return Waarde(w, None, bron)
-            return None
+            # Staat het veld op artikelniveau, dan is dat de samengevoegde waarde
+            # (bv. de GHS-unie) en zijn componentverschillen geen afwijking.
+            if veld_id in artikel:
+                return Waarde(_als_tekst(artikel[veld_id]), None, "Product Data Sheet")
+            houders = [(c["naam"], _als_tekst(c[veld_id]))
+                       for c in artikel.get("componenten", []) if veld_id in c]
+            if not houders:
+                return None
+            naam, w = houders[0]
+            afwijkend = [(n, x) for n, x in houders[1:] if x != w]
+            bron = f"Product Data Sheet, component {naam}"
+            regel = None
+            if afwijkend:
+                # Het dealerbestand krijgt alleen de waarde van het eerste component;
+                # de rest komt zo in de Controle-tab terecht.
+                regel = "ook " + ", ".join(f"{n}: {x}" for n, x in afwijkend)
+                werkwoord = "wijkt af" if len(afwijkend) == 1 else "wijken af"
+                bron += " (" + ", ".join(n for n, _ in afwijkend) + f" {werkwoord})"
+            return Waarde(w, None, bron, regel)
         return None
