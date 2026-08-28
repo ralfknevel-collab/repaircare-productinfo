@@ -3599,52 +3599,27 @@
   "4099999": {
    "artikelcode": "4099999",
    "omschrijving": "Torkrol M-Tork standaard",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk"
-     },
-     "inhoud": "1 stuk"
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "Torkrol M-Tork standaard",
     "Status": "Demo",
     "Productgroup": "999, Other",
     "Minimale Verkoop- hoeveel-heid": "1",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
     "Afmetingen omdoos (cm) (LxBXH)": "n.v.t.",
     "Verpakkings- belasting": "nee"
    },
    "status": "Demo",
    "productgroep": "999, Other",
    "min_verkoophoeveelheid": 1.0,
-   "samengesteld": "nee"
+   "samengesteld": "nee",
+   "inhoud": "1 stuk"
   },
   "4511003": {
    "artikelcode": "4511003",
    "omschrijving": "EASY Q enkelvoudig doseerpistool",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "367x70x220",
-      "Netto gewicht per stuk (gr)": "935",
-      "Bruto gewicht per stuk (gr)": "1081"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 367.0,
-      "b": 70.0,
-      "h": 220.0
-     },
-     "netto_g": 935.0,
-     "bruto_g": 1081.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q enkelvoudig doseerpistool",
     "Language version": "--",
@@ -3652,10 +3627,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "4",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "367x70x220",
     "Afmetingen collo (mm) (LxBxH)": "380x305x170",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8424 20 00",
     "Tarief invoer-rechten": "0.017",
+    "Netto gewicht per stuk (gr)": "935",
+    "Bruto gewicht per stuk (gr)": "1081",
     "Netto gewicht per doos (kg)": "3.74",
     "Bruto gewicht per doos (kg)": "4.8",
     "Netto gewicht per omdoos (kg)": "--",
@@ -3682,6 +3661,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 4.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 367.0,
+    "b": 70.0,
+    "h": 220.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 380.0,
@@ -3691,39 +3677,12 @@
    "gn_code": "84242000",
    "invoerrechten": 0.017,
    "netto_g": 935.0,
-   "netto_regel": "som van -- 935 g",
-   "bruto_g": 1081.0,
-   "bruto_regel": "som van -- 1081 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 367.0,
-    "b": 70.0,
-    "h": 220.0
-   }
+   "bruto_g": 1081.0
   },
   "4511201": {
    "artikelcode": "4511201",
    "omschrijving": "EASY Q High Performance doseerpistool",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "423x120x225",
-      "Netto gewicht per stuk (gr)": "1710",
-      "Bruto gewicht per stuk (gr)": "1922"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 423.0,
-      "b": 120.0,
-      "h": 225.0
-     },
-     "netto_g": 1710.0,
-     "bruto_g": 1922.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q High Performance doseerpistool",
     "Language version": "--",
@@ -3731,10 +3690,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "4",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "423x120x225",
     "Afmetingen collo (mm) (LxBxH)": "360x440x270",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8424 20 00",
     "Tarief invoer-rechten": "0.017",
+    "Netto gewicht per stuk (gr)": "1710",
+    "Bruto gewicht per stuk (gr)": "1922",
     "Netto gewicht per doos (kg)": "6.84",
     "Bruto gewicht per doos (kg)": "8.4",
     "Netto gewicht per omdoos (kg)": "--",
@@ -3759,6 +3722,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 4.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 423.0,
+    "b": 120.0,
+    "h": 225.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 360.0,
@@ -3768,39 +3738,12 @@
    "gn_code": "84242000",
    "invoerrechten": 0.017,
    "netto_g": 1710.0,
-   "netto_regel": "som van -- 1710 g",
-   "bruto_g": 1922.0,
-   "bruto_regel": "som van -- 1922 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 423.0,
-    "b": 120.0,
-    "h": 225.0
-   }
+   "bruto_g": 1922.0
   },
   "4511210": {
    "artikelcode": "4511210",
    "omschrijving": "EASY Q lichtgewicht doseerpistool",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "390x116x223",
-      "Netto gewicht per stuk (gr)": "873",
-      "Bruto gewicht per stuk (gr)": "1062"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 390.0,
-      "b": 116.0,
-      "h": 223.0
-     },
-     "netto_g": 873.0,
-     "bruto_g": 1062.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q lichtgewicht doseerpistool",
     "Language version": "--",
@@ -3808,10 +3751,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "4",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "390x116x223",
     "Afmetingen collo (mm) (LxBxH)": "300x260 x420",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8424 20 00",
     "Tarief invoer-rechten": "0.017",
+    "Netto gewicht per stuk (gr)": "873",
+    "Bruto gewicht per stuk (gr)": "1062",
     "Netto gewicht per doos (kg)": "3.49",
     "Bruto gewicht per doos (kg)": "4.9",
     "Netto gewicht per omdoos (kg)": "--",
@@ -3836,6 +3783,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 4.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 390.0,
+    "b": 116.0,
+    "h": 223.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 300.0,
@@ -3845,39 +3799,12 @@
    "gn_code": "84242000",
    "invoerrechten": 0.017,
    "netto_g": 873.0,
-   "netto_regel": "som van -- 873 g",
-   "bruto_g": 1062.0,
-   "bruto_regel": "som van -- 1062 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 390.0,
-    "b": 116.0,
-    "h": 223.0
-   }
+   "bruto_g": 1062.0
   },
   "4512015": {
    "artikelcode": "4512015",
    "omschrijving": "EASY Q Mengplateau medium",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "270x355x20",
-      "Netto gewicht per stuk (gr)": "370",
-      "Bruto gewicht per stuk (gr)": "375"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 270.0,
-      "b": 355.0,
-      "h": 20.0
-     },
-     "netto_g": 370.0,
-     "bruto_g": 375.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Mengplateau medium",
     "Language version": "--",
@@ -3885,10 +3812,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "5",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "270x355x20",
     "Afmetingen collo (mm) (LxBxH)": "450x290x160",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "370",
+    "Bruto gewicht per stuk (gr)": "375",
     "Netto gewicht per doos (kg)": "10.6",
     "Bruto gewicht per doos (kg)": "11.5",
     "Netto gewicht per omdoos (kg)": "--",
@@ -3915,6 +3846,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 5.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 270.0,
+    "b": 355.0,
+    "h": 20.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 450.0,
@@ -3924,39 +3862,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 370.0,
-   "netto_regel": "som van -- 370 g",
-   "bruto_g": 375.0,
-   "bruto_regel": "som van -- 375 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 270.0,
-    "b": 355.0,
-    "h": 20.0
-   }
+   "bruto_g": 375.0
   },
   "4512020": {
    "artikelcode": "4512020",
    "omschrijving": "EASY Q Mengplateau groot",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "270x445x20",
-      "Netto gewicht per stuk (gr)": "475",
-      "Bruto gewicht per stuk (gr)": "480"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 270.0,
-      "b": 445.0,
-      "h": 20.0
-     },
-     "netto_g": 475.0,
-     "bruto_g": 480.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Mengplateau groot",
     "Language version": "--",
@@ -3964,10 +3875,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "270x445x20",
     "Afmetingen collo (mm) (LxBxH)": "560x295x160",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "475",
+    "Bruto gewicht per stuk (gr)": "480",
     "Netto gewicht per doos (kg)": "14.25",
     "Bruto gewicht per doos (kg)": "15.2",
     "Netto gewicht per omdoos (kg)": "--",
@@ -3994,6 +3909,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 270.0,
+    "b": 445.0,
+    "h": 20.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 560.0,
@@ -4003,39 +3925,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 475.0,
-   "netto_regel": "som van -- 475 g",
-   "bruto_g": 480.0,
-   "bruto_regel": "som van -- 480 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 270.0,
-    "b": 445.0,
-    "h": 20.0
-   }
+   "bruto_g": 480.0
   },
   "4513001": {
    "artikelcode": "4513001",
    "omschrijving": "EASY Q Kitmes",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "25x34x247",
-      "Netto gewicht per stuk (gr)": "123",
-      "Bruto gewicht per stuk (gr)": "125"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 34.0,
-      "h": 247.0
-     },
-     "netto_g": 123.0,
-     "bruto_g": 125.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Kitmes",
     "Language version": "--",
@@ -4043,10 +3938,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "25x34x247",
     "Afmetingen collo (mm) (LxBxH)": "258x193x62",
     "Afmetingen omdoos (cm) (LxBXH)": "40x26x35",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "123",
+    "Bruto gewicht per stuk (gr)": "125",
     "Netto gewicht per doos (kg)": "1.23",
     "Bruto gewicht per doos (kg)": "1.365",
     "Netto gewicht per omdoos (kg)": "13.3",
@@ -4073,6 +3972,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 34.0,
+    "h": 247.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 258.0,
@@ -4088,39 +3994,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 123.0,
-   "netto_regel": "som van -- 123 g",
-   "bruto_g": 125.0,
-   "bruto_regel": "som van -- 125 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 34.0,
-    "h": 247.0
-   }
+   "bruto_g": 125.0
   },
   "4513002": {
    "artikelcode": "4513002",
    "omschrijving": "EASY Q Aanbrandmes",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "45x34x235",
-      "Netto gewicht per stuk (gr)": "121",
-      "Bruto gewicht per stuk (gr)": "123"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 45.0,
-      "b": 34.0,
-      "h": 235.0
-     },
-     "netto_g": 121.0,
-     "bruto_g": 123.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Aanbrandmes",
     "Language version": "--",
@@ -4128,10 +4007,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "45x34x235",
     "Afmetingen collo (mm) (LxBxH)": "258x193x62",
     "Afmetingen omdoos (cm) (LxBXH)": "40x26x35",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "121",
+    "Bruto gewicht per stuk (gr)": "123",
     "Netto gewicht per doos (kg)": "1.21",
     "Bruto gewicht per doos (kg)": "1.338",
     "Netto gewicht per omdoos (kg)": "13.1",
@@ -4158,6 +4041,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 45.0,
+    "b": 34.0,
+    "h": 235.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 258.0,
@@ -4173,39 +4063,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 121.0,
-   "netto_regel": "som van -- 121 g",
-   "bruto_g": 123.0,
-   "bruto_regel": "som van -- 123 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 45.0,
-    "b": 34.0,
-    "h": 235.0
-   }
+   "bruto_g": 123.0
   },
   "4513031": {
    "artikelcode": "4513031",
    "omschrijving": "EASY Q modelleermes RVS 3 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "25x34x222",
-      "Netto gewicht per stuk (gr)": "113",
-      "Bruto gewicht per stuk (gr)": "113"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 34.0,
-      "h": 222.0
-     },
-     "netto_g": 113.0,
-     "bruto_g": 113.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes RVS 3 cm",
     "Language version": "--",
@@ -4213,10 +4076,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "25x34x222",
     "Afmetingen collo (mm) (LxBxH)": "132x143x228",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8205 59 10",
     "Tarief invoer-rechten": "0.037",
+    "Netto gewicht per stuk (gr)": "113",
+    "Bruto gewicht per stuk (gr)": "113",
     "Netto gewicht per doos (kg)": "1.13",
     "Bruto gewicht per doos (kg)": "1.4",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4243,6 +4110,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 34.0,
+    "h": 222.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 132.0,
@@ -4252,39 +4126,12 @@
    "gn_code": "82055910",
    "invoerrechten": 0.037,
    "netto_g": 113.0,
-   "netto_regel": "som van -- 113 g",
-   "bruto_g": 113.0,
-   "bruto_regel": "som van -- 113 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 34.0,
-    "h": 222.0
-   }
+   "bruto_g": 113.0
   },
   "4513032": {
    "artikelcode": "4513032",
    "omschrijving": "EASY Q modelleermes RVS 5 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "25x50x222",
-      "Netto gewicht per stuk (gr)": "120",
-      "Bruto gewicht per stuk (gr)": "120"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 50.0,
-      "h": 222.0
-     },
-     "netto_g": 120.0,
-     "bruto_g": 120.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes RVS 5 cm",
     "Language version": "--",
@@ -4292,10 +4139,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "25x50x222",
     "Afmetingen collo (mm) (LxBxH)": "134x170x229",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8205 59 10",
     "Tarief invoer-rechten": "0.037",
+    "Netto gewicht per stuk (gr)": "120",
+    "Bruto gewicht per stuk (gr)": "120",
     "Netto gewicht per doos (kg)": "1.2",
     "Bruto gewicht per doos (kg)": "1.5",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4322,6 +4173,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 50.0,
+    "h": 222.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 134.0,
@@ -4331,39 +4189,12 @@
    "gn_code": "82055910",
    "invoerrechten": 0.037,
    "netto_g": 120.0,
-   "netto_regel": "som van -- 120 g",
-   "bruto_g": 120.0,
-   "bruto_regel": "som van -- 120 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 50.0,
-    "h": 222.0
-   }
+   "bruto_g": 120.0
   },
   "4513033": {
    "artikelcode": "4513033",
    "omschrijving": "EASY Q modelleermes RVS 10 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "25x100x222",
-      "Netto gewicht per stuk (gr)": "140",
-      "Bruto gewicht per stuk (gr)": "140"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 100.0,
-      "h": 222.0
-     },
-     "netto_g": 140.0,
-     "bruto_g": 140.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes RVS 10 cm",
     "Language version": "--",
@@ -4371,10 +4202,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "25x100x222",
     "Afmetingen collo (mm) (LxBxH)": "225x190x235",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8205 59 10",
     "Tarief invoer-rechten": "0.037",
+    "Netto gewicht per stuk (gr)": "140",
+    "Bruto gewicht per stuk (gr)": "140",
     "Netto gewicht per doos (kg)": "1.4",
     "Bruto gewicht per doos (kg)": "1.8",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4401,6 +4236,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 100.0,
+    "h": 222.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 225.0,
@@ -4410,39 +4252,12 @@
    "gn_code": "82055910",
    "invoerrechten": 0.037,
    "netto_g": 140.0,
-   "netto_regel": "som van -- 140 g",
-   "bruto_g": 140.0,
-   "bruto_regel": "som van -- 140 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 100.0,
-    "h": 222.0
-   }
+   "bruto_g": 140.0
   },
   "4513034": {
    "artikelcode": "4513034",
    "omschrijving": "EASY Q modelleermes RVS 15 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "25x150x222",
-      "Netto gewicht per stuk (gr)": "164",
-      "Bruto gewicht per stuk (gr)": "164"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 150.0,
-      "h": 222.0
-     },
-     "netto_g": 164.0,
-     "bruto_g": 164.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes RVS 15 cm",
     "Language version": "--",
@@ -4450,10 +4265,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "25x150x222",
     "Afmetingen collo (mm) (LxBxH)": "225x230x245",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8205 59 10",
     "Tarief invoer-rechten": "0.037",
+    "Netto gewicht per stuk (gr)": "164",
+    "Bruto gewicht per stuk (gr)": "164",
     "Netto gewicht per doos (kg)": "1.64",
     "Bruto gewicht per doos (kg)": "2.1",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4480,6 +4299,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 150.0,
+    "h": 222.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 225.0,
@@ -4489,39 +4315,12 @@
    "gn_code": "82055910",
    "invoerrechten": 0.037,
    "netto_g": 164.0,
-   "netto_regel": "som van -- 164 g",
-   "bruto_g": 164.0,
-   "bruto_regel": "som van -- 164 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 150.0,
-    "h": 222.0
-   }
+   "bruto_g": 164.0
   },
   "4513035": {
    "artikelcode": "4513035",
    "omschrijving": "EASY Q Modelleermessenset RVS",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 set",
-      "Dimensions per piece (mm) (LxBxH)": "25x176x270",
-      "Netto gewicht per stuk (gr)": "537",
-      "Bruto gewicht per stuk (gr)": "573"
-     },
-     "inhoud": "1 set",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 25.0,
-      "b": 176.0,
-      "h": 270.0
-     },
-     "netto_g": 537.0,
-     "bruto_g": 573.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Modelleermessenset RVS",
     "Language version": "--",
@@ -4529,10 +4328,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "5",
     "Assembled item": "nee",
+    "Contentes": "1 set",
+    "Dimensions per piece (mm) (LxBxH)": "25x176x270",
     "Afmetingen collo (mm) (LxBxH)": "190x140x273",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "8205 59 10",
     "Tarief invoer-rechten": "0.037",
+    "Netto gewicht per stuk (gr)": "537",
+    "Bruto gewicht per stuk (gr)": "573",
     "Netto gewicht per doos (kg)": "2.69",
     "Bruto gewicht per doos (kg)": "3.1",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4559,6 +4362,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 5.0,
    "samengesteld": "nee",
+   "inhoud": "1 set",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 25.0,
+    "b": 176.0,
+    "h": 270.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 190.0,
@@ -4568,39 +4378,12 @@
    "gn_code": "82055910",
    "invoerrechten": 0.037,
    "netto_g": 537.0,
-   "netto_regel": "som van -- 537 g",
-   "bruto_g": 573.0,
-   "bruto_regel": "som van -- 573 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 25.0,
-    "b": 176.0,
-    "h": 270.0
-   }
+   "bruto_g": 573.0
   },
   "4513601": {
    "artikelcode": "4513601",
    "omschrijving": "EASY Q modelleermes kunststof 4 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "19x40x220",
-      "Netto gewicht per stuk (gr)": "47",
-      "Bruto gewicht per stuk (gr)": "47"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 19.0,
-      "b": 40.0,
-      "h": 220.0
-     },
-     "netto_g": 47.0,
-     "bruto_g": 47.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes kunststof 4 cm",
     "Language version": "--",
@@ -4608,10 +4391,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "20",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "19x40x220",
     "Afmetingen collo (mm) (LxBxH)": "220x170x235",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "47",
+    "Bruto gewicht per stuk (gr)": "47",
     "Netto gewicht per doos (kg)": "0.94",
     "Bruto gewicht per doos (kg)": "1.3",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4638,6 +4425,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 20.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 19.0,
+    "b": 40.0,
+    "h": 220.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 220.0,
@@ -4647,39 +4441,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 47.0,
-   "netto_regel": "som van -- 47 g",
-   "bruto_g": 47.0,
-   "bruto_regel": "som van -- 47 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 19.0,
-    "b": 40.0,
-    "h": 220.0
-   }
+   "bruto_g": 47.0
   },
   "4513602": {
    "artikelcode": "4513602",
    "omschrijving": "EASY Q modelleermes kunststof 8 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "19x80x220",
-      "Netto gewicht per stuk (gr)": "56",
-      "Bruto gewicht per stuk (gr)": "56"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 19.0,
-      "b": 80.0,
-      "h": 220.0
-     },
-     "netto_g": 56.0,
-     "bruto_g": 56.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes kunststof 8 cm",
     "Language version": "--",
@@ -4687,10 +4454,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "20",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "19x80x220",
     "Afmetingen collo (mm) (LxBxH)": "275x205x235",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "56",
+    "Bruto gewicht per stuk (gr)": "56",
     "Netto gewicht per doos (kg)": "1.12",
     "Bruto gewicht per doos (kg)": "1.5",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4717,6 +4488,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 20.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 19.0,
+    "b": 80.0,
+    "h": 220.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 275.0,
@@ -4726,39 +4504,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 56.0,
-   "netto_regel": "som van -- 56 g",
-   "bruto_g": 56.0,
-   "bruto_regel": "som van -- 56 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 19.0,
-    "b": 80.0,
-    "h": 220.0
-   }
+   "bruto_g": 56.0
   },
   "4513603": {
    "artikelcode": "4513603",
    "omschrijving": "EASY Q modelleermes kunststof 8 cm stiff",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "19x80x220",
-      "Netto gewicht per stuk (gr)": "57",
-      "Bruto gewicht per stuk (gr)": "57"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 19.0,
-      "b": 80.0,
-      "h": 220.0
-     },
-     "netto_g": 57.0,
-     "bruto_g": 57.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes kunststof 8 cm stiff",
     "Language version": "--",
@@ -4766,10 +4517,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "10",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "19x80x220",
     "Afmetingen collo (mm) (LxBxH)": "230x147x98",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "57",
+    "Bruto gewicht per stuk (gr)": "57",
     "Netto gewicht per doos (kg)": "0.57",
     "Bruto gewicht per doos (kg)": "0.65",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4796,6 +4551,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 10.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 19.0,
+    "b": 80.0,
+    "h": 220.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 230.0,
@@ -4805,39 +4567,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 57.0,
-   "netto_regel": "som van -- 57 g",
-   "bruto_g": 57.0,
-   "bruto_regel": "som van -- 57 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 19.0,
-    "b": 80.0,
-    "h": 220.0
-   }
+   "bruto_g": 57.0
   },
   "4513604": {
    "artikelcode": "4513604",
    "omschrijving": "EASY Q modelleermes kunststof 13 cm",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "19x130x220",
-      "Netto gewicht per stuk (gr)": "64",
-      "Bruto gewicht per stuk (gr)": "64"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 19.0,
-      "b": 130.0,
-      "h": 220.0
-     },
-     "netto_g": 64.0,
-     "bruto_g": 64.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q modelleermes kunststof 13 cm",
     "Language version": "--",
@@ -4845,10 +4580,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "20",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "19x130x220",
     "Afmetingen collo (mm) (LxBxH)": "325x240x235",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "64",
+    "Bruto gewicht per stuk (gr)": "64",
     "Netto gewicht per doos (kg)": "1.28",
     "Bruto gewicht per doos (kg)": "1.8",
     "Netto gewicht per omdoos (kg)": "--",
@@ -4875,6 +4614,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 20.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 19.0,
+    "b": 130.0,
+    "h": 220.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 325.0,
@@ -4884,30 +4630,12 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 64.0,
-   "netto_regel": "som van -- 64 g",
-   "bruto_g": 64.0,
-   "bruto_regel": "som van -- 64 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 19.0,
-    "b": 130.0,
-    "h": 220.0
-   }
+   "bruto_g": 64.0
   },
   "4513605": {
    "artikelcode": "4513605",
    "omschrijving": "EASY Q set modelleermessen kunststof",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 set",
-      "Netto gewicht per stuk (gr)": "224"
-     },
-     "inhoud": "1 set",
-     "netto_g": 224.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q set modelleermessen kunststof",
     "Language version": "--",
@@ -4915,9 +4643,11 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "1",
     "Assembled item": "nee",
+    "Contentes": "1 set",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "224",
     "Netto gewicht per omdoos (kg)": "--",
     "Bruto gewicht per omdoos (kg)": "--",
     "Verpakkings- belasting": "ja",
@@ -4935,10 +4665,10 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "nee",
+   "inhoud": "1 set",
    "gn_code": "39269097",
    "invoerrechten": 0.065,
-   "netto_g": 224.0,
-   "netto_regel": "som van -- 224 g"
+   "netto_g": 224.0
   },
   "4515011": {
    "artikelcode": "4515011",
@@ -7598,26 +7328,7 @@
   "7000212": {
    "artikelcode": "7000212",
    "omschrijving": "Repair Care green tray",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "350x125x30",
-      "Netto gewicht per stuk (gr)": "256",
-      "Bruto gewicht per stuk (gr)": "256"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 350.0,
-      "b": 125.0,
-      "h": 30.0
-     },
-     "netto_g": 256.0,
-     "bruto_g": 256.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "Repair Care green tray",
     "Language version": "--",
@@ -7625,10 +7336,14 @@
     "Productgroup": "450, PACKAGES",
     "Minimale Verkoop- hoeveel-heid": "1",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "350x125x30",
     "Afmetingen collo (mm) (LxBxH)": "617x360x280",
     "Afmetingen omdoos (cm) (LxBXH)": "n.v.t.",
     "GN-code": "3926 90 97 90",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "256",
+    "Bruto gewicht per stuk (gr)": "256",
     "Netto gewicht per doos (kg)": "10.24",
     "Bruto gewicht per doos (kg)": "11.545",
     "Netto gewicht per omdoos (kg)": "--",
@@ -7653,6 +7368,13 @@
    "productgroep": "450, PACKAGES",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 350.0,
+    "b": 125.0,
+    "h": 30.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 617.0,
@@ -7662,15 +7384,7 @@
    "gn_code": "3926909790",
    "invoerrechten": 0.065,
    "netto_g": 256.0,
-   "netto_regel": "som van -- 256 g",
-   "bruto_g": 256.0,
-   "bruto_regel": "som van -- 256 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 350.0,
-    "b": 125.0,
-    "h": 30.0
-   }
+   "bruto_g": 256.0
   },
   "7020500": {
    "artikelcode": "7020500",
@@ -7886,26 +7600,7 @@
   "9600601": {
    "artikelcode": "9600601",
    "omschrijving": "EASY Q Frees buddy",
-   "componenten": [
-    {
-     "naam": "--",
-     "ruw": {
-      "Contentes": "1 stuk",
-      "Dimensions per piece (mm) (LxBxH)": "140x10x10",
-      "Netto gewicht per stuk (gr)": "14",
-      "Bruto gewicht per stuk (gr)": "14"
-     },
-     "inhoud": "1 stuk",
-     "maat_mm": {
-      "vorm": "blok",
-      "l": 140.0,
-      "b": 10.0,
-      "h": 10.0
-     },
-     "netto_g": 14.0,
-     "bruto_g": 14.0
-    }
-   ],
+   "componenten": [],
    "ruw": {
     "Omschrijving": "EASY Q Frees buddy",
     "Language version": "--",
@@ -7913,10 +7608,14 @@
     "Productgroup": "400, EASY Q",
     "Minimale Verkoop- hoeveel-heid": "1",
     "Assembled item": "nee",
+    "Contentes": "1 stuk",
+    "Dimensions per piece (mm) (LxBxH)": "140x10x10",
     "Afmetingen collo (mm) (LxBxH)": "240x140x20",
     "Afmetingen omdoos (cm) (LxBXH)": "--",
     "GN-code": "3926 90 97",
     "Tarief invoer-rechten": "0.065",
+    "Netto gewicht per stuk (gr)": "14",
+    "Bruto gewicht per stuk (gr)": "14",
     "Netto gewicht per doos (kg)": "0.69",
     "Bruto gewicht per doos (kg)": "0.7",
     "Netto gewicht per omdoos (kg)": "--",
@@ -7943,6 +7642,13 @@
    "productgroep": "400, EASY Q",
    "min_verkoophoeveelheid": 1.0,
    "samengesteld": "nee",
+   "inhoud": "1 stuk",
+   "maat_mm": {
+    "vorm": "blok",
+    "l": 140.0,
+    "b": 10.0,
+    "h": 10.0
+   },
    "collo_mm": {
     "vorm": "blok",
     "l": 240.0,
@@ -7952,15 +7658,7 @@
    "gn_code": "39269097",
    "invoerrechten": 0.065,
    "netto_g": 14.0,
-   "netto_regel": "som van -- 14 g",
-   "bruto_g": 14.0,
-   "bruto_regel": "som van -- 14 g",
-   "maat_mm": {
-    "vorm": "blok",
-    "l": 140.0,
-    "b": 10.0,
-    "h": 10.0
-   }
+   "bruto_g": 14.0
   },
   "9600607": {
    "artikelcode": "9600607",

@@ -143,6 +143,16 @@ MAATVELDEN = {"maat_stuk": "maat_mm", "maat_collo": "collo_mm", "maat_omdoos": "
 TEKSTVELDEN = COMPONENTVELDEN - GETALVELDEN - {"maat_stuk"}
 
 
+def _componentnaam(cel) -> str | None:
+    """Kolom 'Components' -> componentnaam, of None als de cel leeg is (bv. '--')."""
+    if cel is None:
+        return None
+    tekst = normaliseer_kop(cel)
+    if tekst.lower() in LEEG:
+        return None
+    return tekst
+
+
 def _component(artikel: dict, naam: str) -> dict:
     for c in artikel["componenten"]:
         if c["naam"] == naam:
@@ -260,11 +270,11 @@ def lees_artikelen(ws) -> tuple[dict[str, dict], list[str]]:
             ean = alleen_cijfers(rij[ean_i]) + alleen_cijfers(rij[ean_i + 1] if ean_i + 1 < len(rij) else None)
             if ean:
                 huidig["ean"] = ean
-            comp = normaliseer_kop(rij[comp_i]) if rij[comp_i] is not None else None
-            _verwerk_rij(rij, index, ghs_index, kop_per_index, huidig, comp or None, hoofdrij=True)
+            comp = _componentnaam(rij[comp_i])
+            _verwerk_rij(rij, index, ghs_index, kop_per_index, huidig, comp, hoofdrij=True)
         elif huidig is not None:
-            comp = normaliseer_kop(rij[comp_i]) if rij[comp_i] is not None else None
-            _verwerk_rij(rij, index, ghs_index, kop_per_index, huidig, comp or None, hoofdrij=False)
+            comp = _componentnaam(rij[comp_i])
+            _verwerk_rij(rij, index, ghs_index, kop_per_index, huidig, comp, hoofdrij=False)
     for artikel in artikelen.values():
         _rond_af(artikel)
     return artikelen, ruwe_kolommen

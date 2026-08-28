@@ -63,9 +63,14 @@ PDS_RIJEN = [
     _rij(**{"Artikelcode": 4570042, "Omschrijving": "REPAIR CARE Box 5", "EAN-code": "87.14748.",
             "Status": "Actief", "Productgroup": "457, BOX", "Minimale Verkoop- hoeveel-heid": 1,
             "Afmetingen collo     (mm) (LxBxH)": "--", "Netto gewicht per stuk (gr)": 8710}),
+    _rij(**{"Artikelcode": 4511003, "Omschrijving": "EASY Q enkelvoudig doseerpistool",
+            "EAN-code": "87.14748.", "Status": "Actief", "Productgroup": "450, EASY Q",
+            "Minimale Verkoop- hoeveel-heid": 1, "Components": "--", "Contentes": "1 stuk",
+            "Dimensions per piece    (mm) (LxBxH)": "350x60x180", "GN-code": "8424 20 00",
+            "Netto gewicht per stuk (gr)": 935, "Bruto gewicht per stuk (gr)": 1010}),
 ]
 # Tweede EAN-cel (kolom zonder kop) per hoofdrij.
-_EAN2 = {0: "00436.8", 2: "00380.4", 3: "00332.3", 4: "00385.9"}
+_EAN2 = {0: "00436.8", 2: "00380.4", 3: "00332.3", 4: "00385.9", 5: "00405.4"}
 for _i, _e in _EAN2.items():
     PDS_RIJEN[_i][PDS_KOPPEN.index("EAN-code") + 1] = _e
 

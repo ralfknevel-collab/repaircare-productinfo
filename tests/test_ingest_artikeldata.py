@@ -96,7 +96,7 @@ ECHT_SHEET = Path(__file__).resolve().parent.parent / "Product Data Sheet decemb
 
 def test_lees_artikelen_fixture(artikeldata_dict):
     art = artikeldata_dict["artikelen"]
-    assert set(art) == {"2010005", "2511105", "4513032", "4570042"}
+    assert set(art) == {"2010005", "2511105", "4513032", "4570042", "4511003"}
     assert "Dimensions per piece (mm) (LxBxH)" in artikeldata_dict["ruwe_kolommen"]
 
     dfu = art["2010005"]
@@ -138,6 +138,12 @@ def test_lees_artikelen_fixture(artikeldata_dict):
     assert "collo_mm" not in box
     assert box["netto_g"] == 8710
 
+    pistool = art["4511003"]
+    assert pistool["componenten"] == []
+    assert pistool["inhoud"] == "1 stuk"
+    assert pistool["netto_g"] == 935 and "netto_regel" not in pistool
+    assert pistool["maat_mm"] == {"vorm": "blok", "l": 350, "b": 60, "h": 180}
+
 
 def test_ontbrekende_kolom_geeft_duidelijke_fout(tmp_path):
     wb = openpyxl.Workbook()
@@ -162,3 +168,5 @@ def test_echt_sheet():
     assert art["2022003"]["omschrijving"] == "DRY FLEX 4 JP"   # string-artikelcode
     assert art["4012100"]["maat_mm"]["vorm"] == "rond"           # 'B: Ø: 50 H: 6' zonder componentrij
     assert art["4012100"]["netto_g"] == 7
+    assert {c["naam"] for a in art.values() for c in a["componenten"]} <= {"A", "B"}
+    assert art["4511003"]["componenten"] == []
