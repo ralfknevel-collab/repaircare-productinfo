@@ -1,16 +1,27 @@
 from pathlib import Path
 
 import csv
+import io
 import openpyxl
 import pytest
 
+from artikeldata import Artikeldata, Waarde
 from dealer_invuller import (
+    CONTROLE_TAB,
+    Rapport,
     kies_tabblad,
     koppen,
     laad_werkboek,
     lees_rijen,
+    maak_waarde,
+    match_rijen,
+    schrijf_controle,
+    verwerk,
     vind_kopregel,
+    vul_in,
+    werkboek_naar_bytes,
 )
+from mapping import KolomMapping, Mapping
 from tests.conftest import SEEFELDER_KOPPEN, SEEFELDER_RIJEN, maak_dealerbestand
 
 
@@ -74,3 +85,129 @@ def test_laad_csv_fallback_muteert_stdlib_niet():
     ws = kies_tabblad(wb, None)
     assert ws.cell(1, 1).value == "ArtNr" and ws.cell(2, 1).value == "2010005"
     assert csv.excel.delimiter == ","
+
+
+SEEFELDER_MAPPING = Mapping(0, [
+    KolomMapping("ArtNr", "geen", None, "hoog", "eigen nummer dealer"),
+    KolomMapping("Bundesland", "vast:bundesland", None, "hoog", ""),
+    KolomMapping("Ursprungsland", "vast:ursprungsland", None, "hoog", ""),
+    KolomMapping("Zolltarifnummer", "gn_code", None, "hoog", ""),
+    KolomMapping("Nettogewicht", "netto_gewicht", "g", "middel", ""),
+    KolomMapping("Länge", "lengte", "cm", "middel", ""),
+    KolomMapping("Breite", "breedte", "cm", "middel", ""),
+    KolomMapping("Höhe", "hoogte", "cm", "middel", ""),
+    KolomMapping("ArtBeschreibung", "geen", None, "hoog", ""),
+    KolomMapping("Primärlieferant", "geen", None, "hoog", ""),
+    KolomMapping("VKEinheit", "geen", None, "hoog", ""),
+    KolomMapping("HerstellerArtNr", "sleutel_artikelcode", None, "hoog", ""),
+    KolomMapping("EAN13", "sleutel_ean", None, "hoog", ""),
+])
+
+VASTE_TEST = {"ursprungsland": {"label": "Land", "standaard": None, "per_prefix": {"2": "NLD"}, "per_artikel": {}},
+              "bundesland": {"label": "Bundesland", "standaard": None}}
+
+
+@pytest.fixture
+def ad(artikeldata_dict):
+    return Artikeldata(artikeldata_dict, VASTE_TEST)
+
+
+@pytest.mark.parametrize("w, doel, verwacht", [
+    (Waarde(318.0, "g", "b"), "kg", 0.318),
+    (Waarde(318.0, "g", "b"), "g", 318),
+    (Waarde(184.0, "mm", "b"), "cm", 18.4),
+    (Waarde(89.0, "mm", "b"), None, 89),
+    (Waarde("32141010", None, "b"), None, "32141010"),
+    (Waarde(0.3333333, "kg", "b"), "kg", 0.333),
+])
+def test_maak_waarde(w, doel, verwacht):
+    assert maak_waarde(w, doel) == verwacht
+    assert type(maak_waarde(w, doel)) is type(verwacht)
+
+
+def test_match_rijen(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    res = match_rijen(ws, SEEFELDER_MAPPING, ad)
+    assert [r.rij for r in res] == [2, 3, 4, 5, 6]
+    assert res[0].match.via == "artikelcode"
+    assert res[3].sleutel == "0 / 8714748004955"
+    assert res[3].match is None                 # Wipes zit niet in de fixture
+    assert all(r.velden == [] for r in res)
+
+
+def test_vul_in_seefelder(seefelder_bestand, ad):
+    wb = laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name)
+    ws = kies_tabblad(wb, None)
+    rapport = vul_in(ws, SEEFELDER_MAPPING, ad)
+
+    # Rij 2 = DRY FIX UNI: gn, gewicht, maten in cm, land NLD via prefix, Bundesland leeg+geel.
+    assert ws["D2"].value == "32141010"
+    assert ws["E2"].value == 318
+    assert (ws["F2"].value, ws["G2"].value, ws["H2"].value) == (8.9, 4.8, 18.4)
+    assert ws["C2"].value == "NLD"
+    assert ws["B2"].value is None and ws["B2"].fill.start_color.rgb.endswith("FFFF00")
+    # Rij 4 = spatel: bestaande GN-code blijft staan, land leeg (prefix 4 niet geconfigureerd).
+    assert ws["D4"].value == "82055910"
+    assert ws["C4"].value is None
+    # Rij 5 = Wipes: niet gevonden -> alle doelcellen geel, leeg.
+    assert ws["D5"].value is None and ws["D5"].fill.start_color.rgb.endswith("FFFF00")
+    # Rij 6 = Box: geen GN, geen maat -> geel; gewicht wel.
+    assert ws["D6"].value is None and ws["E6"].value == 8710
+    # 'geen'-kolommen ongemoeid.
+    assert ws["I2"].value == "REPAIR CARE DRY FIX UNI"
+
+    s = rapport.samenvatting()
+    assert s["totaal"] == 5 and s["gevonden"] == 4 and s["niet_gevonden"] == 1
+    assert s["via"] == {"artikelcode": 4}
+    assert s["gaten_per_kolom"]["Bundesland"] == 5
+    assert s["gaten_per_kolom"]["Zolltarifnummer"] == 2   # Wipes + Box
+    statussen = {(v.kolom, v.status) for v in rapport.rijen[2].velden}
+    assert ("Zolltarifnummer", "bestaand") in statussen
+
+
+def test_vul_in_overschrijven(seefelder_bestand, ad):
+    wb = laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name)
+    ws = kies_tabblad(wb, None)
+    vul_in(ws, SEEFELDER_MAPPING, ad, overschrijven=True)
+    assert ws["D4"].value == "82055910"  # zelfde waarde uit de data, nu wél geschreven
+
+
+def test_vul_in_zonder_sleutel_faalt(seefelder_bestand, ad):
+    ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
+    m = Mapping(0, [KolomMapping("Zolltarifnummer", "gn_code", None, "hoog", "")])
+    with pytest.raises(ValueError):
+        vul_in(ws, m, ad)
+
+
+def test_controle_tab(seefelder_bestand, ad):
+    wb = laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name)
+    ws = kies_tabblad(wb, None)
+    rapport = vul_in(ws, SEEFELDER_MAPPING, ad)
+    schrijf_controle(wb, rapport)
+    schrijf_controle(wb, rapport)  # tweede keer: vervangen, niet dupliceren
+    assert wb.sheetnames.count(CONTROLE_TAB) == 1
+    ct = wb[CONTROLE_TAB]
+    tekst = "\n".join(" ".join(str(c) for c in rij if c is not None) for rij in ct.iter_rows(values_only=True))
+    assert "2010005" in tekst and "artikelcode" in tekst
+    assert "222" in tekst and "96" in tekst          # rekenregel gewicht
+    assert "naast elkaar" in tekst                     # rekenregel maat
+    assert "niet gevonden" in tekst.lower()
+    assert "Gevonden: 4" in tekst
+
+
+def test_verwerk_rondreis(seefelder_bestand, ad):
+    uit, rapport = verwerk(seefelder_bestand.read_bytes(), seefelder_bestand.name, SEEFELDER_MAPPING, ad)
+    wb = openpyxl.load_workbook(io.BytesIO(uit))
+    assert CONTROLE_TAB in wb.sheetnames
+    assert wb["Sheet1"]["E2"].value == 318
+    assert rapport.samenvatting()["gevonden"] == 4
+
+
+def test_verwerk_csv_met_kg_en_cm(tmp_path, ad):
+    inhoud = "Item no.;Net weight (kg);Height (cm)\n2010005;;\n".encode("utf-8")
+    m = Mapping(0, [KolomMapping("Item no.", "sleutel_artikelcode", None, "hoog", ""),
+                    KolomMapping("Net weight (kg)", "netto_gewicht", "kg", "hoog", ""),
+                    KolomMapping("Height (cm)", "hoogte", "cm", "hoog", "")])
+    uit, _ = verwerk(inhoud, "lijst.csv", m, ad)
+    ws = openpyxl.load_workbook(io.BytesIO(uit))["Sheet1"]
+    assert ws["B2"].value == 0.318 and ws["C2"].value == 18.4

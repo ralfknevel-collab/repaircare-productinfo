@@ -96,3 +96,156 @@ def koppen(ws, kopregel_index: int) -> dict[str, int]:
             n += 1
         uit[naam] = i
     return uit
+
+
+@dataclass
+class VeldResultaat:
+    kolom: str
+    veld_id: str
+    waarde: object
+    eenheid: str | None
+    bron: str
+    regel: str | None
+    status: str  # ingevuld | leeg | bestaand | controleer
+
+
+@dataclass
+class RijResultaat:
+    rij: int                     # 1-based Excel-rijnummer
+    sleutel: str
+    match: Match | None
+    velden: list[VeldResultaat] = field(default_factory=list)
+
+
+@dataclass
+class Rapport:
+    rijen: list[RijResultaat]
+
+    def samenvatting(self) -> dict:
+        via: dict[str, int] = {}
+        gaten_per_kolom: dict[str, int] = {}
+        ingevuld = gaten = 0
+        for r in self.rijen:
+            if r.match:
+                via[r.match.via] = via.get(r.match.via, 0) + 1
+            for v in r.velden:
+                if v.status == "ingevuld":
+                    ingevuld += 1
+                elif v.status == "leeg":
+                    gaten += 1
+                    gaten_per_kolom[v.kolom] = gaten_per_kolom.get(v.kolom, 0) + 1
+        gevonden = sum(1 for r in self.rijen if r.match)
+        return {
+            "totaal": len(self.rijen), "gevonden": gevonden, "niet_gevonden": len(self.rijen) - gevonden,
+            "via": via, "ingevuld": ingevuld, "gaten": gaten, "gaten_per_kolom": gaten_per_kolom,
+        }
+
+
+def maak_waarde(w: Waarde, eenheid_doel: str | None):
+    """Bronwaarde omrekenen naar de gevraagde eenheid; getallen netjes afronden."""
+    if isinstance(w.waarde, bool) or not isinstance(w.waarde, (int, float)):
+        return w.waarde
+    getal = float(w.waarde)
+    if w.eenheid and eenheid_doel:
+        getal = converteer(getal, w.eenheid, eenheid_doel)
+    getal = round(getal, 3)
+    return int(getal) if getal.is_integer() else getal
+
+
+def _is_leeg(cel) -> bool:
+    return cel.value is None or (isinstance(cel.value, str) and not cel.value.strip())
+
+
+def _datarijen(ws, kopregel_index: int):
+    for rijnr in range(kopregel_index + 2, ws.max_row + 1):
+        cellen = ws[rijnr]
+        if any(not _is_leeg(c) for c in cellen):
+            yield rijnr, cellen
+
+
+def _zoek_match(cellen, mapping: Mapping, kolomindex: dict[str, int], artikeldata: Artikeldata):
+    argumenten: dict[str, object] = {}
+    delen = []
+    for k in mapping.sleutels():
+        i = kolomindex.get(k.kolom)
+        if i is None:
+            continue
+        waarde = cellen[i].value
+        argumenten[SLEUTELTYPE_ARG[k.doelveld]] = waarde
+        delen.append("" if waarde is None else str(waarde))
+    return artikeldata.zoek(**argumenten), " / ".join(delen)
+
+
+def match_rijen(ws, mapping: Mapping, artikeldata: Artikeldata) -> list[RijResultaat]:
+    if not mapping.sleutels():
+        raise ValueError("Geen sleutelkolom gekozen (artikelnummer, EAN of omschrijving).")
+    kolomindex = koppen(ws, mapping.kopregel_index)
+    uit = []
+    for rijnr, cellen in _datarijen(ws, mapping.kopregel_index):
+        match, sleutel = _zoek_match(cellen, mapping, kolomindex, artikeldata)
+        uit.append(RijResultaat(rijnr, sleutel, match))
+    return uit
+
+
+def vul_in(ws, mapping: Mapping, artikeldata: Artikeldata, overschrijven: bool = False) -> Rapport:
+    rijen = match_rijen(ws, mapping, artikeldata)
+    kolomindex = koppen(ws, mapping.kopregel_index)
+    doelen = [(k, kolomindex[k.kolom]) for k in mapping.doelen() if k.kolom in kolomindex]
+    for r in rijen:
+        for k, i in doelen:
+            cel = ws.cell(row=r.rij, column=i + 1)
+            w = artikeldata.waarde(r.match.artikel, k.doelveld) if r.match else None
+            if not _is_leeg(cel) and not overschrijven:
+                r.velden.append(VeldResultaat(k.kolom, k.doelveld, cel.value, k.eenheid,
+                                              "dealer (bestaande waarde)", None, "bestaand"))
+                continue
+            if w is None or w.waarde is None or w.waarde == "":
+                cel.fill = GEEL
+                bron = "artikel niet gevonden" if r.match is None else "geen waarde in productdata"
+                r.velden.append(VeldResultaat(k.kolom, k.doelveld, None, k.eenheid, bron, None, "leeg"))
+                continue
+            cel.value = maak_waarde(w, k.eenheid)
+            status = "controleer" if r.match.via == "omschrijving" else "ingevuld"
+            r.velden.append(VeldResultaat(k.kolom, k.doelveld, cel.value, k.eenheid, w.bron, w.regel, status))
+    return Rapport(rijen)
+
+
+def schrijf_controle(wb, rapport: Rapport) -> None:
+    if CONTROLE_TAB in wb.sheetnames:
+        del wb[CONTROLE_TAB]
+    ct = wb.create_sheet(CONTROLE_TAB)
+    s = rapport.samenvatting()
+    ct.append(["Samenvatting"])
+    ct.append([f"Rijen: {s['totaal']}", f"Gevonden: {s['gevonden']}", f"Niet gevonden: {s['niet_gevonden']}",
+               f"Ingevuld: {s['ingevuld']}", f"Gaten: {s['gaten']}"])
+    ct.append(["Gevonden via: " + ", ".join(f"{k} {v}" for k, v in s["via"].items())])
+    ct.append(["Gaten per kolom: " + ", ".join(f"{k} {v}" for k, v in s["gaten_per_kolom"].items())])
+    ct.append([])
+    ct.append(["Rij", "Sleutel", "Artikelcode", "Gevonden via", "Kolom", "Doelveld", "Waarde", "Eenheid",
+               "Status", "Bron", "Rekenregel"])
+    for r in rapport.rijen:
+        if r.match is None:
+            ct.append([r.rij, r.sleutel, None, "niet gevonden"])
+            continue
+        code = r.match.artikel.get("artikelcode")
+        via = r.match.via if r.match.score >= 1.0 else f"{r.match.via} ({r.match.score:.2f})"
+        for v in r.velden:
+            ct.append([r.rij, r.sleutel, code, via, v.kolom, v.veld_id, v.waarde, v.eenheid,
+                       v.status, v.bron, v.regel])
+    for kol, breedte in zip("ABCDEFGHIJK", (6, 26, 12, 14, 20, 22, 16, 8, 11, 34, 50)):
+        ct.column_dimensions[kol].width = breedte
+
+
+def werkboek_naar_bytes(wb) -> bytes:
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()
+
+
+def verwerk(inhoud: bytes, bestandsnaam: str, mapping: Mapping, artikeldata: Artikeldata,
+            tabblad: str | None = None, overschrijven: bool = False) -> tuple[bytes, Rapport]:
+    wb = laad_werkboek(inhoud, bestandsnaam)
+    ws = kies_tabblad(wb, tabblad)
+    rapport = vul_in(ws, mapping, artikeldata, overschrijven)
+    schrijf_controle(wb, rapport)
+    return werkboek_naar_bytes(wb), rapport
