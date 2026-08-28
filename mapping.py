@@ -24,11 +24,16 @@ Je krijgt de eerste rijen van een dealerbestand (Excel). Bepaal:
      (sleutel_artikelcode voor het Repair Care-artikelnummer / Hersteller-Artikelnummer /
      supplier item number; sleutel_ean voor EAN/GTIN; sleutel_omschrijving alleen als
      er geen ander sleutelveld is). Het eigen artikelnummer van de dealer is GEEN sleutel.
+     Markeer élke kolom die het artikel identificeert als sleutel — artikelnummer én EAN
+     (én omschrijving als beide ontbreken); meerdere sleutelkolommen zijn normaal.
+     De tool probeert ze in volgorde artikelcode → EAN → omschrijving.
    - Kolommen die al door de dealer gevuld zijn of niet uit productdata af te leiden zijn
      krijgen 'geen'.
    - Kies bij gewichten en maten de eenheid die de dealer vraagt (uit de kop, de
-     voorbeeldwaarden of de context). Onbekend: g voor gewicht, mm voor maten, en
-     zekerheid 'middel'. Geen eenheid van toepassing: lege tekst "".
+     voorbeeldwaarden of de context). Onbekend: g voor gewicht, cm voor maten
+     (gebruikelijk in dealer-/ERP-stamdata), en zekerheid 'middel'. Geen eenheid van
+     toepassing: lege tekst "". De 'broneenheid' in de catalogus is de eenheid van onze
+     data, niet wat de dealer vraagt.
    - Gebruik 'vast:...'-velden voor bedrijfsgegevens zoals land van oorsprong of Bundesland.
    - Gebruik 'ruw:...'-velden alleen als geen gewoon veld past.
 3. zekerheid: hoog als kop en voorbeelden eenduidig zijn, middel bij een aanname

@@ -67,7 +67,9 @@ def test_catalogus_voor_prompt_bevat_ruw_en_vast():
     assert "gn_code" in ids
     assert "ruw:UFI-code" in ids
     assert "vast:ursprungsland" in ids
-    assert all(set(c) == {"id", "label", "eenheid", "uitleg"} for c in cat)
+    assert all(set(c) == {"id", "label", "broneenheid", "uitleg"} for c in cat)
+    netto = next(c for c in cat if c["id"] == "netto_gewicht")
+    assert netto["broneenheid"] == "g"
 
 
 def test_eenheid_opties():

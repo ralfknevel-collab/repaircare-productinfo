@@ -96,12 +96,16 @@ def converteer(waarde: float, van: str | None, naar: str | None) -> float:
 
 
 def catalogus_voor_prompt(ruwe_kolommen: list[str], vaste_sleutels: dict[str, str]) -> list[dict]:
-    """Volledige keuzelijst (vaste velden + ruw:* + vast:*) als platte dicts voor prompt en UI."""
-    uit = [{"id": v.id, "label": v.label, "eenheid": v.eenheid, "uitleg": v.uitleg} for v in VELDEN]
+    """Volledige keuzelijst (vaste velden + ruw:* + vast:*) als platte dicts voor prompt en UI.
+
+    'broneenheid' is de eenheid waarin onze eigen data staat — niet de eenheid die de
+    dealer vraagt. Die kiest Claude per kolom uit de kop of de voorbeeldwaarden.
+    """
+    uit = [{"id": v.id, "label": v.label, "broneenheid": v.eenheid, "uitleg": v.uitleg} for v in VELDEN]
     for kolom in ruwe_kolommen:
         v = veld(f"ruw:{kolom}")
-        uit.append({"id": v.id, "label": v.label, "eenheid": None, "uitleg": v.uitleg})
+        uit.append({"id": v.id, "label": v.label, "broneenheid": None, "uitleg": v.uitleg})
     for sleutel, label in vaste_sleutels.items():
-        uit.append({"id": f"vast:{sleutel}", "label": label, "eenheid": None,
+        uit.append({"id": f"vast:{sleutel}", "label": label, "broneenheid": None,
                     "uitleg": f"Vaste bedrijfswaarde: {label}. Kan leeg zijn (dan wordt de cel gemarkeerd)."})
     return uit
