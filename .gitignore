@@ -13,3 +13,6 @@ Productdatabladen/
 Veiligheidsbladen/
 *.xlsx
 *.zip
+
+# Sessielog van de task-observer skill
+skill-observations/

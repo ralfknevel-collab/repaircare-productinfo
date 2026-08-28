@@ -50,6 +50,40 @@ python3 ingest_excel.py
 Dit gebruikt geen API (puur lokaal) en voegt de Excel als één bron toe aan
 `kennisbank.json`. Opnieuw draaien is veilig — het oude Excel-item wordt vervangen.
 
+### Stap 1c — Artikeldata voor de dealer-Excel invuller
+
+`ingest_artikeldata.py` zet het Product Data Sheet om naar `artikeldata.json`
+(gestructureerd, per artikelcode). Draai dit opnieuw bij een nieuwe versie van
+het sheet en commit het resultaat:
+
+```bash
+python3 ingest_artikeldata.py
+```
+
+## Dealer-Excel invullen
+
+Dealers sturen invulbestanden in allerlei indelingen. In de app kies je bovenin
+**Dealer-Excel**, uploadt het bestand, controleert de voorgestelde mapping
+(welke kolom → welk gegeven, in welke eenheid) en klikt op *Invullen*. Je krijgt
+hetzelfde bestand terug met alleen de lege cellen gevuld. Cellen waarvoor geen
+data is, zijn geel; het tabblad *Controle* laat per cel de bron en rekenregel zien.
+
+- Artikelen worden gezocht op Repair Care-artikelnummer, daarna EAN, daarna
+  omschrijving (die laatste krijgt status "controleer").
+- Tweecomponentproducten: gewicht = A + B; afmeting = bussen naast elkaar.
+- Gegevens die niet in het sheet staan (land van oorsprong, Bundesland) komen
+  uit `vaste_waarden.json`. Vul daar `standaard`, `per_prefix` (bv. `"2": "NLD"`)
+  of `per_artikel` in.
+
+Zonder browser:
+
+```bash
+python3 dealer_invuller.py dealerbestand.xlsx            # mapping via Claude
+python3 dealer_invuller.py dealerbestand.xlsx --mapping mapping.json
+```
+
+Tests: `pip install -r requirements-dev.txt && pytest`
+
 ## Stap 2 — De chatbot starten
 
 ```bash

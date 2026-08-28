@@ -225,7 +225,7 @@ tabblad bij meerdere tabbladen.
    Artikel niet gevonden → alle doelcellen van die rij geel.
 5. Tabblad "Controle" toevoegen: per rij artikelcode, gevonden-via, en per
    ingevuld veld de bron en rekenregel ("netto = A 222 g + B 96 g";
-   "L = ØA 48 + ØB 41"); onderaan een samenvatting (gevonden, niet gevonden,
+   "L = ØA 48 + ØB 41"); bovenaan een samenvatting (gevonden, niet gevonden,
    gaten per veld). Bestaat het tabblad al, dan wordt het vervangen.
 6. Resultaat in geheugen als bytes → downloadknop `<naam>_ingevuld.xlsx`.
 
