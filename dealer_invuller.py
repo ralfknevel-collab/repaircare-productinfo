@@ -49,7 +49,10 @@ def laad_werkboek(inhoud: bytes, bestandsnaam: str) -> openpyxl.Workbook:
     if ext == ".xlsx":
         return openpyxl.load_workbook(io.BytesIO(inhoud))
     if ext == ".csv":
-        tekst = inhoud.decode("utf-8-sig", errors="replace")
+        try:
+            tekst = inhoud.decode("utf-8-sig")
+        except UnicodeDecodeError:
+            tekst = inhoud.decode("cp1252")   # veelgebruikte export van Duitse ERP-systemen
         try:
             dialect = csv.Sniffer().sniff(tekst[:2000], delimiters=";,\t")
         except csv.Error:

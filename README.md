@@ -7,8 +7,19 @@ chatten.
 ## Wat zit erin
 
 - `ingest.py` — leest alle PDF's en bouwt `kennisbank.json` (eenmalig draaien).
-- `app.py` — Streamlit-chatapp die `kennisbank.json` gebruikt.
-- `kennisbank.json` — gegenereerde kennisbank (komt na stap 3).
+- `app.py` — Streamlit-app: de chatbot én het tabblad Dealer-Excel.
+- `kennisbank.json` — gegenereerde kennisbank (komt na stap 1).
+
+Voor de dealer-Excel invuller:
+
+- `ingest_artikeldata.py` — zet het Product Data Sheet om naar `artikeldata.json`.
+- `artikeldata.json` — gegenereerde productdata per artikelcode (gecommit).
+- `veldcatalogus.py` — de doelvelden en hun eenheden; één bron voor prompt, UI en invullen.
+- `artikeldata.py` — artikel zoeken (artikelnummer, EAN, omschrijving) en waarden opvragen.
+- `mapping.py` — datamodel en Claude-aanroep voor kolom → doelveld.
+- `dealer_invuller.py` — kern (kopregel, matchen, invullen, Controle-tab) en CLI.
+- `vaste_waarden.json` — bedrijfsgegevens die niet in het sheet staan (land van
+  oorsprong, Bundesland).
 
 ## Installatie (eenmalig)
 
@@ -74,6 +85,8 @@ data is, zijn geel; het tabblad *Controle* laat per cel de bron en rekenregel zi
 - Gegevens die niet in het sheet staan (land van oorsprong, Bundesland) komen
   uit `vaste_waarden.json`. Vul daar `standaard`, `per_prefix` (bv. `"2": "NLD"`)
   of `per_artikel` in.
+- Met "ook gevulde cellen overschrijven" blijft een bestaande waarde staan als er
+  geen brondata is (de cel wordt dan alleen geel).
 
 Zonder browser:
 
@@ -120,8 +133,10 @@ GitHub via https://share.streamlit.io).
    git push -u origin main
    ```
    > De `.gitignore` zorgt dat `.env`, `secrets.toml`, de venv en de PDF-mappen
-   > NIET meegaan. Alleen `app.py`, `requirements.txt` en `kennisbank.json` zijn
-   > nodig voor de online app.
+   > NIET meegaan. Voor de online app zijn nodig: `app.py`, `requirements.txt`,
+   > `kennisbank.json`, en voor de dealer-Excel invuller ook `artikeldata.py`,
+   > `dealer_invuller.py`, `mapping.py`, `veldcatalogus.py`, `artikeldata.json`
+   > en `vaste_waarden.json`.
 
 2. **Maak de app aan op Streamlit Cloud.** Ga naar https://share.streamlit.io →
    "Create app" → kies je repo, branch `main`, main file `app.py`.

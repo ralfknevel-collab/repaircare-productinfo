@@ -46,6 +46,13 @@ def test_laad_csv():
     assert ws.cell(2, 1).value == "2010005"
 
 
+def test_laad_csv_cp1252():
+    # Duitse ERP-exports zijn vaak Windows-1252; umlauten mogen niet verminken.
+    wb = laad_werkboek("Länge;Gewicht\n1;\n".encode("cp1252"), "lijst.csv")
+    ws = kies_tabblad(wb, None)
+    assert [c.value for c in ws[1]] == ["Länge", "Gewicht"]
+
+
 def test_laad_onbekend_formaat():
     with pytest.raises(ValueError) as e:
         laad_werkboek(b"x", "oud.xls")
