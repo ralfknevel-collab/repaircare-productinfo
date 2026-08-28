@@ -108,3 +108,24 @@ def test_vraag_mapping_onbekend_doelveld_faalt():
     client, _ = _nep_client(antwoord)
     with pytest.raises(ValueError):
         vraag_mapping(client, [["X"]], "Sheet1", 0, catalogus_voor_prompt([], {}))
+
+
+def _nep_client_ruw(content, stop_reason="end_turn"):
+    def create(**kwargs):
+        return SimpleNamespace(content=content, stop_reason=stop_reason)
+    return SimpleNamespace(messages=SimpleNamespace(create=create))
+
+
+def test_vraag_mapping_zonder_tekstblok_faalt_duidelijk():
+    client = _nep_client_ruw([SimpleNamespace(type="thinking", thinking="")])
+    with pytest.raises(ValueError, match="geen tekstblok"):
+        vraag_mapping(client, [["X"]], "Sheet1", 0, catalogus_voor_prompt([], {}))
+
+
+def test_vraag_mapping_afgekapt_of_geweigerd_faalt_duidelijk():
+    client = _nep_client_ruw([SimpleNamespace(type="text", text='{"kopregel_index": 0, "kolom')], stop_reason="max_tokens")
+    with pytest.raises(ValueError, match="stop_reason=max_tokens"):
+        vraag_mapping(client, [["X"]], "Sheet1", 0, catalogus_voor_prompt([], {}))
+    client = _nep_client_ruw([SimpleNamespace(type="text", text='{"kopregel_index": 0, "kolom')])
+    with pytest.raises(ValueError, match="geen geldige JSON"):
+        vraag_mapping(client, [["X"]], "Sheet1", 0, catalogus_voor_prompt([], {}))

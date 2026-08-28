@@ -131,8 +131,16 @@ def vraag_mapping(client, rijen: list[list], tabblad: str, totaal_rijen: int,
         messages=[{"role": "user", "content": bouw_fragment(rijen, tabblad, totaal_rijen)}],
         output_config={"format": {"type": "json_schema", "schema": mapping_schema(ids)}},
     )
-    tekst = next(b.text for b in antwoord.content if b.type == "text")
-    data = json.loads(tekst)
+    stop = getattr(antwoord, "stop_reason", None)
+    if stop in ("refusal", "max_tokens"):
+        raise ValueError(f"Claude gaf geen bruikbare mapping (stop_reason={stop}).")
+    tekst = next((b.text for b in antwoord.content if b.type == "text"), None)
+    if tekst is None:
+        raise ValueError("Claude-antwoord bevat geen tekstblok met JSON.")
+    try:
+        data = json.loads(tekst)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Claude-antwoord is geen geldige JSON: {e}") from e
     mapping = Mapping.uit_dict(data)
     onbekend = [k.doelveld for k in mapping.kolommen if k.doelveld not in ids]
     if onbekend:
