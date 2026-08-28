@@ -1,0 +1,140 @@
+"""
+Mapping van dealerkolommen naar doelvelden: datamodel, JSON-schema voor een
+afgedwongen Claude-antwoord, en de aanroep zelf. Alleen de kopregel-
+kandidaten en een paar voorbeeldrijen gaan naar de API, nooit het hele bestand.
+"""
+
+from __future__ import annotations
+
+import json
+from dataclasses import asdict, dataclass, field
+
+from veldcatalogus import EENHEID_OPTIES
+
+MODEL = "claude-opus-5"
+ZEKERHEDEN = ["hoog", "middel", "laag"]
+
+SYSTEEMPROMPT = """Je helpt een medewerker van Repair Care (fabrikant van houtreparatieproducten) om
+invulbestanden van dealers automatisch te vullen met productdata.
+
+Je krijgt de eerste rijen van een dealerbestand (Excel). Bepaal:
+1. kopregel_index: de 0-gebaseerde index van de rij met kolomkoppen.
+2. Per kolom uit die kopregel: welk doelveld uit de catalogus de dealer vraagt.
+   - Kolommen die het artikel identificeren krijgen een sleutel_-veld
+     (sleutel_artikelcode voor het Repair Care-artikelnummer / Hersteller-Artikelnummer /
+     supplier item number; sleutel_ean voor EAN/GTIN; sleutel_omschrijving alleen als
+     er geen ander sleutelveld is). Het eigen artikelnummer van de dealer is GEEN sleutel.
+   - Kolommen die al door de dealer gevuld zijn of niet uit productdata af te leiden zijn
+     krijgen 'geen'.
+   - Kies bij gewichten en maten de eenheid die de dealer vraagt (uit de kop, de
+     voorbeeldwaarden of de context). Onbekend: g voor gewicht, mm voor maten, en
+     zekerheid 'middel'.
+   - Gebruik 'vast:...'-velden voor bedrijfsgegevens zoals land van oorsprong of Bundesland.
+   - Gebruik 'ruw:...'-velden alleen als geen gewoon veld past.
+3. zekerheid: hoog als kop en voorbeelden eenduidig zijn, middel bij een aanname
+   (bijvoorbeeld de eenheid), laag als je gokt.
+4. toelichting: één korte zin, alleen bij middel/laag of bij 'geen'.
+
+Antwoord uitsluitend met JSON volgens het opgelegde schema.
+
+=== VELDCATALOGUS ===
+"""
+
+
+@dataclass
+class KolomMapping:
+    kolom: str
+    doelveld: str
+    eenheid: str | None
+    zekerheid: str
+    toelichting: str
+
+
+@dataclass
+class Mapping:
+    kopregel_index: int
+    kolommen: list[KolomMapping] = field(default_factory=list)
+    opmerkingen: str = ""
+
+    def sleutels(self) -> list[KolomMapping]:
+        return [k for k in self.kolommen if k.doelveld.startswith("sleutel_")]
+
+    def doelen(self) -> list[KolomMapping]:
+        return [k for k in self.kolommen if not k.doelveld.startswith("sleutel_") and k.doelveld != "geen"]
+
+    def naar_dict(self) -> dict:
+        return asdict(self)
+
+    @staticmethod
+    def uit_dict(d: dict) -> "Mapping":
+        return Mapping(
+            kopregel_index=int(d["kopregel_index"]),
+            kolommen=[KolomMapping(k["kolom"], k["doelveld"], k.get("eenheid"),
+                                   k.get("zekerheid", "laag"), k.get("toelichting", ""))
+                      for k in d.get("kolommen", [])],
+            opmerkingen=d.get("opmerkingen", "") or "",
+        )
+
+
+def mapping_schema(doelveld_ids: list[str]) -> dict:
+    return {
+        "type": "object",
+        "properties": {
+            "kopregel_index": {"type": "integer"},
+            "kolommen": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "kolom": {"type": "string"},
+                        "doelveld": {"type": "string", "enum": list(doelveld_ids)},
+                        "eenheid": {"type": ["string", "null"], "enum": list(EENHEID_OPTIES)},
+                        "zekerheid": {"type": "string", "enum": ZEKERHEDEN},
+                        "toelichting": {"type": "string"},
+                    },
+                    "required": ["kolom", "doelveld", "eenheid", "zekerheid", "toelichting"],
+                    "additionalProperties": False,
+                },
+            },
+            "opmerkingen": {"type": "string"},
+        },
+        "required": ["kopregel_index", "kolommen", "opmerkingen"],
+        "additionalProperties": False,
+    }
+
+
+def lege_mapping(kopregel_index: int, koppen: list[str]) -> Mapping:
+    return Mapping(kopregel_index, [KolomMapping(k, "geen", None, "laag", "") for k in koppen])
+
+
+def bouw_fragment(rijen: list[list], tabblad: str, totaal_rijen: int) -> str:
+    regels = [f"Tabblad: {tabblad}. Totaal {totaal_rijen} rijen. Eerste rijen (index: cellen):"]
+    for i, rij in enumerate(rijen):
+        cellen = [("" if c is None else str(c)) for c in rij]
+        regels.append(f"rij {i}: " + " | ".join(cellen))
+    return "\n".join(regels)
+
+
+def vraag_mapping(client, rijen: list[list], tabblad: str, totaal_rijen: int,
+                  catalogus: list[dict]) -> Mapping:
+    """Eén Claude-aanroep; antwoord is JSON volgens mapping_schema."""
+    ids = [c["id"] for c in catalogus]
+    systeem = [{
+        "type": "text",
+        "text": SYSTEEMPROMPT + json.dumps(catalogus, ensure_ascii=False, indent=1),
+        "cache_control": {"type": "ephemeral"},
+    }]
+    antwoord = client.messages.create(
+        model=MODEL,
+        max_tokens=8000,
+        system=systeem,
+        messages=[{"role": "user", "content": bouw_fragment(rijen, tabblad, totaal_rijen)}],
+        output_config={"format": {"type": "json_schema", "schema": mapping_schema(ids)}},
+    )
+    tekst = next(b.text for b in antwoord.content if b.type == "text")
+    data = json.loads(tekst)
+    mapping = Mapping.uit_dict(data)
+    onbekend = [k.doelveld for k in mapping.kolommen if k.doelveld not in ids]
+    if onbekend:
+        raise ValueError(f"Onbekende doelvelden in mapping: {onbekend}")
+    return mapping
