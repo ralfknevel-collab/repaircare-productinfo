@@ -1988,7 +1988,7 @@
       "Dangerous for the environment": "A: yes",
       "Flashpoint": "A: >93°C",
       "Transport-naam ADR": "A: UN 3082 ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S. (CONTAINS ;reaction product: bisphenol-A-(epichlorhydrin), epoxy resin (number average molecular weight ≤ 700) ; Formaldehyde, oligomeric reaction products with 1-chloro-2,3-epoxypropane and phenol), 9, III, MARINE POLLUTANT; Flashpoint >93°C;",
-      "Netto gewicht per stuk (gr)": "A: 131",
+      "Netto gewicht per stuk (gr)": "A: 279",
       "Bruto gewicht per stuk (gr)": "A: 330"
      },
      "inhoud": "200 ml",
@@ -2009,7 +2009,7 @@
      "milieugevaarlijk": "yes",
      "vlampunt": ">93°C",
      "adr_naam": "UN 3082 ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S. (CONTAINS ;reaction product: bisphenol-A-(epichlorhydrin), epoxy resin (number average molecular weight ≤ 700) ; Formaldehyde, oligomeric reaction products with 1-chloro-2,3-epoxypropane and phenol), 9, III, MARINE POLLUTANT; Flashpoint >93°C;",
-     "netto_g": 131.0,
+     "netto_g": 279.0,
      "bruto_g": 330.0,
      "ghs": [
       "GHS07",
@@ -2031,6 +2031,7 @@
       "Dangerous for the environment": "B: yes",
       "Flashpoint": "B: >104°C",
       "Transport-naam ADR": "B: UN 2735 AMINES, LIQUID, CORROSIVE, N.O.S. (2,4,6-tris(dimethylaminomethyl)phenol), 8, III, MARINE POLLUTANT/ENVIRONMENTALLY HAZARDOUS; Flashpoint >104°C",
+      "Netto gewicht per stuk (gr)": "A: 131",
       "Bruto gewicht per stuk (gr)": "B: 140",
       "Netto gewicht per doos (kg)": "B: 2,62",
       "Gewicht verpakking kunststof per stuk (gr)": "B: 30,7"
@@ -2053,6 +2054,7 @@
      "milieugevaarlijk": "yes",
      "vlampunt": ">104°C",
      "adr_naam": "UN 2735 AMINES, LIQUID, CORROSIVE, N.O.S. (2,4,6-tris(dimethylaminomethyl)phenol), 8, III, MARINE POLLUTANT/ENVIRONMENTALLY HAZARDOUS; Flashpoint >104°C",
+     "netto_g": 131.0,
      "bruto_g": 140.0,
      "ghs": [
       "GHS07",
@@ -2106,6 +2108,8 @@
    },
    "gn_code": "32141010",
    "invoerrechten": 0.05,
+   "netto_g": 410.0,
+   "netto_regel": "som van A 279 g + B 131 g",
    "bruto_g": 470.0,
    "bruto_regel": "som van A 330 g + B 140 g",
    "maat_mm": {
@@ -7458,7 +7462,7 @@
       "Dangerous for the environment": "A: yes",
       "Flashpoint": "A: >93°C",
       "Transport-naam ADR": "A: UN 3082 ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S. (CONTAINS ;reaction product: bisphenol-A-(epichlorhydrin), epoxy resin (number average molecular weight ≤ 700) ; Formaldehyde, oligomeric reaction products with 1-chloro-2,3-epoxypropane and phenol), 9, III, MARINE POLLUTANT; Flashpoint >93°C;",
-      "Netto gewicht per stuk (gr)": "A: 96"
+      "Netto gewicht per stuk (gr)": "A: 205"
      },
      "inhoud": "215 ml",
      "ufi": "2QX2-9JHV-3E74-NHF9",
@@ -7470,7 +7474,7 @@
      "milieugevaarlijk": "yes",
      "vlampunt": ">93°C",
      "adr_naam": "UN 3082 ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S. (CONTAINS ;reaction product: bisphenol-A-(epichlorhydrin), epoxy resin (number average molecular weight ≤ 700) ; Formaldehyde, oligomeric reaction products with 1-chloro-2,3-epoxypropane and phenol), 9, III, MARINE POLLUTANT; Flashpoint >93°C;",
-     "netto_g": 96.0,
+     "netto_g": 205.0,
      "ghs": [
       "GHS07",
       "GHS09"
@@ -7488,7 +7492,8 @@
       "Transport-categorie ADR": "B: 3",
       "Dangerous for the environment": "B: yes",
       "Flashpoint": "B: >104°C",
-      "Transport-naam ADR": "B: UN 2735 AMINES, LIQUID, CORROSIVE, N.O.S. (2,4,6-tris(dimethylaminomethyl)phenol), 8, III, MARINE POLLUTANT/ENVIRONMENTALLY HAZARDOUS; Flashpoint >104°C"
+      "Transport-naam ADR": "B: UN 2735 AMINES, LIQUID, CORROSIVE, N.O.S. (2,4,6-tris(dimethylaminomethyl)phenol), 8, III, MARINE POLLUTANT/ENVIRONMENTALLY HAZARDOUS; Flashpoint >104°C",
+      "Netto gewicht per stuk (gr)": "A: 96"
      },
      "ufi": "22Y2-AJ9F-AE73-9VSJ",
      "voc": "contains no or almost no volatile organic compound",
@@ -7499,6 +7504,7 @@
      "milieugevaarlijk": "yes",
      "vlampunt": ">104°C",
      "adr_naam": "UN 2735 AMINES, LIQUID, CORROSIVE, N.O.S. (2,4,6-tris(dimethylaminomethyl)phenol), 8, III, MARINE POLLUTANT/ENVIRONMENTALLY HAZARDOUS; Flashpoint >104°C",
+     "netto_g": 96.0,
      "ghs": [
       "GHS07",
       "GHS05",
@@ -7520,6 +7526,8 @@
    "samengesteld": "ja",
    "gn_code": "32141010",
    "invoerrechten": 0.05,
+   "netto_g": 301.0,
+   "netto_regel": "som van A 205 g + B 96 g",
    "ghs": [
     "GHS07",
     "GHS09",

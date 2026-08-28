@@ -21,6 +21,10 @@ import openpyxl
 
 LEEG = {"", "--", "-", "n.v.t.", "nvt", "inapplicable", "none"}
 
+# Datafouten in het sheet die de ingest niet kan oplossen. lees_artikelen() leegt
+# en vult deze lijst; main() print hem zodat de eigenaar het sheet kan corrigeren.
+WAARSCHUWINGEN: list[str] = []
+
 _GETAL = re.compile(r"-?\d+(?:[.,]\d+)?")
 _PREFIX = re.compile(r"^([AB])\s*:\s*(.*)$", re.S)
 _BLOK = re.compile(r"^(\d+(?:[.,]\d+)?)\s*[xX×]\s*(\d+(?:[.,]\d+)?)\s*[xX×]\s*(\d+(?:[.,]\d+)?)$")
@@ -204,10 +208,24 @@ def _verwerk_rij(rij, index: dict[str, int], ghs_index: dict[str, int], kop_per_
             continue
         if sleutel in COMPONENTVELDEN:
             prefix, rest = split_prefix(tekst)
-            naam = prefix or standaard_component
+            code = artikel.get("artikelcode", "?")
+            if prefix and standaard_component and prefix != standaard_component:
+                # Structuur (kolom Components) is betrouwbaarder dan de prefix in de cel.
+                WAARSCHUWINGEN.append(
+                    f"{code}: prefix {prefix}: in rij van component {standaard_component} "
+                    f"(kolom {kop}) — rij-component gebruikt")
+                naam = standaard_component
+            else:
+                naam = prefix or standaard_component
             doel = _component(artikel, naam) if naam else artikel
             doel["ruw"][kop] = tekst
-            _zet(doel, sleutel, rest)
+            # Nooit stil overschrijven: de eerste waarde blijft staan.
+            if MAATVELDEN.get(sleutel, sleutel) in doel:
+                WAARSCHUWINGEN.append(
+                    f"{code}: {kop} staat al gevuld voor {naam or 'artikel'} "
+                    f"— eerste waarde blijft staan, {tekst!r} genegeerd")
+            else:
+                _zet(doel, sleutel, rest)
         else:
             doel = artikel if hoofdrij or not standaard_component else _component(artikel, standaard_component)
             doel["ruw"][kop] = tekst
@@ -243,6 +261,7 @@ def _rond_af(artikel: dict) -> None:
 
 
 def lees_artikelen(ws) -> tuple[dict[str, dict], list[str]]:
+    WAARSCHUWINGEN.clear()
     rijen = list(ws.iter_rows(values_only=True))
     koppen = [normaliseer_kop(k) if k is not None else None for k in rijen[KOPREGEL]]
     ontbreekt = [k for k in VERPLICHT if k not in koppen]
@@ -301,6 +320,10 @@ def main() -> int:
     data = bouw_artikeldata(EXCEL_FILE)
     UITVOER.write_text(json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{len(data['artikelen'])} artikelen geschreven naar {UITVOER.name}")
+    if WAARSCHUWINGEN:
+        print(f"\n{len(WAARSCHUWINGEN)} waarschuwing(en) — controleer deze rijen in het sheet:")
+        for w in WAARSCHUWINGEN:
+            print(" ", w)
     return 0
 
 

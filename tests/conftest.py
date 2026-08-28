@@ -68,9 +68,14 @@ PDS_RIJEN = [
             "Minimale Verkoop- hoeveel-heid": 1, "Components": "--", "Contentes": "1 stuk",
             "Dimensions per piece    (mm) (LxBxH)": "350x60x180", "GN-code": "8424 20 00",
             "Netto gewicht per stuk (gr)": 935, "Bruto gewicht per stuk (gr)": 1010}),
+    # Datafout uit het echte sheet: de B-rij draagt een 'A:'-prefix in de nettokolom.
+    _rij(**{"Artikelcode": 2027005, "Omschrijving": "DRY FLEX 4 duo", "EAN-code": "87.14748.",
+            "Status": "Actief", "Productgroup": "202, DRY FLEX", "Minimale Verkoop- hoeveel-heid": 6,
+            "Components": "A", "GN-code": "3214 10 10", "Netto gewicht per stuk (gr)": "A: 279 "}),
+    _rij(**{"Components": "B", "Netto gewicht per stuk (gr)": "A: 131"}),
 ]
 # Tweede EAN-cel (kolom zonder kop) per hoofdrij.
-_EAN2 = {0: "00436.8", 2: "00380.4", 3: "00332.3", 4: "00385.9", 5: "00405.4"}
+_EAN2 = {0: "00436.8", 2: "00380.4", 3: "00332.3", 4: "00385.9", 5: "00405.4", 6: "00500.1"}
 for _i, _e in _EAN2.items():
     PDS_RIJEN[_i][PDS_KOPPEN.index("EAN-code") + 1] = _e
 

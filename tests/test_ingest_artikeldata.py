@@ -1,6 +1,7 @@
 import pytest
 
 from ingest_artikeldata import (
+    WAARSCHUWINGEN,
     alleen_cijfers,
     combineer_maat,
     normaliseer_kop,
@@ -96,7 +97,7 @@ ECHT_SHEET = Path(__file__).resolve().parent.parent / "Product Data Sheet decemb
 
 def test_lees_artikelen_fixture(artikeldata_dict):
     art = artikeldata_dict["artikelen"]
-    assert set(art) == {"2010005", "2511105", "4513032", "4570042", "4511003"}
+    assert set(art) == {"2010005", "2511105", "4513032", "4570042", "4511003", "2027005"}
     assert "Dimensions per piece (mm) (LxBxH)" in artikeldata_dict["ruwe_kolommen"]
 
     dfu = art["2010005"]
@@ -143,6 +144,17 @@ def test_lees_artikelen_fixture(artikeldata_dict):
     assert pistool["inhoud"] == "1 stuk"
     assert pistool["netto_g"] == 935 and "netto_regel" not in pistool
     assert pistool["maat_mm"] == {"vorm": "blok", "l": 350, "b": 60, "h": 180}
+
+
+def test_prefix_botst_met_rijcomponent(artikeldata_dict):
+    """B-rij met een 'A:'-prefix: het rij-component wint en er komt een waarschuwing."""
+    art = artikeldata_dict["artikelen"]["2027005"]
+    assert {c["naam"]: c["netto_g"] for c in art["componenten"]} == {"A": 279, "B": 131}
+    assert art["netto_g"] == 410
+    botsingen = [w for w in WAARSCHUWINGEN if "2027005" in w]
+    assert len(botsingen) == 1
+    assert "prefix A:" in botsingen[0] and "component B" in botsingen[0]
+    assert "rij-component gebruikt" in botsingen[0]
 
 
 def test_ontbrekende_kolom_geeft_duidelijke_fout(tmp_path):
