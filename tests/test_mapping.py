@@ -63,13 +63,31 @@ def _nep_client(antwoord: dict):
     """Minimale nep van anthropic.Anthropic: onthoudt de aanroep, geeft JSON-tekst terug."""
     aanroepen = []
 
-    def create(**kwargs):
-        aanroepen.append(kwargs)
-        return SimpleNamespace(content=[SimpleNamespace(type="text", text=json.dumps(antwoord))],
-                               stop_reason="end_turn")
+    bericht = SimpleNamespace(content=[SimpleNamespace(type="text", text=json.dumps(antwoord))],
+                              stop_reason="end_turn")
 
-    client = SimpleNamespace(messages=SimpleNamespace(create=create))
+    def stream(**kwargs):
+        aanroepen.append(kwargs)
+        return _NepStream(bericht)
+
+    client = SimpleNamespace(messages=SimpleNamespace(stream=stream))
     return client, aanroepen
+
+
+class _NepStream:
+    """Nep van de streaming-contextmanager van de SDK: alleen get_final_message()."""
+
+    def __init__(self, bericht):
+        self.bericht = bericht
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def get_final_message(self):
+        return self.bericht
 
 
 def test_vraag_mapping_gebruikt_schema_en_parset_antwoord():
@@ -113,9 +131,9 @@ def test_vraag_mapping_onbekend_doelveld_faalt():
 
 
 def _nep_client_ruw(content, stop_reason="end_turn"):
-    def create(**kwargs):
-        return SimpleNamespace(content=content, stop_reason=stop_reason)
-    return SimpleNamespace(messages=SimpleNamespace(create=create))
+    def stream(**kwargs):
+        return _NepStream(SimpleNamespace(content=content, stop_reason=stop_reason))
+    return SimpleNamespace(messages=SimpleNamespace(stream=stream))
 
 
 def test_vraag_mapping_zonder_tekstblok_faalt_duidelijk():

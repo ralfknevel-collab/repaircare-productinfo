@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass, field
 from veldcatalogus import EENHEID_OPTIES
 
 MODEL = "claude-opus-5"
+MAX_TOKENS = 32000  # ruim: 150+ kolommen × ~40 tokens plus thinking
 ZEKERHEDEN = ["hoog", "middel", "laag"]
 
 SYSTEEMPROMPT = """Je helpt een medewerker van Repair Care (fabrikant van houtreparatieproducten) om
@@ -129,13 +130,17 @@ def vraag_mapping(client, rijen: list[list], tabblad: str, totaal_rijen: int,
         "text": SYSTEEMPROMPT + json.dumps(catalogus, ensure_ascii=False, indent=1),
         "cache_control": {"type": "ephemeral"},
     }]
-    antwoord = client.messages.create(
+    # Streaming: dealerbestanden met 100+ kolommen geven een lang JSON-antwoord, en
+    # de thinking-tokens tellen mee in max_tokens; zonder streaming loopt de
+    # HTTP-aanroep bij zulke waarden tegen de SDK-timeout.
+    with client.messages.stream(
         model=MODEL,
-        max_tokens=8000,
+        max_tokens=MAX_TOKENS,
         system=systeem,
         messages=[{"role": "user", "content": bouw_fragment(rijen, tabblad, totaal_rijen)}],
         output_config={"format": {"type": "json_schema", "schema": mapping_schema(ids)}},
-    )
+    ) as stream:
+        antwoord = stream.get_final_message()
     stop = getattr(antwoord, "stop_reason", None)
     if stop in ("refusal", "max_tokens"):
         raise ValueError(f"Claude gaf geen bruikbare mapping (stop_reason={stop}).")

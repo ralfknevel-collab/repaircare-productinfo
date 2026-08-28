@@ -371,10 +371,10 @@ def test_bepaal_mapping_zonder_client(seefelder_bestand, ad):
 def test_bepaal_mapping_bij_fout_lege_mapping(seefelder_bestand, ad):
     ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
 
-    def create(**kwargs):
+    def stream(**kwargs):
         raise ValueError("API stuk")
 
-    client = SimpleNamespace(messages=SimpleNamespace(create=create))
+    client = SimpleNamespace(messages=SimpleNamespace(stream=stream))
     m = bepaal_mapping(client, ws, ad)
     assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
     assert all(k.doelveld == "geen" for k in m.kolommen)
