@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 import openpyxl
+from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 
 from artikeldata import Artikeldata, Match, Waarde
@@ -27,7 +28,14 @@ SLEUTELTYPE_ARG = {
     "sleutel_ean": "ean",
     "sleutel_omschrijving": "omschrijving",
 }
-GEEL = openpyxl.styles.PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
+
+
+class _PUNTKOMMA(csv.excel):
+    """Fallback-dialect als csv.Sniffer het scheidingsteken niet herkent."""
+    delimiter = ";"
+
+
+GEEL = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
 CONTROLE_TAB = "Controle"
 
 
@@ -40,8 +48,7 @@ def laad_werkboek(inhoud: bytes, bestandsnaam: str) -> openpyxl.Workbook:
         try:
             dialect = csv.Sniffer().sniff(tekst[:2000], delimiters=";,\t")
         except csv.Error:
-            dialect = csv.excel
-            dialect.delimiter = ";"
+            dialect = _PUNTKOMMA
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Sheet1"

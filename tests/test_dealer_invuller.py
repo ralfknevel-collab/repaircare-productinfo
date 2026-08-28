@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import csv
 import openpyxl
 import pytest
 
@@ -65,3 +66,11 @@ def test_koppen_dedup_en_leeg(tmp_path):
     ws = kies_tabblad(laad_werkboek(pad.read_bytes(), pad.name), None)
     k = koppen(ws, 0)
     assert k == {"ArtNr": 0, "Gewicht": 1, "Kolom C": 2, "Gewicht (2)": 3, "EAN": 4}
+
+
+def test_laad_csv_fallback_muteert_stdlib_niet():
+    # Eén kolom: de Sniffer kan geen scheidingsteken bepalen -> fallback op ';'.
+    wb = laad_werkboek("ArtNr\n2010005\n".encode("utf-8"), "een.csv")
+    ws = kies_tabblad(wb, None)
+    assert ws.cell(1, 1).value == "ArtNr" and ws.cell(2, 1).value == "2010005"
+    assert csv.excel.delimiter == ","
