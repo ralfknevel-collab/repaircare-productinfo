@@ -416,15 +416,17 @@ def toon_dealer_excel() -> None:
     mapping: Mapping = staat["mapping"]
     if mapping.opmerkingen:
         st.info(mapping.opmerkingen)
-    if not mapping.kolommen:
-        # Geen kopregel herkend: gebruiker wijst de rij aan.
+    if "kopregel_handmatig" not in staat:
+        staat["kopregel_handmatig"] = not mapping.kolommen
+    if staat["kopregel_handmatig"]:
+        # Geen kopregel herkend: gebruiker wijst de rij aan; keuze blijft over reruns bewaard.
         rijen = lees_rijen(ws, 10)
         opties = [f"rij {i + 1}: " + " | ".join(str(c) for c in r if c is not None)[:80]
                   for i, r in enumerate(rijen)]
         gekozen = st.selectbox("Kopregel niet herkend — kies de rij met de kolomkoppen",
-                               list(range(len(opties))), format_func=lambda i: opties[i])
+                               list(range(len(opties))), format_func=lambda i: opties[i],
+                               key=f"kopregel_{sleutel}_{ws.title}")
         mapping = lege_mapping(gekozen, list(koppen(ws, gekozen).keys()))
-        staat["mapping"] = mapping
 
     catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
     labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
@@ -446,7 +448,7 @@ def toon_dealer_excel() -> None:
         "Toelichting": k.toelichting,
     } for k in mapping.kolommen])
     bewerkt = st.data_editor(
-        tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}",
+        tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}_{mapping.kopregel_index}",
         disabled=["Kolom", "Voorbeeld", "Zekerheid", "Toelichting"],
         column_config={
             "Doelveld": st.column_config.SelectboxColumn(options=list(labels.values()), required=True),
