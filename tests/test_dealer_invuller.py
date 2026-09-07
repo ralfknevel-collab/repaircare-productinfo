@@ -11,6 +11,7 @@ from artikeldata import Artikeldata, Waarde
 from dealer_invuller import (
     CONTROLE_TAB,
     Rapport,
+    bepaal_data_start,
     bepaal_mapping,
     controleer_eenheden,
     kies_tabblad,
@@ -190,7 +191,9 @@ def test_vul_in_seefelder(seefelder_bestand, ad):
     # Rij 2 = DRY FIX UNI: gn, gewicht, maten in cm, land NLD via prefix, Bundesland leeg+geel.
     assert ws["D2"].value == "32141010"
     assert ws["E2"].value == 318
-    assert (ws["F2"].value, ws["G2"].value, ws["H2"].value) == (8.9, 4.8, 18.4)
+    assert (ws["F2"].value, ws["G2"].value, ws["H2"].value) == (
+        "A: 4.8 / B: 4.1", "A: 4.8 / B: 4.1", "A: 18.4 / B: 14.5",
+    )
     assert ws["C2"].value == "NLD"
     assert ws["B2"].value is None and ws["B2"].fill.start_color.rgb.endswith("FFFF00")
     # Rij 4 = spatel: bestaande GN-code blijft staan, land leeg (prefix 4 niet geconfigureerd).
@@ -237,7 +240,8 @@ def test_controle_tab(seefelder_bestand, ad):
     tekst = "\n".join(" ".join(str(c) for c in rij if c is not None) for rij in ct.iter_rows(values_only=True))
     assert "2010005" in tekst and "artikelcode" in tekst
     assert "222" in tekst and "96" in tekst          # rekenregel gewicht
-    assert "naast elkaar" in tekst                     # rekenregel maat
+    assert "geen totale setmaat" in tekst               # bronbetekenis van de componentmaten
+    assert "componenten A en B" in tekst and "A: 4.8 / B: 4.1" in tekst
     assert "niet gevonden" in tekst.lower()
     assert "Gevonden: 4" in tekst
 
@@ -257,7 +261,113 @@ def test_verwerk_csv_met_kg_en_cm(tmp_path, ad):
                     KolomMapping("Height (cm)", "hoogte", "cm", "hoog", "")])
     uit, _ = verwerk(inhoud, "lijst.csv", m, ad)
     ws = openpyxl.load_workbook(io.BytesIO(uit))["Sheet1"]
-    assert ws["B2"].value == 0.318 and ws["C2"].value == 18.4
+    assert ws["B2"].value == 0.318 and ws["C2"].value == "A: 18.4 / B: 14.5"
+
+
+@pytest.mark.parametrize("eenheid, verwacht", [
+    ("mm", "A: 48 / B: 41"),
+    ("cm", "A: 4.8 / B: 4.1"),
+    ("m", "A: 0.048 / B: 0.041"),
+])
+def test_componentmaten_worden_per_component_omgerekend(ad, eenheid, verwacht):
+    waarde = ad.waarde(ad.zoek(artikelcode="2010005").artikel, "lengte")
+    assert maak_waarde(waarde, eenheid) == verwacht
+
+
+def test_componentmaten_maken_alleen_ingevulde_maatkolommen_breder(seefelder_bestand, ad):
+    wb = laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name)
+    ws = wb.active
+    for kolom in ("E", "F", "G", "H", "I"):
+        ws.column_dimensions[kolom].width = 6
+    ws.column_dimensions["G"].width = 30
+    ws["H2"] = "bestaande maat"
+    stijlen = {c.coordinate: list(c._style or [0] * 9) for rij in ws for c in rij}
+
+    vul_in(ws, SEEFELDER_MAPPING, ad, behoud_sjabloon=True)
+
+    assert ws.column_dimensions["F"].width >= len(ws["F2"].value) + 2
+    assert ws.column_dimensions["G"].width == 30
+    assert ws.column_dimensions["H"].width == 6
+    assert ws.column_dimensions["E"].width == 6
+    assert ws.column_dimensions["I"].width == 6
+    assert ws["H2"].value == "bestaande maat"
+    assert {c.coordinate: list(c._style or [0] * 9) for rij in ws for c in rij} == stijlen
+
+
+@pytest.mark.parametrize("maatkolom", ["B", "C"])
+@pytest.mark.parametrize("breedte", [6, 40])
+def test_componentmaten_behouden_gedeelde_kolominstellingen(ad, maatkolom, breedte):
+    ws = openpyxl.Workbook().active
+    ws.append(["Artikelcode", "Tweede", "Derde", "Vierde"])
+    ws.append(["2010005", None, None, None])
+    ws.column_dimensions.group("B", "D", hidden=True)
+    ws.column_dimensions["B"].width = breedte
+    instellingen = {naam: dict(dimensie) for naam, dimensie in ws.column_dimensions.items()}
+    mapping = Mapping(0, [
+        KolomMapping("Artikelcode", "sleutel_artikelcode", None, "hoog", ""),
+        KolomMapping(ws[f"{maatkolom}1"].value, "lengte", "mm", "hoog", ""),
+    ])
+
+    vul_in(ws, mapping, ad, behoud_sjabloon=True)
+
+    assert ws[f"{maatkolom}2"].value == "A: 48 / B: 41"
+    assert {naam: dict(dimensie) for naam, dimensie in ws.column_dimensions.items()} == instellingen
+
+
+def test_componentmaten_verkleinen_standaard_kolombreedte_niet(ad):
+    ws = openpyxl.Workbook().active
+    ws.append(["Artikelcode", "Lengte"])
+    ws.append(["2010005", None])
+    ws.sheet_format.defaultColWidth = 40
+    mapping = Mapping(0, [
+        KolomMapping("Artikelcode", "sleutel_artikelcode", None, "hoog", ""),
+        KolomMapping("Lengte", "lengte", "mm", "hoog", ""),
+    ])
+
+    vul_in(ws, mapping, ad, behoud_sjabloon=True)
+
+    assert ws["B2"].value == "A: 48 / B: 41"
+    assert "B" not in ws.column_dimensions
+    assert ws.sheet_format.defaultColWidth == 40
+
+
+def test_componentmaten_rondreis_met_bron_en_bestaande_cellen(ad):
+    inhoud = b"Artikelcode;Lengte;Breedte;Hoogte\n2010005;;dealermaat;=10+20\n"
+    mapping = Mapping(0, [KolomMapping("Artikelcode", "sleutel_artikelcode", None, "hoog", "")] + [
+        KolomMapping(kop, doel, "mm", "hoog", "Keuze gebruiker: mm.")
+        for kop, doel in [("Lengte", "lengte"), ("Breedte", "breedte"), ("Hoogte", "hoogte")]
+    ])
+    uit, rapport = verwerk(inhoud, "sets.csv", mapping, ad, behoud_sjabloon=True)
+    wb = openpyxl.load_workbook(io.BytesIO(uit))
+    assert [wb["Sheet1"].cell(2, k).value for k in (2, 3, 4)] == [
+        "A: 48 / B: 41", "dealermaat", "=10+20",
+    ]
+    resultaat = rapport.rijen[0].velden[0]
+    assert resultaat.waarde == "A: 48 / B: 41" and resultaat.eenheid == "mm"
+    assert "componenten A en B" in resultaat.bron
+    assert "geen totale setmaat" in resultaat.regel and "Keuze gebruiker: mm." in resultaat.regel
+    assert [v.status for v in rapport.rijen[0].velden] == ["ingevuld", "bestaand", "overgeslagen"]
+    controletekst = str(list(wb[CONTROLE_TAB].values))
+    assert "A: 48 / B: 41" in controletekst and "componenten A en B" in controletekst
+
+
+@pytest.mark.parametrize("behoud_sjabloon", [False, True])
+def test_onvolledige_componentmaat_blijft_leeg_met_duidelijke_reden(ad, behoud_sjabloon):
+    artikel = ad.zoek(artikelcode="2010005").artikel
+    del artikel["componenten"][1]["maat_mm"]["l"]
+    wb = openpyxl.Workbook()
+    wb.active.append(["Artikelcode", "Lengte", "Hoogte"])
+    wb.active.append(["2010005"])
+    mapping = Mapping(0, [
+        KolomMapping("Artikelcode", "sleutel_artikelcode", None, "hoog", ""),
+        KolomMapping("Lengte", "lengte", "mm", "hoog", ""),
+        KolomMapping("Hoogte", "hoogte", "mm", "hoog", ""),
+    ])
+    rapport = vul_in(wb.active, mapping, ad, behoud_sjabloon=behoud_sjabloon)
+    assert wb.active["B2"].value is None
+    assert wb.active["C2"].value == "A: 184 / B: 145"
+    leeg = rapport.rijen[0].velden[0]
+    assert leeg.status == "onzeker" and "component" in leeg.regel.lower()
 
 
 def test_cli_met_mapping_bestand(seefelder_bestand, tmp_path, artikeldata_dict, monkeypatch):
@@ -364,21 +474,49 @@ def test_bepaal_mapping_zonder_client(seefelder_bestand, ad):
     ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
     m = bepaal_mapping(None, ws, ad)
     assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
-    assert all(k.doelveld == "geen" for k in m.kolommen)
+    assert {k.kolom: k.doelveld for k in m.sleutels()} == {
+        "HerstellerArtNr": "sleutel_artikelcode", "EAN13": "sleutel_ean",
+    }
     assert "handmatig" in m.opmerkingen
 
 
-def test_bepaal_mapping_bij_fout_lege_mapping(seefelder_bestand, ad):
+def test_bepaal_mapping_bij_fout_lege_mapping(seefelder_bestand, ad, monkeypatch):
     ws = kies_tabblad(laad_werkboek(seefelder_bestand.read_bytes(), seefelder_bestand.name), None)
 
-    def stream(**kwargs):
+    def vraag(*args, **kwargs):
         raise ValueError("API stuk")
 
-    client = SimpleNamespace(messages=SimpleNamespace(stream=stream))
-    m = bepaal_mapping(client, ws, ad)
+    monkeypatch.setattr("dealer_invuller.vraag_mapping", vraag)
+    m = bepaal_mapping(object(), ws, ad)
     assert [k.kolom for k in m.kolommen] == SEEFELDER_KOPPEN
-    assert all(k.doelveld == "geen" for k in m.kolommen)
+    assert {k.kolom for k in m.sleutels()} == {"HerstellerArtNr", "EAN13"}
     assert "API stuk" in m.opmerkingen
+
+
+@pytest.mark.parametrize("fout", ["totaal", "lezen", "onderbroken"])
+def test_bepaal_mapping_na_wachttijd_bewaart_sleutels_en_beginrij(ad, monkeypatch, fout):
+    import asyncio
+    import httpx
+
+    fouten = {"totaal": asyncio.TimeoutError(), "lezen": httpx.ReadTimeout("Geen data"),
+              "onderbroken": httpx.RemoteProtocolError("Stream afgebroken")}
+    def vraag(*args, **kwargs):
+        raise fouten[fout]
+    monkeypatch.setattr("dealer_invuller.vraag_mapping", vraag)
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Material", "Produkt", "EM", "MW"])
+    ws.append(["Standard-Material", "Lief-Mat", "EAN", "Gewicht"])
+    ws.append([])
+    ws.append([None, None, "MATNR", "MEMD0002"])
+    ws.append(["dealer-123", "2010005", "8714748004368", None])
+    m = bepaal_mapping(object(), ws, ad)
+    assert m.kopregel_index == 1 and m.data_start_index == 4
+    assert {k.kolom for k in m.sleutels()} == {"Lief-Mat", "EAN"}
+    assert not m.doelen()
+    assert "handmatig" in m.opmerkingen
+    if fout == "totaal":
+        assert "wachttijd" in m.opmerkingen.lower()
 
 
 def test_bepaal_mapping_zonder_kopregel(tmp_path, ad):
@@ -387,3 +525,89 @@ def test_bepaal_mapping_zonder_kopregel(tmp_path, ad):
     m = bepaal_mapping(None, ws, ad)
     assert m.kopregel_index == 0 and m.kolommen == []
     assert "kopregel" in m.opmerkingen.lower()
+
+
+@pytest.mark.parametrize("tweede_kop", ["Gewicht", "GEWICHT"])
+def test_api_dubbele_koppen_worden_aan_aparte_kolommen_gekoppeld(ad, tweede_kop):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Artikelcode", "Gewicht", tweede_kop])
+    ws.append(["2010005", None, None])
+    client, _ = _nep_client({
+        "kopregel_index": 0, "data_start_index": 1, "opmerkingen": "",
+        "kolommen": [
+            {"kolom": "Artikelcode", "doelveld": "sleutel_artikelcode", "eenheid": ""},
+            {"kolom": "Gewicht", "doelveld": "netto_gewicht", "eenheid": "g"},
+            {"kolom": tweede_kop, "doelveld": "bruto_gewicht", "eenheid": "g"},
+        ],
+    })
+    m = bepaal_mapping(client, ws, ad)
+    vul_in(ws, m, ad)
+    assert [k.kolom for k in m.kolommen] == ["Artikelcode", "Gewicht", "Gewicht (2)" if tweede_kop == "Gewicht" else tweede_kop]
+    assert ws["B2"].value == 318
+    assert ws["C2"].value == 360
+
+
+@pytest.mark.parametrize("code", ["MEMD0002", "MEMB0005", "MWMEMB0005-005"])
+def test_meerlaagse_koppen_en_technische_codes(ad, code):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Material", "Produkt", "EM", "MW"])
+    ws.append(["Standard-Material", "Lief-Mat", "EAN", "Gewicht"])
+    ws.append([])
+    ws.append([None, None, "MATNR", code])
+    ws.append(["dealer-123", "2010005", "8714748004368", None])
+    ws.append([None, None, None, "Toelichting voor de dealer"])
+    ws.cell(30, 4).number_format = "0.0"
+    assert vind_kopregel(lees_rijen(ws)) == 1
+    assert bepaal_data_start(ws, 1) == 4
+    m = bepaal_mapping(None, ws, ad)
+    assert m.kopregel_index == 1 and m.data_start_index == 4
+    assert {k.kolom for k in m.sleutels()} == {"Lief-Mat", "EAN"}
+    assert [r.rij for r in match_rijen(ws, m, ad)] == [5]
+    assert match_rijen(ws, m, ad)[0].match.artikel["artikelcode"] == "2010005"
+
+
+def test_weigel_koppen_met_regeleinden_en_ean_punten(ad):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Lieferanten \nArtikelnummer", "Gtin\n(EAN)", "Artikelname"])
+    ws.append(["2010005", "87.14748.00436.8", "DRY FIX UNI"])
+    ws.append(["onbekend", "87.14748.00380.4", "DRY SEAL"])
+    m = bepaal_mapping(None, ws, ad)
+    assert [r.match.artikel["artikelcode"] for r in match_rijen(ws, m, ad)] == ["2010005", "2511105"]
+
+
+def test_beschermde_cellen_blijven_intact_bij_overschrijven(ad):
+    from openpyxl.styles import Color, PatternFill
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["HerstellerArtNr", "Zwart", "Formule", "Samengevoegd", "Gewicht"])
+    ws.append(["2010005", None, "=10+20", None, None])
+    ws["B2"].fill = PatternFill("solid", fgColor=Color(theme=1))
+    ws.merge_cells("C2:D2")
+    legenda = wb.create_sheet("Legende")
+    legenda.append(["Bedeutung der schwarzen Zellen", "Diese Felder sollen nicht befüllt werden"])
+    # Opslaan en laden geeft het werkboek het standaard Excel-kleurthema.
+    wb = laad_werkboek(werkboek_naar_bytes(wb), "test.xlsx")
+    m = Mapping(0, [KolomMapping("HerstellerArtNr", "sleutel_artikelcode", None, "hoog", "")] + [
+        KolomMapping(k, "netto_gewicht", "g", "hoog", "")
+        for k in ["Zwart", "Formule", "Samengevoegd", "Gewicht"]
+    ])
+    ws = wb.active
+    rapport = vul_in(ws, m, ad, overschrijven=True)
+    assert ws["B2"].value is None and ws["B2"].fill.fgColor.theme == 1
+    assert ws["C2"].value == "=10+20" and ws["D2"].value is None
+    assert ws["E2"].value == 318
+    assert [v.status for v in rapport.rijen[0].velden] == ["overgeslagen"] * 3 + ["ingevuld"]
+
+
+def test_start_rij_buiten_werkblad_geeft_duidelijke_fout(ad):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.append(["Artikel", "EAN", "Gewicht"])
+    ws.append(["2010005"])
+    m = Mapping(0, [KolomMapping("Artikel", "sleutel_artikelcode", None, "hoog", "")], data_start_index=0)
+    with pytest.raises(ValueError, match="eerste artikelrij"):
+        match_rijen(ws, m, ad)

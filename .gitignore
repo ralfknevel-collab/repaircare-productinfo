@@ -17,3 +17,6 @@ Veiligheidsbladen/
 # Sessielog van de task-observer skill
 skill-observations/
 .playwright-mcp/
+
+# Lokaal onthouden eenheden per dealerformaat
+.dealer_profielen/

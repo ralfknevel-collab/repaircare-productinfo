@@ -6,13 +6,17 @@ kandidaten en een paar voorbeeldrijen gaan naar de API, nooit het hele bestand.
 
 from __future__ import annotations
 
+import asyncio
 import json
+import time
 from dataclasses import asdict, dataclass, field
+from typing import Callable
 
 from veldcatalogus import EENHEID_OPTIES
 
 MODEL = "claude-opus-5"
 MAX_TOKENS = 32000  # ruim: 150+ kolommen × ~40 tokens plus thinking
+MAPPING_TIMEOUT_SECONDS = 180
 ZEKERHEDEN = ["hoog", "middel", "laag"]
 
 SYSTEEMPROMPT = """Je helpt een medewerker van Repair Care (fabrikant van houtreparatieproducten) om
@@ -20,7 +24,14 @@ invulbestanden van dealers automatisch te vullen met productdata.
 
 Je krijgt de eerste rijen van een dealerbestand (Excel). Bepaal:
 1. kopregel_index: de 0-gebaseerde index van de rij met kolomkoppen.
-2. Per kolom uit die kopregel: welk doelveld uit de catalogus de dealer vraagt.
+2. data_start_index: de 0-gebaseerde index van de eerste echte artikelrij of de
+   eerste lege invulrij. Sla extra kopregels, technische veldcodes, eenheden en
+   instructierijen onder de kolomkoppen over. Deze index ligt na kopregel_index.
+   Bij een leeg sjabloon mag dit de rij direct na de laatste werkbladrij zijn.
+3. Per kolom uit die kopregel: welk doelveld uit de catalogus de dealer vraagt.
+   - Behoud de kolomkoppen exact en geef één item per kolom in de oorspronkelijke
+     volgorde, ook bij dubbele labels. Gebruik andere kop- en instructierijen
+     alleen als context; voeg hun tekst niet aan de gekozen kolomkop toe.
    - Kolommen die het artikel identificeren krijgen een sleutel_-veld
      (sleutel_artikelcode voor het Repair Care-artikelnummer / Hersteller-Artikelnummer /
      supplier item number; sleutel_ean voor EAN/GTIN; sleutel_omschrijving alleen als
@@ -37,9 +48,12 @@ Je krijgt de eerste rijen van een dealerbestand (Excel). Bepaal:
      data, niet wat de dealer vraagt.
    - Gebruik 'vast:...'-velden voor bedrijfsgegevens zoals land van oorsprong of Bundesland.
    - Gebruik 'ruw:...'-velden alleen als geen gewoon veld past.
-3. zekerheid: hoog als kop en voorbeelden eenduidig zijn, middel bij een aanname
+   - Koppel geen tekstveld aan een kolom die alleen cijfers, een keuzevak of een x
+     verwacht. Losse kenmerkopties (bijvoorbeeld MW-kolommen) krijgen 'geen' als
+     de catalogus geen expliciete omzetting naar de gevraagde x-markering biedt.
+4. zekerheid: hoog als kop en voorbeelden eenduidig zijn, middel bij een aanname
    (bijvoorbeeld de eenheid), laag als je gokt.
-4. toelichting: één korte zin, alleen bij middel/laag of bij 'geen'.
+5. toelichting: één korte zin, alleen bij middel/laag of bij 'geen'.
 
 Antwoord uitsluitend met JSON volgens het opgelegde schema.
 
@@ -61,6 +75,7 @@ class Mapping:
     kopregel_index: int
     kolommen: list[KolomMapping] = field(default_factory=list)
     opmerkingen: str = ""
+    data_start_index: int | None = None
 
     def sleutels(self) -> list[KolomMapping]:
         return [k for k in self.kolommen if k.doelveld.startswith("sleutel_")]
@@ -79,6 +94,8 @@ class Mapping:
                                    k.get("zekerheid", "laag"), k.get("toelichting", ""))
                       for k in d.get("kolommen", [])],
             opmerkingen=d.get("opmerkingen", "") or "",
+            data_start_index=(int(d["data_start_index"])
+                              if d.get("data_start_index") is not None else None),
         )
 
 
@@ -87,6 +104,7 @@ def mapping_schema(doelveld_ids: list[str]) -> dict:
         "type": "object",
         "properties": {
             "kopregel_index": {"type": "integer"},
+            "data_start_index": {"type": "integer"},
             "kolommen": {
                 "type": "array",
                 "items": {
@@ -104,7 +122,7 @@ def mapping_schema(doelveld_ids: list[str]) -> dict:
             },
             "opmerkingen": {"type": "string"},
         },
-        "required": ["kopregel_index", "kolommen", "opmerkingen"],
+        "required": ["kopregel_index", "data_start_index", "kolommen", "opmerkingen"],
         "additionalProperties": False,
     }
 
@@ -122,25 +140,41 @@ def bouw_fragment(rijen: list[list], tabblad: str, totaal_rijen: int) -> str:
 
 
 def vraag_mapping(client, rijen: list[list], tabblad: str, totaal_rijen: int,
-                  catalogus: list[dict]) -> Mapping:
-    """Eén Claude-aanroep; antwoord is JSON volgens mapping_schema."""
+                  catalogus: list[dict], voortgang: Callable[[str], None] | None = None) -> Mapping:
+    """Eén begrensde Claude-aanroep; de meegegeven AsyncAnthropic-client wordt gesloten."""
     ids = [c["id"] for c in catalogus]
     systeem = [{
         "type": "text",
         "text": SYSTEEMPROMPT + json.dumps(catalogus, ensure_ascii=False, indent=1),
         "cache_control": {"type": "ephemeral"},
     }]
-    # Streaming: dealerbestanden met 100+ kolommen geven een lang JSON-antwoord, en
-    # de thinking-tokens tellen mee in max_tokens; zonder streaming loopt de
-    # HTTP-aanroep bij zulke waarden tegen de SDK-timeout.
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=systeem,
-        messages=[{"role": "user", "content": bouw_fragment(rijen, tabblad, totaal_rijen)}],
-        output_config={"format": {"type": "json_schema", "schema": mapping_schema(ids)}},
-    ) as stream:
-        antwoord = stream.get_final_message()
+    async def ontvang_antwoord():
+        # Sluit de verbinding binnen dezelfde eventloop, ook bij annulering.
+        async with client.with_options(timeout=30.0, max_retries=0) as begrensde_client:
+            if voortgang:
+                voortgang("Verbinding maken voor automatische kolomherkenning...")
+            laatste_update, tekens = time.monotonic(), 0
+            async with begrensde_client.messages.stream(
+                model=MODEL,
+                max_tokens=MAX_TOKENS,
+                system=systeem,
+                messages=[{"role": "user", "content": bouw_fragment(rijen, tabblad, totaal_rijen)}],
+                output_config={"format": {"type": "json_schema", "schema": mapping_schema(ids)}},
+            ) as stream:
+                async for event in stream:
+                    if event.type == "text":
+                        tekens += len(event.text)
+                    nu = time.monotonic()
+                    if voortgang and nu - laatste_update >= 1:
+                        voortgang(f"Kolomherkenning bezig: {tekens:,} tekens ontvangen.")
+                        laatste_update = nu
+                return await stream.get_final_message()
+
+    async def begrensd_antwoord():
+        # Ook actieve ping-/tekststreams stoppen bij deze totale wachttijd.
+        return await asyncio.wait_for(ontvang_antwoord(), timeout=MAPPING_TIMEOUT_SECONDS)
+
+    antwoord = asyncio.run(begrensd_antwoord())
     stop = getattr(antwoord, "stop_reason", None)
     if stop in ("refusal", "max_tokens"):
         raise ValueError(f"Claude gaf geen bruikbare mapping (stop_reason={stop}).")
@@ -151,6 +185,16 @@ def vraag_mapping(client, rijen: list[list], tabblad: str, totaal_rijen: int,
         data = json.loads(tekst)
     except json.JSONDecodeError as e:
         raise ValueError(f"Claude-antwoord is geen geldige JSON: {e}") from e
+    kopregel = data.get("kopregel_index") if isinstance(data, dict) else None
+    if type(kopregel) is not int or not 0 <= kopregel < min(len(rijen), totaal_rijen):
+        raise ValueError("Ongeldige kopregel_index: kies een bestaande rij uit het aangeleverde fragment.")
+    beginrij = data.get("data_start_index")
+    # Oude mappings beginnen direct na de kop; totaal_rijen is ook de eerste
+    # invoegpositie na het werkblad wanneer een sjabloon nog geen artikelen bevat.
+    if beginrij is None:
+        beginrij = kopregel + 1
+    if type(beginrij) is not int or not kopregel < beginrij <= totaal_rijen:
+        raise ValueError("Ongeldige data_start_index: kies een rij na de kop, uiterlijk direct na het werkblad.")
     mapping = Mapping.uit_dict(data)
     onbekend = [k.doelveld for k in mapping.kolommen if k.doelveld not in ids]
     if onbekend:

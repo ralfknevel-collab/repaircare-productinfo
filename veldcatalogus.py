@@ -31,6 +31,10 @@ VELDEN: list[Veld] = [
          "Netto gewicht van één verkoopeenheid. Bij tweecomponentproducten de som van A en B."),
     Veld("bruto_gewicht", "Brutogewicht per stuk", "g", "artikel",
          "Bruto gewicht van één verkoopeenheid inclusief verpakking."),
+    Veld("collo_netto_gewicht", "Nettogewicht per doos (collo)", "g", "artikel",
+         "Netto gewicht per doos. Gelabelde doosgewichten van A en B worden opgeteld; niet het stukgewicht."),
+    Veld("collo_bruto_gewicht", "Brutogewicht per doos (collo)", "g", "artikel",
+         "Bruto gewicht per doos inclusief doosverpakking, volgens de doosbron."),
     Veld("lengte", "Lengte per stuk", "mm", "artikel", "Lengte van één verkoopeenheid."),
     Veld("breedte", "Breedte per stuk", "mm", "artikel", "Breedte van één verkoopeenheid."),
     Veld("hoogte", "Hoogte per stuk", "mm", "artikel", "Hoogte van één verkoopeenheid."),
@@ -39,6 +43,14 @@ VELDEN: list[Veld] = [
     Veld("collo_hoogte", "Hoogte verpakkingseenheid (collo)", "mm", "artikel", "Hoogte van de doos/collo."),
     Veld("ean", "EAN-13", None, "artikel", "EAN-code van het artikel (invullen, geen sleutel)."),
     Veld("omschrijving", "Omschrijving", None, "artikel", "Productnaam volgens Repair Care."),
+    Veld("adviesprijs", "Adviesverkoopprijs exclusief btw (EUR)", "EUR", "artikel",
+         "Adviesverkoopprijs exclusief btw in EUR per stuk of set volgens de prijslijst. Geen dealerinkoopprijs; alleen binnen de geldigheidsperiode."),
+    Veld("adviesprijs_eenheid", "Prijseenheid (stuk of set)", None, "artikel",
+         "Eenheid waarop de adviesprijs betrekking heeft: st of set, letterlijk volgens de prijslijst."),
+    Veld("ve_aantal", "VE-aantal volgens prijslijst", None, "artikel",
+         "Commercieel VE-aantal volgens de prijslijst, in de opgegeven stuk- of seteenheid. Geen minimale afname of bewezen doosinhoud."),
+    Veld("prijslijst_omschrijving", "Omschrijving volgens prijslijst", None, "artikel",
+         "Productnaam uit de aanvullende prijslijst. Deze is ook leidend voor het gewone omschrijvingsveld."),
     Veld("min_verkoophoeveelheid", "Minimale afname", "stuks", "artikel", "Minimale verkoophoeveelheid."),
     Veld("un_code", "UN-nummer", None, "component", "UN-nummer voor gevaarlijke stoffen (ADR)."),
     Veld("klasse", "Gevarenklasse (ADR)", None, "component", "ADR-klasse, bv. 9 of 8."),
@@ -84,9 +96,10 @@ EENHEDEN: dict[str, dict[str, float]] = {
     "massa": {"g": 1.0, "kg": 1000.0},
     "lengte": {"mm": 1.0, "cm": 10.0, "m": 1000.0},
     "aantal": {"stuks": 1.0},
+    "valuta": {"EUR": 1.0},
 }
 
-EENHEID_OPTIES: list[str | None] = [None, "g", "kg", "mm", "cm", "m", "stuks"]
+EENHEID_OPTIES: list[str | None] = [None, "g", "kg", "mm", "cm", "m", "stuks", "EUR"]
 
 
 def veld(veld_id: str) -> Veld | None:

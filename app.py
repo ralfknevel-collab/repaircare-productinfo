@@ -1,52 +1,51 @@
 """
-Chat-app voor de Repair Care productinfo-tool.
+Dealerbestanden invullen met gecontroleerde Repair Care-artikeldata.
 
-Laadt kennisbank.json (gemaakt door ingest.py) en biedt een chatbot die vragen
-beantwoordt over de product- en veiligheidsbladen, met bronvermelding.
-Vormgeving volgt de Repair Care Quote-tool (witte zijbalk met navigatie, kaarten,
-merkgroen, Inter Tight-font).
+Laadt artikeldata.json en vult bekende gegevens direct lokaal in.
+Handmatige instellingen en optionele AI-hulp staan onder Geavanceerd.
+Vormgeving volgt de Repair Care Quote-tool met kaarten, merkgroen en Inter Tight.
 
-Lokaal draaien:
-    export ANTHROPIC_API_KEY="sk-ant-..."
-    streamlit run app.py
-
-In de cloud (Streamlit Community Cloud): zet ANTHROPIC_API_KEY en (optioneel)
-APP_PASSWORD als secrets in de app-instellingen. Zie README.
+Lokaal draaien: streamlit run app.py
+Online delen: stel APP_PASSWORD in. APP_LANGUAGE kiest de starttaal (nl/de).
+ANTHROPIC_API_KEY is alleen nodig voor optionele AI-hulp. Zie README.
 """
 
 from __future__ import annotations
 
 import base64
+import asyncio
 import hashlib
-import io
+import hmac
 import json
 import os
+from collections import Counter
+from datetime import date
+from html import escape
 from pathlib import Path
 
 import anthropic
+import httpx
 import pandas as pd
 import streamlit as st
 
+import dealer_profielen
 from artikeldata import Artikeldata
 from dealer_invuller import (
-    bepaal_mapping, controleer_eenheden, kies_tabblad, koppen, laad_werkboek, lees_rijen,
-    match_rijen, verwerk,
+    bepaal_data_start, bepaal_mapping, controleer_eenheden, kies_tabblad, koppen, laad_werkboek,
+    ontbrekende_eenheden, pas_eenheden_toe, verwerk,
 )
-from mapping import KolomMapping, Mapping, lege_mapping
-from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt
+from mapping import MAPPING_TIMEOUT_SECONDS, KolomMapping, Mapping, lege_mapping
+from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt, veld
+from vertalingen import vertaal, vertaal_melding
 
 BASE_DIR = Path(__file__).resolve().parent
-KENNISBANK_FILE = BASE_DIR / "kennisbank.json"
 LOGO_SVG = BASE_DIR / "assets" / "repair-care-logo.svg"
 LOGO_PNG = BASE_DIR / "assets" / "repair-care-logo.png"
-MODEL = "claude-opus-4-8"
 
 # --- Repair Care huisstijl (tokens gelijk aan de Repair Care Quote-tool) -----
 BRAND = "#007A37"        # merkgroen: primaire knoppen, kaarttitels
-BRAND_700 = "#046B33"    # sectiekoppen, actieve navigatie
-BRAND_SOFT = "#E9F3EC"   # zachte groene vlakken (actieve nav, gebruikersbubbel)
+BRAND_700 = "#046B33"    # sectiekoppen
 BRAND_SOFT2 = "#F3F9F5"  # nog zachter (uploader)
-GEEL = "#FFDC00"         # accentbalkje bij actieve navigatie
 INK = "#13211A"          # tekst
 MUTED = "#5C6B62"        # subtekst
 LIJN = "#E6ECE7"         # randen
@@ -54,34 +53,25 @@ BG = "#EEF1EE"           # paginavlak
 PANEL = "#FFFFFF"        # kaarten, zijbalk
 WARN = "#C0392B"
 
-NAVIGATIE = [
-    ("chat", "Productinfo-chat", ":material/forum:"),
-    ("dealer", "Dealer-Excel", ":material/table_view:"),
-]
 
-VOORBEELDVRAGEN = [
-    "Wat is het brutogewicht per doos van DRY FLEX 4?",
-    "Welke gevarenklasse heeft BIO FLEX COOL component A?",
-    "Wat is de UN-code van DRY FIX UNI?",
-    "Hoe lang is de verwerkingstijd van DRY FLEX SF?",
-]
+def t(tekst: str, **waarden) -> str:
+    """Vertaal alleen bedieningstekst; productgegevens blijven in hun brontaal."""
+    return vertaal(tekst, st.session_state.get("taal", "nl"), **waarden)
 
-SYSTEEM_INSTRUCTIE = """Je bent een interne assistent voor medewerkers van Repair Care.
-Je beantwoordt vragen over de Repair Care producten op basis van de product-
-databladen en veiligheidsbladen die hieronder staan.
 
-REGELS:
-- Beantwoord uitsluitend op basis van de informatie in de documenten hieronder.
-- Verzin NOOIT informatie. Weet je iets niet of staat het niet in de documenten,
-  zeg dat dan eerlijk en verwijs naar het originele PDF-bestand.
-- Vermeld bij elk antwoord de bron: het bestand (en component) waar de informatie
-  vandaan komt, bv. "(bron: Veiligheidsblad DRY FLEX 4 - component A)".
-- Veiligheidsbladen bevatten juridisch belangrijke informatie. Wees hierbij extra
-  precies en verwijs bij twijfel altijd naar het originele veiligheidsblad.
-- Antwoord in het Nederlands, helder en bondig.
+def melding(tekst: str) -> str:
+    return vertaal_melding(tekst, st.session_state.get("taal", "nl"))
 
-=== KENNISBANK ===
-"""
+
+def behoud_keuzes_bij_taalwissel() -> None:
+    """Bewaar gemaakte keuzes voordat vertaalde widgetlabels opnieuw worden opgebouwd."""
+    staat = st.session_state.get("dealer", {})
+    if staat.get("actieve_mapping"):
+        staat["mapping"] = Mapping.uit_dict(staat["actieve_mapping"])
+    for sleutel, waarde in list(st.session_state.items()):
+        if sleutel.startswith(("maat_", "gewicht_", "tabblad_", "kopregel_", "beginrij_",
+                               "overschrijven_", "kolomdetails_")):
+            st.session_state[sleutel] = waarde
 
 
 def get_secret(naam: str) -> str | None:
@@ -95,14 +85,13 @@ def get_secret(naam: str) -> str | None:
 
 
 def pas_huisstijl_toe() -> None:
-    """Injecteer de huisstijl van de Repair Care Quote-tool: witte zijbalk met
-    navigatie, licht groengrijs paginavlak, witte kaarten, groene accenten."""
+    """Pas de huisstijl toe: witte zijbalk, witte kaarten en groene accenten."""
     css = f"""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap');
 
     html, body, [class*="st-"], [data-testid="stAppViewContainer"] *,
-    .stMarkdown, .stChatMessage, button, input, textarea {{
+    .stMarkdown, button, input, textarea {{
         font-family: 'Inter Tight', Arial, Helvetica, sans-serif !important;
     }}
     [data-testid="stIconMaterial"] {{ font-family: 'Material Symbols Rounded' !important; }}
@@ -117,7 +106,7 @@ def pas_huisstijl_toe() -> None:
 
     .stApp {{ background-color: {BG}; color: {INK}; }}
 
-    /* ---- zijbalk: wit, 248px, dunne rand, logo + navigatie ---- */
+    /* ---- zijbalk: wit, 248px, dunne rand en logo ---- */
     [data-testid="stSidebar"] {{
         background-color: {PANEL};
         border-right: 1px solid {LIJN};
@@ -131,30 +120,9 @@ def pas_huisstijl_toe() -> None:
         border-bottom: 1px solid {LIJN};
     }}
     .rc-logo img {{ height: 32px; width: auto; display: block; }}
-    [data-testid="stSidebar"] .stButton button {{
-        width: 100%; justify-content: flex-start; text-align: left; gap: 11px;
-        background: transparent; border: 0; border-radius: 10px;
-        color: #3C4A42; font-weight: 600; padding: 10px 12px;
-        box-shadow: none; position: relative;
-        transition: background .12s, color .12s;
-    }}
-    [data-testid="stSidebar"] .stButton button p {{ font-size: 14px; }}
-    [data-testid="stSidebar"] .stButton button:hover {{
-        background: rgba(0,122,55,.06); color: {INK}; border: 0;
-    }}
-    [data-testid="stSidebar"] .stButton button[kind="primary"] {{
-        background: {BRAND_SOFT}; color: {BRAND_700}; font-weight: 700;
-    }}
-    [data-testid="stSidebar"] .stButton button[kind="primary"]:hover {{
-        background: {BRAND_SOFT}; color: {BRAND_700};
-    }}
-    [data-testid="stSidebar"] .stButton button[kind="primary"]::before {{
-        content: ""; position: absolute; left: -12px; top: 8px; bottom: 8px;
-        width: 4px; border-radius: 0 3px 3px 0; background: {GEEL};
-    }}
 
-    /* ---- content: max 1080px, kaarten ---- */
-    .block-container {{ max-width: 1080px !important; padding: 30px 34px 90px !important; }}
+    /* ---- content: extra ruimte voor kolomkoppelingen ---- */
+    .block-container {{ max-width: 1400px !important; padding: 30px 34px 90px !important; }}
     [class*="st-key-kaart"] {{
         background: {PANEL}; border: 0 !important; border-radius: 16px;
         box-shadow: 0 1px 2px rgba(16,40,26,.05), 0 8px 24px -16px rgba(16,40,26,.30);
@@ -171,19 +139,21 @@ def pas_huisstijl_toe() -> None:
     .rc-sectie.eerste {{ border-top: 0; padding-top: 0; margin-top: 4px; }}
     .rc-tekst {{ color: {MUTED}; font-size: 14px; line-height: 1.5; margin: 0 0 12px; }}
     .rc-tekst b {{ color: {INK}; }}
+    .rc-detailtekst {{
+        white-space: pre-wrap; overflow-wrap: anywhere;
+        color: {INK}; font-size: 14px; line-height: 1.6; margin-bottom: 12px;
+    }}
 
     /* ---- labels en invoer ---- */
     [data-testid="stWidgetLabel"] p {{ font-size: 13px; font-weight: 700; color: {INK}; }}
     [data-testid="stTextInput"] div[data-baseweb="input"],
     [data-testid="stTextInput"] div[data-baseweb="base-input"],
-    [data-testid="stSelectbox"] div[data-baseweb="select"] > div,
-    [data-testid="stChatInput"] {{
+    [data-testid="stSelectbox"] div[data-baseweb="select"] > div {{
         border: 1px solid {LIJN}; border-radius: 9px; background: {PANEL};
         box-shadow: none;
     }}
     [data-testid="stTextInput"] div[data-baseweb="input"]:focus-within,
-    [data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within,
-    [data-testid="stChatInput"]:focus-within {{
+    [data-testid="stSelectbox"] div[data-baseweb="select"] > div:focus-within {{
         border-color: {BRAND}; box-shadow: 0 0 0 3px rgba(0,119,50,.12);
     }}
     [data-testid="stFileUploaderDropzone"] {{
@@ -215,19 +185,6 @@ def pas_huisstijl_toe() -> None:
     section.stMain .stButton button[kind="primary"]:disabled {{
         background: #C9D6CD; border-color: #C9D6CD; color: #FFFFFF;
     }}
-    /* voorbeeldvragen: kaartjes, links uitgelijnd, gelijke hoogte */
-    section.stMain .stButton button.rc-voorbeeld,
-    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"] {{
-        min-height: 60px; justify-content: flex-start; text-align: left;
-        line-height: 1.35; font-weight: 500; color: {INK};
-    }}
-    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"] p {{
-        text-align: left; width: 100%; margin: 0;
-    }}
-    section.stMain [data-testid="stColumn"] .stButton button[kind="secondary"]:hover {{
-        border-color: {BRAND}; color: {BRAND_700}; background: {BRAND_SOFT2};
-    }}
-
     /* ---- meldingen: rustige witte notice met rand ---- */
     [data-testid="stAlert"], [data-testid="stAlertContainer"] {{
         background: {PANEL} !important; border: 1px solid {LIJN}; border-radius: 12px;
@@ -236,17 +193,6 @@ def pas_huisstijl_toe() -> None:
     [data-testid="stAlert"] p {{ color: {MUTED}; font-size: 13px; line-height: 1.55; }}
     [data-testid="stAlert"] [data-testid="stAlertContentWarning"] p,
     [data-testid="stAlert"] [data-testid="stAlertContentError"] p {{ color: {WARN}; }}
-
-    /* ---- chat ---- */
-    [data-testid="stChatMessage"] {{
-        border-radius: 16px; padding: 6px 18px; margin-bottom: 10px;
-        background: {PANEL}; border: 1px solid {LIJN}; box-shadow: none;
-    }}
-    [data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {{
-        background: {BRAND_SOFT}; border-color: transparent;
-    }}
-    [data-testid="stChatMessageAvatarUser"],
-    [data-testid="stChatMessageAvatarAssistant"] {{ display: none; }}
 
     /* ---- tabellen ---- */
     [data-testid="stDataFrame"], [data-testid="stDataEditor"] {{
@@ -286,29 +232,26 @@ def sectie(titel: str, eerste: bool = False) -> None:
     st.markdown(f"<div class='{klasse}'>{titel}</div>", unsafe_allow_html=True)
 
 
-def toon_sidebar() -> str:
-    """Logo en navigatie in de zijbalk; geeft de gekozen weergave terug."""
-    huidig = st.session_state.get("weergave", NAVIGATIE[0][0])
+def toon_sidebar() -> None:
+    """Toon het Repair Care-logo en de naam van de tool."""
     with st.sidebar:
         logo = logo_data_uri()
         if logo:
             st.markdown(f"<div class='rc-logo'><img src='{logo}' alt='Repair Care'></div>",
                         unsafe_allow_html=True)
-        for sleutel, label, icoon in NAVIGATIE:
-            actief = sleutel == huidig
-            if st.button(label, key=f"nav_{sleutel}", icon=icoon,
-                         type="primary" if actief else "secondary", use_container_width=True):
-                if not actief:
-                    st.session_state.weergave = sleutel
-                    st.rerun()
-    return huidig
+        st.caption(t("Dealerbestanden invullen"))
 
 
 def check_wachtwoord() -> bool:
     """Inlogkaart zoals het welkomstscherm van de Quote-tool. True = toegang."""
     verwacht = get_secret("APP_PASSWORD")
-    if not verwacht:
-        return True  # geen wachtwoord ingesteld -> open (bv. lokaal)
+    online = any(os.environ.get(naam, "").strip().lower() == "true"
+                 for naam in ("RENDER", "REQUIRE_APP_PASSWORD"))
+    if not isinstance(verwacht, str) or not verwacht.strip():
+        if not online and verwacht in (None, ""):
+            return True  # Zonder wachtwoord alleen lokaal openstellen.
+        st.error(t("De online tool is nog niet beveiligd. Stel APP_PASSWORD in voordat je hem gebruikt."))
+        return False
     if st.session_state.get("toegang"):
         return True
 
@@ -319,165 +262,71 @@ def check_wachtwoord() -> bool:
         st.markdown(
             "<div class='rc-login'>"
             + (f"<img src='{logo}' alt='Repair Care'>" if logo else "")
-            + "<div class='merk'>PRODUCTINFO</div>"
-            "<h2>Welkom</h2><p>Log in om de productinfo-tools te gebruiken.</p></div>",
+            + f"<div class='merk'>{t('DEALERBESTANDEN')}</div>"
+            f"<h2>{t('Welkom')}</h2><p>{t('Log in om dealerbestanden in te vullen.')}</p></div>",
             unsafe_allow_html=True,
         )
         with st.form("inlogformulier"):
             invoer = st.text_input(
-                "Wachtwoord", type="password",
-                label_visibility="collapsed", placeholder="Wachtwoord",
+                t("Wachtwoord"), type="password", key="wachtwoord_invoer",
+                label_visibility="collapsed", placeholder=t("Wachtwoord"),
             )
-            ingelogd = st.form_submit_button("Inloggen", use_container_width=True)
+            ingelogd = st.form_submit_button(t("Inloggen"), use_container_width=True)
         if ingelogd:
-            if invoer == verwacht:
+            if hmac.compare_digest(invoer.encode("utf-8"), verwacht.encode("utf-8")):
                 st.session_state.toegang = True
                 st.rerun()
             else:
-                st.error("Onjuist wachtwoord.")
+                st.error(t("Onjuist wachtwoord."))
     st.stop()
 
 
-def laad_kennisbank() -> list[dict]:
-    if not KENNISBANK_FILE.exists():
-        return []
-    return json.loads(KENNISBANK_FILE.read_text(encoding="utf-8"))
-
-
-def bouw_kennisbank_tekst(documenten: list[dict]) -> str:
-    """Zet alle documenten om naar één tekstblok voor de systeem-prompt."""
-    delen = []
-    for doc in documenten:
-        component = f" - component {doc['component']}" if doc.get("component") else ""
-        kop = f"BESTAND: {doc.get('bestand', '?')} | CATEGORIE: {doc.get('categorie', '?')}"
-        specs = "\n".join(
-            f"  - {s['veld']}: {s['waarde']}" for s in doc.get("specs", [])
-        )
-        delen.append(
-            f"--- {kop} ---\n"
-            f"Product: {doc.get('product', '?')}{component}\n\n"
-            f"{doc.get('samenvatting', '')}\n"
-            + (f"\nKerngegevens:\n{specs}\n" if specs else "")
-        )
-    return "\n\n".join(delen)
-
-
-def beantwoord(vraag: str) -> None:
-    """Voeg de vraag toe, toon hem, en stream het antwoord van Claude."""
-    st.session_state.messages.append({"role": "user", "content": vraag})
-    with st.chat_message("user"):
-        st.markdown(vraag)
-
-    systeem = [
-        {
-            "type": "text",
-            "text": SYSTEEM_INSTRUCTIE + st.session_state.kennisbank_tekst,
-            # Kennisbank is stabiel -> cachen scheelt kosten bij volgende vragen.
-            "cache_control": {"type": "ephemeral"},
-        }
-    ]
-
-    with st.chat_message("assistant"):
-        plek = st.empty()
-        antwoord = ""
-        try:
-            with st.session_state.client.messages.stream(
-                model=MODEL,
-                max_tokens=4000,
-                system=systeem,
-                messages=st.session_state.messages,
-            ) as stream:
-                for tekst in stream.text_stream:
-                    antwoord += tekst
-                    plek.markdown(antwoord)
-        except anthropic.APIError as e:
-            antwoord = f"Er ging iets mis met de API: {e}"
-            plek.markdown(antwoord)
-
-    st.session_state.messages.append({"role": "assistant", "content": antwoord})
-
-
 def main() -> None:
+    if "taal" not in st.session_state:
+        voorkeur = os.environ.get("APP_LANGUAGE", "nl").lower()
+        st.session_state.taal = voorkeur if voorkeur in {"nl", "de"} else "nl"
     st.set_page_config(
-        page_title="Repair Care Productinfo",
+        page_title="Repair Care | " + t("Dealerbestanden invullen"),
         page_icon="🔧",
         layout="wide",
         initial_sidebar_state="expanded",
     )
     pas_huisstijl_toe()
+    st.radio("Taal / Sprache", ["nl", "de"], key="taal", horizontal=True,
+             format_func=lambda code: {"nl": "Nederlands", "de": "Deutsch"}[code],
+             on_change=behoud_keuzes_bij_taalwissel)
 
     if not check_wachtwoord():
         return
 
-    api_key = get_secret("ANTHROPIC_API_KEY")
-    if not api_key:
-        st.error("Geen ANTHROPIC_API_KEY gevonden. Stel deze in als secret "
-                 "(cloud) of als omgevingsvariabele (lokaal).")
-        st.stop()
-
-    documenten = laad_kennisbank()
-    if not documenten:
-        st.warning("Geen kennisbank gevonden. Draai eerst:  python3 ingest.py")
-        st.stop()
-
-    if "client" not in st.session_state:
-        st.session_state.client = anthropic.Anthropic(api_key=api_key)
-
-    weergave = toon_sidebar()
-    if weergave == "dealer":
-        toon_dealer_excel()
-    else:
-        toon_chat(documenten)
-
-
-def toon_chat(documenten: list[dict]) -> None:
-    if "kennisbank_tekst" not in st.session_state:
-        st.session_state.kennisbank_tekst = bouw_kennisbank_tekst(documenten)
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    gekozen_voorbeeld = None
-    with st.container(key="kaart_chat"):
-        links, rechts = st.columns([4, 1])
-        with links:
-            kaarttitel("Productinfo", "Stel je vraag over de product- en veiligheidsbladen.")
-        # Knop om het gesprek te wissen (rechtsboven, alleen tijdens een gesprek).
-        if st.session_state.messages and rechts.button("Wissen", use_container_width=True):
-            st.session_state.messages = []
-            st.rerun()
-
-        # Welkomstscherm met voorbeeldvragen zolang er nog niets gevraagd is.
-        if not st.session_state.messages:
-            sectie("Probeer bijvoorbeeld", eerste=True)
-            kolommen = st.columns(2)
-            for i, v in enumerate(VOORBEELDVRAGEN):
-                if kolommen_klik(kolommen=kolommen, index=i, vraag=v):
-                    gekozen_voorbeeld = v
-
-        # Eerdere berichten tonen.
-        for msg in st.session_state.messages:
-            with st.chat_message(msg["role"]):
-                st.markdown(msg["content"])
-
-    getypt = st.chat_input("Stel je vraag over een product...")
-    vraag = getypt or gekozen_voorbeeld
-    if vraag:
-        beantwoord(vraag)
-        st.rerun()
+    toon_sidebar()
+    toon_dealer_excel()
 
 
 def toon_dealer_excel() -> None:
     with st.container(key="kaart_dealer"):
-        kaarttitel("Dealer-Excel", "Upload een invulbestand van een dealer. De tool herkent de kolommen, "
-                   "jij controleert de mapping, daarna worden de lege cellen ingevuld.")
-        sectie("Bestand", eerste=True)
+        kaarttitel(t("Dealerbestanden invullen"), t("Upload je dealerbestand. Bekende gegevens worden automatisch "
+                   "aangevuld. Download daarna het resultaat."))
+        sectie(t("Bestand"), eerste=True)
         try:
             artikeldata = Artikeldata.laad()
         except FileNotFoundError:
-            st.error("artikeldata.json ontbreekt. Draai eerst:  python3 ingest_artikeldata.py")
+            st.error(t("artikeldata.json ontbreekt. Draai eerst:  python3 ingest_artikeldata.py"))
             return
 
-        bestand = st.file_uploader("Dealerbestand", type=["xlsx", "csv"], label_visibility="collapsed")
+        prijsinfo = getattr(artikeldata, "prijslijst_info", {})
+        bronmeldingen = getattr(artikeldata, "bron_meldingen", [])
+        if not prijsinfo and bronmeldingen:
+            st.warning(t("Brongegevens konden niet volledig worden geladen. Neem contact op met de beheerder."))
+        bronconflicten = [code for code, artikel in getattr(artikeldata, "artikelen", {}).items()
+                         if artikel.get("bron_conflicten")]
+        if bronconflicten:
+            st.warning(t("Bronconflict bij artikel {artikelen}. De EAN-codes verschillen tussen de bronnen. "
+                         "Deze artikelen worden niet aangevuld.", artikelen=", ".join(bronconflicten)))
+
+        # Een gewijzigd uploadlabel wist bij Streamlit ook met dezelfde sleutel het bestand.
+        bestand = st.file_uploader("Dealerbestand / Händlerdatei", type=["xlsx", "csv"],
+                                   label_visibility="collapsed", key="dealer_upload")
         if bestand is None:
             st.session_state.pop("dealer", None)
             return
@@ -487,111 +336,319 @@ def toon_dealer_excel() -> None:
         try:
             wb = laad_werkboek(inhoud, bestand.name)
         except ValueError as e:
-            st.error(str(e))
+            st.error(melding(str(e)))
             return
-        tabblad = None
-        if len(wb.sheetnames) > 1:
-            tabblad = st.selectbox("Tabblad", wb.sheetnames, index=wb.sheetnames.index(kies_tabblad(wb, None).title))
-        ws = kies_tabblad(wb, tabblad)
+        # Het resultaat staat boven de instellingen, maar gebruikt wel hun actuele waarden.
+        eenhedengebied = st.container()
+        resultaatgebied = st.container()
+        with st.expander(t("Geavanceerd"), expanded=False):
+            st.caption(t("Alleen nodig als je de indeling of kolomkoppelingen wilt aanpassen. "
+                       "Wijzigingen worden direct verwerkt; het originele bestand blijft ongewijzigd."))
+            tabblad = None
+            if len(wb.sheetnames) > 1:
+                tabblad = st.selectbox(
+                    t("Tabblad"), wb.sheetnames, index=wb.sheetnames.index(kies_tabblad(wb, None).title),
+                    key=f"tabblad_{sleutel}",
+                )
+            ws = kies_tabblad(wb, tabblad)
+            staat = st.session_state.get("dealer")
+            if not staat or staat.get("werkwijze") != "direct_eenheden" or staat["sleutel"] != (sleutel, ws.title):
+                staat = {"sleutel": (sleutel, ws.title), "werkwijze": "direct_eenheden", "versie": 0,
+                         "mapping": bepaal_mapping(None, ws, artikeldata), "mapping_versie": "prijslijst_v1"}
+                st.session_state.dealer = staat
+            elif staat.get("mapping_versie") != "prijslijst_v1":
+                # Vul nieuw herkenbare bronkolommen aan; behoud bestaande handmatige keuzes.
+                bestaand = staat["mapping"]
+                nieuw = bepaal_mapping(None, ws, artikeldata)
+                editor_sleutel = f"mapping_{sleutel}_{ws.title}_{bestaand.kopregel_index}_{staat['versie']}"
+                bewerkt = st.session_state.get(editor_sleutel, {}).get("edited_rows", {})
+                nieuwe_kolommen = {k.kolom: k for k in nieuw.kolommen}
+                labels = {f"{v['label']}  [{v['id']}]": v["id"]
+                          for v in catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)}
+                if bestaand.kopregel_index == nieuw.kopregel_index:
+                    for index, kolom in enumerate(bestaand.kolommen):
+                        handmatig = bewerkt.get(index, bewerkt.get(str(index), {}))
+                        voorstel = nieuwe_kolommen.get(kolom.kolom)
+                        if handmatig:
+                            # Nieuwe tabeldata reset de editor; neem de bestaande bewerkingen eerst over.
+                            if handmatig.get("Doelveld") in labels:
+                                kolom.doelveld = labels[handmatig["Doelveld"]]
+                            if "Eenheid" in handmatig:
+                                kolom.eenheid = handmatig["Eenheid"] or None
+                        elif (kolom.doelveld == "geen" and voorstel is not None
+                                and voorstel.doelveld in {"collo_netto_gewicht", "collo_bruto_gewicht",
+                                                         "adviesprijs", "adviesprijs_eenheid", "ve_aantal",
+                                                         "prijslijst_omschrijving"}):
+                            bestaand.kolommen[index] = voorstel
+                staat["mapping_versie"] = "prijslijst_v1"
+            api_key = get_secret("ANTHROPIC_API_KEY")
+            if st.button(t("AI-hulp bij kolommen"), disabled=not api_key,
+                         help=t("Optioneel. Maakt nieuwe koppelingen en vervangt je huidige keuzes. Kan enkele minuten duren.")):
+                status = st.empty()
+                try:
+                    with st.spinner(t("AI-voorstel maken…"), show_time=True):
+                        client = anthropic.AsyncAnthropic(api_key=api_key)
+                        voorstel = bepaal_mapping(client, ws, artikeldata, lambda tekst: status.caption(melding(tekst)),
+                                                 ai_fouten_doorgeven=True)
+                    # Onzekere AI-voorstellen zijn geen toestemming om productdata in te vullen.
+                    for k in voorstel.kolommen:
+                        if k.zekerheid != "hoog":
+                            k.doelveld, k.eenheid = "geen", None
+                    if not voorstel.sleutels() or controleer_eenheden(voorstel):
+                        raise ValueError("Het AI-voorstel heeft geen bruikbare sleutel of een ongeldige eenheid.")
+                    staat["mapping"] = voorstel
+                    staat["versie"] += 1
+                    staat.pop("ai_fout", None)
+                except (asyncio.TimeoutError, anthropic.APIError, httpx.TransportError, ValueError, KeyError):
+                    staat["ai_fout"] = "AI-hulp gaf geen bruikbaar antwoord binnen de beschikbare tijd. " \
+                                       "Je bestaande koppelingen en resultaat zijn behouden."
+                finally:
+                    status.empty()
+            if not api_key:
+                st.caption(t("Automatisch invullen werkt zonder AI. Voor optionele AI-hulp is een API-sleutel nodig."))
+            else:
+                st.caption(t("AI-hulp wacht maximaal {minuten} minuten; de gewone invulstap gebruikt geen AI.",
+                             minuten=MAPPING_TIMEOUT_SECONDS // 60))
+            if staat.get("ai_fout"):
+                st.warning(t(staat["ai_fout"]))
+            mapping = Mapping.uit_dict(staat["mapping"].naar_dict())
+            versie = staat["versie"]
+            if mapping.opmerkingen:
+                st.caption(melding(mapping.opmerkingen))
+            kopregel = st.number_input(
+                t("Rij met kolomkoppen"), min_value=1, max_value=max(1, ws.max_row),
+                value=mapping.kopregel_index + 1, step=1, key=f"kopregel_{sleutel}_{ws.title}_{versie}",
+            ) - 1
+            if kopregel != mapping.kopregel_index or not mapping.kolommen:
+                mapping = lege_mapping(kopregel, list(koppen(ws, kopregel).keys()))
+            beginrij = mapping.data_start_index
+            if beginrij is None:
+                beginrij = bepaal_data_start(ws, kopregel)
+            data_start_index = st.number_input(
+                t("Eerste artikelrij"), min_value=kopregel + 2, max_value=max(kopregel + 2, ws.max_row + 1),
+                value=beginrij + 1, step=1, key=f"beginrij_{sleutel}_{ws.title}_{kopregel}_{versie}",
+            ) - 1
+            mapping.data_start_index = data_start_index
+            mapping = toon_kolomkoppelingen(ws, mapping, artikeldata, sleutel, versie)
+            staat["actieve_mapping"] = mapping.naar_dict()
+            overschrijven = st.checkbox(t("Ook gevulde cellen overschrijven"), value=False,
+                                        key=f"overschrijven_{sleutel}_{ws.title}")
 
-        staat = st.session_state.get("dealer")
-        if not staat or staat["sleutel"] != (sleutel, ws.title):
-            with st.spinner("Kolommen herkennen…"):
-                mapping = bepaal_mapping(st.session_state.client, ws, artikeldata)
-            staat = {"sleutel": (sleutel, ws.title), "mapping": mapping}
-            st.session_state.dealer = staat
-        mapping: Mapping = staat["mapping"]
-        if mapping.opmerkingen:
-            st.info(mapping.opmerkingen)
-        if "kopregel_handmatig" not in staat:
-            staat["kopregel_handmatig"] = not mapping.kolommen
-        if staat["kopregel_handmatig"]:
-            # Geen kopregel herkend: gebruiker wijst de rij aan; keuze blijft over reruns bewaard.
-            rijen = lees_rijen(ws, 10)
-            opties = [f"rij {i + 1}: " + " | ".join(str(c) for c in r if c is not None)[:80]
-                      for i, r in enumerate(rijen)]
-            gekozen = st.selectbox("Kopregel niet herkend — kies de rij met de kolomkoppen",
-                                   list(range(len(opties))), format_func=lambda i: opties[i],
-                                   key=f"kopregel_{sleutel}_{ws.title}")
-            mapping = lege_mapping(gekozen, list(koppen(ws, gekozen).keys()))
+        with eenhedengebied:
+            mapping = toon_eenheidskeuze(ws, mapping, bestand.name, sleutel)
 
-        catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
-        labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
-        ids_per_label = {v: k for k, v in labels.items()}
-        voorbeeld = {}
-        kolomindex = koppen(ws, mapping.kopregel_index)
-        for rij in ws.iter_rows(min_row=mapping.kopregel_index + 2, max_row=mapping.kopregel_index + 4, values_only=True):
-            for naam, i in kolomindex.items():
-                if naam not in voorbeeld and i < len(rij) and rij[i] is not None:
-                    voorbeeld[naam] = str(rij[i])
+        broninhoud = json.dumps([artikeldata.artikelen, artikeldata.vaste, artikeldata.ruwe_kolommen],
+                               ensure_ascii=False, sort_keys=True)
+        bronsleutel = hashlib.sha256(broninhoud.encode("utf-8")).hexdigest()
+        # Vernieuw downloads bij bronwijzigingen en na het verstrijken van een prijslijst.
+        uitvoersleutel = json.dumps([bestand.name, sleutel, ws.title, mapping.naar_dict(), overschrijven, bronsleutel,
+                                    "componentmaten_v1", "doosgewichten_v1", "prijslijst_v1", date.today().isoformat()],
+                                   ensure_ascii=False, sort_keys=True)
+        if staat.get("uitvoersleutel") != uitvoersleutel:
+            # Nooit een oude download tonen bij gewijzigde of ongeldige instellingen.
+            staat.update(uitvoersleutel=uitvoersleutel, uit=None, rapport=None, fout=None)
+            meldingen = controleer_eenheden(mapping)
+            if meldingen:
+                staat["fout"] = " ".join(meldingen)
+            else:
+                try:
+                    staat["uit"], staat["rapport"] = verwerk(
+                        inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven,
+                        behoud_sjabloon=True,
+                    )
+                except ValueError as e:
+                    staat["fout"] = str(e)
+                except Exception:
+                    staat["fout"] = "Het bestand kon niet worden verwerkt. Je originele bestand is ongewijzigd."
 
-        sectie("Mapping")
-        st.markdown("<p class='rc-tekst'>Pas aan waar nodig, dan <b>Invullen</b>.</p>", unsafe_allow_html=True)
-        tabel = pd.DataFrame([{
-            "Kolom": k.kolom,
-            "Voorbeeld": voorbeeld.get(k.kolom, ""),
-            "Doelveld": labels.get(k.doelveld, labels["geen"]),
-            "Eenheid": k.eenheid or "",
-            "Zekerheid": k.zekerheid,
-            "Toelichting": k.toelichting,
-        } for k in mapping.kolommen])
-        bewerkt = st.data_editor(
-            tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}_{mapping.kopregel_index}",
-            disabled=["Kolom", "Voorbeeld", "Zekerheid", "Toelichting"],
-            column_config={
-                "Doelveld": st.column_config.SelectboxColumn(options=list(labels.values()), required=True),
-                "Eenheid": st.column_config.SelectboxColumn(options=[o or "" for o in EENHEID_OPTIES]),
-            },
-        )
-        mapping = Mapping(mapping.kopregel_index, [
-            KolomMapping(r["Kolom"], ids_per_label[r["Doelveld"]], r["Eenheid"] or None, r["Zekerheid"], r["Toelichting"])
-            for _, r in bewerkt.iterrows()
-        ], mapping.opmerkingen)
-
-        try:
-            res = match_rijen(ws, mapping, artikeldata)
-        except ValueError as e:
-            st.warning(str(e))
-            return
-        sectie("Resultaat")
-        gevonden = [r for r in res if r.match]
-        niet = [f"rij {r.rij}: {r.sleutel or '(leeg)'}" for r in res if not r.match]
-        via: dict[str, int] = {}
-        for r in gevonden:
-            via[r.match.via] = via.get(r.match.via, 0) + 1
-        delen = ", ".join(f"{n} op {sleuteltype}" for sleuteltype, n in via.items())
-        st.markdown("<p class='rc-tekst'>"
-                    f"<b>{len(gevonden)} van {len(res)} artikelen gevonden.</b>"
-                    + (f" ({delen})" if delen else "")
-                    + (f" Niet gevonden: {', '.join(niet[:10])}{'…' if len(niet) > 10 else ''}" if niet else "")
-                    + "</p>", unsafe_allow_html=True)
-        if res and not gevonden:
-            st.warning("Geen enkel artikel gevonden. Controleer de sleutelkolom (artikelnummer of EAN).")
-
-        meldingen = controleer_eenheden(mapping)
-        for melding in meldingen:
-            st.warning(melding)
-
-        overschrijven = st.checkbox("Ook gevulde cellen overschrijven", value=False)
-        if st.button("Invullen", type="primary", disabled=bool(meldingen)):
-            try:
-                uit, rapport = verwerk(inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven)
-            except Exception as e:                      # ook openpyxl-fouten bij opslaan
-                st.error(f"Invullen mislukt: {e}")
+        with resultaatgebied:
+            sectie(t("Resultaat"))
+            st.caption(t("Tabblad: {tabblad}. Bestaande waarden blijven staan tenzij je bij Geavanceerd anders kiest.",
+                         tabblad=ws.title))
+            if staat["fout"]:
+                st.warning(melding(staat["fout"]) + t(" Controleer zo nodig de instellingen bij Geavanceerd."))
                 return
+            rapport = staat["rapport"]
             s = rapport.samenvatting()
-            st.success(f"Ingevuld: {s['ingevuld']} cellen. Gaten (geel): {s['gaten']}. "
-                       f"Zie tabblad 'Controle' in het bestand.")
-            naam = bestand.name.rsplit(".", 1)[0] + "_ingevuld.xlsx"
-            st.download_button("Download ingevuld bestand", data=uit, file_name=naam,
-                               mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            if s["ingevuld"]:
+                st.success(t("{aantal} cellen aangevuld. {gevonden} van {totaal} artikelen gevonden.",
+                             aantal=s["ingevuld"], gevonden=s["gevonden"], totaal=s["totaal"]))
+                aantallen = Counter(v.kolom for r in rapport.rijen for v in r.velden if v.status == "ingevuld")
+                st.caption(t("Aangevuld: ") + ", ".join(f"{naam}: {n}" for naam, n in list(aantallen.items())[:6])
+                           + (t(". Meer details staan in het controleoverzicht.") if len(aantallen) > 6 else "."))
+            else:
+                st.info(t("0 cellen aangevuld. Er zijn geen lege velden die we met zekerheid konden invullen."))
+            niet_gevonden = [r.sleutel for r in rapport.rijen if not r.match and not r.toelichting]
+            if niet_gevonden:
+                st.warning(t("Niet gevonden in de productbron: ") + escape(", ".join(niet_gevonden[:5]))
+                           + (t(" en nog {aantal}.", aantal=len(niet_gevonden) - 5) if len(niet_gevonden) > 5 else ".")
+                           + t(" Deze artikelen zijn niet aangevuld; de overige artikelen zijn wel verwerkt."))
+            conflicten = [r for r in rapport.rijen if r.toelichting]
+            if conflicten:
+                st.warning(t("{aantal} artikelrijen hebben tegenstrijdige artikelgegevens of bronconflicten. "
+                             "Deze rijen zijn niet aangevuld. Het controleoverzicht geeft uitleg.", aantal=len(conflicten)))
+            if s["gaten"]:
+                st.caption(t("{aantal} velden leeg gelaten omdat de brongegevens ontbreken.", aantal=s["gaten"]))
+            if s["onzeker"]:
+                st.caption(t("Onzekere gegevens zijn niet ingevuld. Het controleoverzicht vermeldt waarom."))
+            if s["eenheid_nodig"]:
+                st.warning(t("{aantal} cellen wachten op een eenheidskeuze hierboven. "
+                             "De overige beschikbare gegevens zijn wel verwerkt.", aantal=s["eenheid_nodig"]))
+            naam = bestand.name.rsplit(".", 1)[0] + ("_ingevuld.xlsx" if s["ingevuld"] else "_controle.xlsx")
+            st.download_button(
+                t("Download ingevuld bestand" if s["ingevuld"] else "Download bestand met controleoverzicht"),
+                data=staat["uit"], file_name=naam,
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                type="primary", on_click="ignore",
+            )
+            st.caption(t("Alleen beschikbare gegevens zijn gebruikt. Het controleoverzicht in Excel vermeldt de bronnen."))
+            overgeslagen = [k.kolom for k in mapping.kolommen if k.doelveld == "geen"]
+            if overgeslagen:
+                with st.expander(t("{aantal} kolommen niet automatisch ingevuld", aantal=len(overgeslagen)), expanded=False):
+                    st.write(t("Deze kolommen zijn onbekend of niet eenduidig. Bestaande inhoud is behouden. "
+                               "Je kunt ze desgewenst koppelen bij Geavanceerd."))
+                    for naam in overgeslagen:
+                        st.text(naam)
 
 
-def kolommen_klik(kolommen, index: int, vraag: str) -> bool:
-    """Render een voorbeeldvraag-knop in de juiste kolom; True bij klik."""
-    kol = kolommen[index % 2]
-    return kol.button(vraag, key=f"voorbeeld_{index}", type="secondary",
-                      use_container_width=True)
+def toon_eenheidskeuze(ws, mapping: Mapping, bestandsnaam: str, bestandssleutel: str) -> Mapping:
+    """Vraag alleen ontbrekende eenheden; expliciete kolomeenheden hebben voorrang."""
+    ontbrekend = ontbrekende_eenheden(mapping)
+    if not ontbrekend:
+        return mapping
+    profiel_id = dealer_profielen.profielsleutel(ws, mapping.kopregel_index, bestandsnaam)
+    try:
+        profiel = dealer_profielen.laad_profiel(profiel_id) or {}
+    except (ValueError, OSError):
+        st.warning(t("De bewaarde eenheden konden niet worden gelezen. Kies ze hieronder opnieuw; "
+                     "er wordt niets aangenomen."))
+        profiel = {}
+    maat_nodig = any(veld(k.doelveld).eenheid == "mm" for k in ontbrekend)
+    gewicht_nodig = any(veld(k.doelveld).eenheid == "g" for k in ontbrekend)
+    maat = profiel.get("maat_eenheid")
+    gewicht = profiel.get("gewicht_eenheid")
+    mist_keuze = (maat_nodig and maat is None) or (gewicht_nodig and gewicht is None)
+    profielversie = hashlib.sha256(json.dumps(profiel, sort_keys=True).encode()).hexdigest()[:12]
+    widgetsleutel = f"{bestandssleutel}_{profiel_id}_{profielversie}"
+    labels = {None: "Kies eenheid", "mm": "Millimeters (mm)", "cm": "Centimeters (cm)",
+              "m": "Meters (m)", "g": "Gram (g)", "kg": "Kilogram (kg)"}
+    weergavelabels = {code: t(label) for code, label in labels.items()}
+    with st.expander(t("Eenheden kiezen" if mist_keuze else "Eenheden wijzigen"), expanded=mist_keuze):
+        st.caption(t("De kolommen zijn herkend, maar noemen geen eenheid. Kies die hier één keer. "
+                     "Een eenheid die al in een kolom staat of handmatig is ingesteld, blijft gelden."))
+        kolommen = st.columns(2 if maat_nodig and gewicht_nodig else 1)
+        if maat_nodig:
+            with kolommen[0]:
+                opties = [None, "mm", "cm", "m"]
+                maat = st.selectbox(t("Maten"), opties, index=opties.index(maat), format_func=weergavelabels.get,
+                                    key=f"maat_{widgetsleutel}")
+        if gewicht_nodig:
+            with kolommen[-1]:
+                opties = [None, "g", "kg"]
+                gewicht = st.selectbox(t("Gewichten"), opties, index=opties.index(gewicht), format_func=weergavelabels.get,
+                                       key=f"gewicht_{widgetsleutel}")
+        klaar = not ((maat_nodig and maat is None) or (gewicht_nodig and gewicht is None))
+        if st.button(t("Onthouden voor dit dealerformaat"), disabled=not klaar, key=f"onthoud_{widgetsleutel}"):
+            try:
+                dealer_profielen.bewaar_profiel(profiel_id, maat, gewicht)
+                profiel = {"maat_eenheid": maat, "gewicht_eenheid": gewicht}
+                st.caption(t("Eenheden onthouden voor volgende bestanden in dit dealerformaat."))
+            except (ValueError, OSError):
+                st.warning(t("Deze keuze wordt nu gebruikt, maar kon niet worden opgeslagen. "
+                             "Bij een volgend bestand moet je de eenheden opnieuw kiezen."))
+    actief = []
+    if maat_nodig and maat:
+        actief.append(t("maten in {eenheid}", eenheid=t(labels[maat])))
+    if gewicht_nodig and gewicht:
+        actief.append(t("gewichten in {eenheid}", eenheid=t(labels[gewicht])))
+    bewaard = bool(profiel) and maat == profiel.get("maat_eenheid") and gewicht == profiel.get("gewicht_eenheid")
+    if actief:
+        st.caption(t("Voor kolommen zonder eenheid: ") + ", ".join(actief)
+                   + t(". Onthouden voor dit dealerformaat." if bewaard else ". Alleen voor dit bestand gekozen."))
+    return pas_eenheden_toe(mapping, maat_eenheid=maat, gewicht_eenheid=gewicht,
+                           bron="Bewaarde keuze voor dit dealerformaat" if bewaard else "Keuze gebruiker in de tool")
+
+
+def toon_kolomkoppelingen(ws, mapping: Mapping, artikeldata: Artikeldata, sleutel: str, versie: int) -> Mapping:
+    """Bewerk optionele koppelingen met een stabiele tabel en volledige tekstweergave."""
+
+    catalogus = catalogus_voor_prompt(artikeldata.ruwe_kolommen, artikeldata.vaste_sleutels)
+    labels = {c["id"]: f"{c['label']}  [{c['id']}]" for c in catalogus}
+    labelaantallen = Counter(c["label"] for c in catalogus)
+    leesbare_labels = {}
+    for c in catalogus:
+        # Bronkoppen en interne waarden blijven ongewijzigd; alleen de bediening wordt vertaald.
+        label = c["label"] if c["id"].startswith("ruw:") else t(c["label"])
+        if labelaantallen[c["label"]] > 1:
+            label += t(" (bronbestand)" if c["id"].startswith("ruw:") else " (productgegeven)")
+        leesbare_labels[labels[c["id"]]] = label
+    ids_per_label = {v: k for k, v in labels.items()}
+    voorbeeld = {}
+    kolomindex = koppen(ws, mapping.kopregel_index)
+    for rij in ws.iter_rows(min_row=mapping.data_start_index + 1,
+                            max_row=mapping.data_start_index + 3, values_only=True):
+        for naam, i in kolomindex.items():
+            if naam not in voorbeeld and i < len(rij) and rij[i] is not None:
+                voorbeeld[naam] = str(rij[i])
+
+    sectie(t("Kolommen koppelen"))
+    st.markdown("<p class='rc-tekst'>" + t("Pas het productgegeven en de eenheid aan waar nodig. "
+                "De volledige voorbeeldtekst en toelichting kun je onder de tabel bekijken.") + "</p>",
+                unsafe_allow_html=True)
+    tabel = pd.DataFrame([{
+        "Kolom": k.kolom,
+        "Doelveld": labels.get(k.doelveld, labels["geen"]),
+        "Eenheid": k.eenheid or "",
+        "Zekerheid": k.zekerheid,
+        "Toelichting": k.toelichting,
+    } for k in mapping.kolommen])
+    if tabel.empty:
+        st.info(t("Kies hierboven de rij met de kolomkoppen om kolommen te koppelen."))
+        return mapping
+    tabelhoogte = (len(tabel) + 1) * 42 + 3
+    bewerkt = st.data_editor(
+        tabel, hide_index=True, use_container_width=True, key=f"mapping_{sleutel}_{ws.title}_{mapping.kopregel_index}_{versie}",
+        height=min(633, tabelhoogte), row_height=42,
+        column_order=["Kolom", "Doelveld", "Eenheid", "Zekerheid"],
+        disabled=["Kolom", "Zekerheid", "Toelichting"],
+        column_config={
+            "Kolom": st.column_config.TextColumn(t("Kolom in dealerbestand"), width="large"),
+            "Doelveld": st.column_config.SelectboxColumn(
+                t("Productgegeven"), options=list(labels.values()), required=True, width="large",
+                format_func=lambda waarde: leesbare_labels.get(waarde, waarde),
+            ),
+            "Eenheid": st.column_config.SelectboxColumn(
+                t("Eenheid"), options=[o or "" for o in EENHEID_OPTIES], width="small",
+                format_func=lambda waarde: waarde or t("Bestandskeuze / niet nodig"),
+            ),
+            "Zekerheid": st.column_config.SelectboxColumn(t("Zekerheid"), width="small",
+                                                         options=["hoog", "middel", "laag"], format_func=t),
+            "Toelichting": None,
+        },
+    )
+    st.caption(t("{aantal} koppelingen. Kies hieronder een kolom om alle tekst te lezen.", aantal=len(tabel)))
+    mapping = Mapping(mapping.kopregel_index, [
+        KolomMapping(r["Kolom"], ids_per_label[r["Doelveld"]], r["Eenheid"] or None, r["Zekerheid"], r["Toelichting"])
+        for _, r in bewerkt.iterrows()
+    ], mapping.opmerkingen, mapping.data_start_index)
+
+    detailkolom = st.selectbox(
+        t("Volledige tekst van een kolom"), [k.kolom for k in mapping.kolommen],
+        format_func=lambda naam: " ".join(naam.split()),
+        key=f"kolomdetails_{sleutel}_{ws.title}_{mapping.kopregel_index}_{versie}",
+    )
+    if detailkolom is not None:
+        detail = next(k for k in mapping.kolommen if k.kolom == detailkolom)
+        for titel, tekst in [
+            ("Kolom in dealerbestand", detail.kolom),
+            ("Productgegeven", leesbare_labels[labels[detail.doelveld]]),
+            ("Voorbeeld uit het dealerbestand", voorbeeld.get(detail.kolom) or t("Geen voorbeeld ingevuld.")),
+            ("Toelichting", melding(detail.toelichting) if detail.toelichting else t("Geen aanvullende toelichting.")),
+        ]:
+            st.caption(t(titel))
+            st.markdown(f"<div class='rc-detailtekst'>{escape(tekst)}</div>", unsafe_allow_html=True)
+
+    return mapping
 
 
 if __name__ == "__main__":

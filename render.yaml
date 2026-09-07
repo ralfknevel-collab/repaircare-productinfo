@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: repaircare-productinfo
+    runtime: python
+    region: frankfurt
+    plan: free
+    autoDeployTrigger: "off"
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: python -m streamlit run app.py --server.address 0.0.0.0 --server.port $PORT --server.headless true --browser.gatherUsageStats false
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: APP_LANGUAGE
+        value: de
+      - key: REQUIRE_APP_PASSWORD
+        value: "true"
+      - key: APP_PASSWORD
+        generateValue: true

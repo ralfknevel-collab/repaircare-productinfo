@@ -75,3 +75,19 @@ def test_catalogus_voor_prompt_bevat_ruw_en_vast():
 def test_eenheid_opties():
     assert None in EENHEID_OPTIES
     assert {"g", "kg", "mm", "cm", "m", "stuks"} <= set(o for o in EENHEID_OPTIES if o)
+
+
+def test_prijsvelden_bewaren_commerciele_betekenis():
+    assert veld("adviesprijs").eenheid == "EUR"
+    assert "exclusief btw" in veld("adviesprijs").uitleg.lower()
+    assert "inkoopprijs" in veld("adviesprijs").uitleg.lower()
+    assert veld("ve_aantal").eenheid is None
+    assert "minimale afname" in veld("ve_aantal").uitleg.lower()
+    assert veld("adviesprijs_eenheid").eenheid is None
+    assert veld("prijslijst_omschrijving").eenheid is None
+    assert "EUR" in EENHEID_OPTIES
+    assert converteer(22.99, "EUR", "EUR") == 22.99
+    with pytest.raises(ValueError):
+        converteer(22.99, "EUR", "kg")
+    with pytest.raises(ValueError):
+        converteer(22.99, "EUR", "USD")
