@@ -1,4 +1,6 @@
-anthropic>=0.109.0
-streamlit>=1.40.0
-openpyxl>=3.1.0
-# pandas komt mee met streamlit
+# Direct gebruikte pakketten: dezelfde geteste versies lokaal en op Render.
+anthropic==0.109.1
+httpx==0.28.1
+pandas==2.3.3
+streamlit==1.50.0
+openpyxl==3.1.5
