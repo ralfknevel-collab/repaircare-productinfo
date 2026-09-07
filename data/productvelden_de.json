@@ -1,0 +1,134 @@
+{
+  "taal": "de",
+  "versie": 1,
+  "velden": {
+    "kleur": {
+      "A oranje transparant, B transparant, gemengd transparante massa": "A orange transparent, B transparent, gemischt transparente Masse",
+      "Beige": "Beige",
+      "Blauw/Paars": "Blau/Violett",
+      "Groen": "Grün",
+      "Rood, pasta": "Rot, Paste",
+      "Standaard wit en reebruin": "Standardmäßig weiß und rehbraun",
+      "Wit": "Weiß",
+      "rood": "rot",
+      "rood, bruin": "rot, braun",
+      "wit": "weiß"
+    },
+    "verpakking": {
+      "200 ml": "200 ml",
+      "A 300 ml + B 100 ml = 400 ml, doos 20 sets": "A 300 ml + B 100 ml = 400 ml, Karton mit 20 Sets",
+      "A 300ml + B 100ml = 400ml; doos met 20 sets": "A 300ml + B 100ml = 400ml; Karton mit 20 Sets",
+      "A: 200 ml, B: 100 ml, totaal 300 ml; doos met 10 sets": "A: 200 ml, B: 100 ml, insgesamt 300 ml; Karton mit 10 Sets",
+      "Component A 200 ml + Component B 100 ml = 300 ml": "Komponente A 200 ml + Komponente B 100 ml = 300 ml",
+      "Koker A + B: 150 ml": "Kartusche A + B: 150 ml",
+      "Koker A 200 ml + B 100 ml = 300 ml totaal": "Kartusche A 200 ml + B 100 ml = 300 ml insgesamt",
+      "Koker A 300 ml + Koker B 100 ml = 400 ml": "Kartusche A 300 ml + Kartusche B 100 ml = 400 ml",
+      "Koker A 300 ml + Koker B 100 ml, totaal 400 ml": "Kartusche A 300 ml + Kartusche B 100 ml, insgesamt 400 ml",
+      "Koker A+B 150 ml; doos 10 kokers": "Kartusche A+B 150 ml; Karton mit 10 Kartuschen",
+      "Koker van 290 ml (doos met 24 kokers)": "Kartusche mit 290 ml (Karton mit 24 Kartuschen)"
+    },
+    "verpakkingseenheid": {
+      "Kartonnen doos met 10 kokers": "Karton mit 10 Kartuschen",
+      "Kartonnen doos met 10 sets": "Karton mit 10 Sets",
+      "Kartonnen doos met 20 sets": "Karton mit 20 Sets"
+    },
+    "verwerkingstijd": {
+      "1 uur": "1 Stunde",
+      "1,5 - 2 uur": "1,5 - 2 Stunden",
+      "15 - 20 minuten": "15 - 20 Minuten",
+      "15 minuten": "15 Minuten",
+      "15-20 min": "15-20 min",
+      "15-20 minuten": "15-20 Minuten",
+      "20 - 25 minuten": "20 - 25 Minuten",
+      "20 minuten (20-25 min)": "20 Minuten (20-25 min)",
+      "20-25 minuten": "20-25 Minuten",
+      "20–25 minuten": "20–25 Minuten",
+      "7 - 10 minuten": "7 - 10 Minuten",
+      "7 tot 10 minuten": "7 bis 10 Minuten"
+    },
+    "uitharding": {
+      "3 mm in 24 uur": "3 mm in 24 Stunden",
+      "6 uur": "6 Stunden",
+      "Schuur- en overschilderbaar na ca. 1 uur": "Schleifbar und überstreichbar nach ca. 1 Stunde",
+      "Schuur- en overschilderbaar na ca. 15 uur": "Schleifbar und überstreichbar nach ca. 15 Stunden",
+      "Schuurbaar en overschilderbaar na ca. 30 minuten": "Schleifbar und überstreichbar nach ca. 30 Minuten",
+      "Schuurbaar en overschilderbaar na ca. 4 uur": "Schleifbar und überstreichbar nach ca. 4 Stunden",
+      "Schuurbaar/overschilderbaar na ca. 1 uur": "Schleifbar/überstreichbar nach ca. 1 Stunde",
+      "Schuurbaar/overschilderbaar na ca. 30 min": "Schleifbar/überstreichbar nach ca. 30 min",
+      "ca. 12 uur": "ca. 12 Stunden",
+      "ca. 16 uur": "ca. 16 Stunden",
+      "na ca. 4 uur (bij 20°C)": "nach ca. 4 Stunden (bei 20°C)"
+    },
+    "verbruik": {
+      "Ca. 250 g/m²": "Ca. 250 g/m²",
+      "ca. 1100 g/m²": "ca. 1100 g/m²",
+      "ca. 250 g/m²": "ca. 250 g/m²"
+    },
+    "opslagtemperatuur": {
+      "5 - 40°C": "5 - 40°C",
+      "5-40°C": "5-40°C",
+      "5-40ºC": "5-40ºC",
+      "5°C tot 25°C": "5°C bis 25°C",
+      "5°C tot 30°C": "5°C bis 30°C",
+      "5°C tot 30°C, R.V. max. 65%": "5°C bis 30°C, rel. Luftfeuchtigkeit max. 65%",
+      "5°C tot 40°C": "5°C bis 40°C",
+      "Tussen 5 - 50ºC": "Zwischen 5 - 50ºC"
+    },
+    "verwerkingstemperatuur": {
+      "0 - 20°C": "0 - 20°C",
+      "0 - 25°C": "0 - 25°C",
+      "0 - 25ºC": "0 - 25ºC",
+      "0 - 30°C": "0 - 30°C",
+      "0 - 30°C (verpakking: 0-35°C)": "0 - 30°C (Verpackung: 0-35°C)",
+      "0 - 35ºC": "0 - 35ºC",
+      "0-25ºC": "0-25ºC",
+      "0-35°C": "0-35°C",
+      "0–35°C": "0–35°C",
+      "10 - 35°C": "10 - 35°C",
+      "5 - 40°C": "5 - 40°C"
+    },
+    "mengverhouding": {
+      "A 2 volumedelen : B 1 volumedeel": "A 2 Volumenteile : B 1 Volumenteil",
+      "A 2,5 volumedelen : B 1 volumedeel": "A 2,5 Volumenteile : B 1 Volumenteil",
+      "A 3 : B 1 (volumedelen)": "A 3 : B 1 (Volumenteile)",
+      "A 3 : B 1 volumedelen": "A 3 : B 1 Volumenteile",
+      "A 3 volumedelen : B 1 volumedeel": "A 3 Volumenteile : B 1 Volumenteil",
+      "A : B = 2 : 1 (volumedelen)": "A : B = 2 : 1 (Volumenteile)",
+      "A: 2 volumedelen / B: 1 volumedeel": "A: 2 Volumenteile / B: 1 Volumenteil",
+      "A: 2 volumedelen, B: 1 volumedeel": "A: 2 Volumenteile, B: 1 Volumenteil",
+      "A:B = 2:1 (volumedelen)": "A:B = 2:1 (Volumenteile)"
+    },
+    "dichtheid": {
+      "1,05 kg/dm³ (gemengd)": "1,05 kg/dm³ (gemischt)",
+      "1,10 kg/dm³": "1,10 kg/dm³",
+      "1,11 kg/dm³": "1,11 kg/dm³",
+      "1,20 kg/dm³": "1,20 kg/dm³",
+      "1,40 kg/dm³": "1,40 kg/dm³",
+      "1,55 kg/dm³": "1,55 kg/dm³",
+      "1.08 kg/dm³": "1.08 kg/dm³",
+      "1.10 kg/dm³": "1.10 kg/dm³",
+      "1.17 kg/dm³": "1.17 kg/dm³",
+      "1.40 kg/dm³": "1.40 kg/dm³"
+    },
+    "laagdikte": {
+      "0 - 20 mm (minimaal 5 mm bij systeemopbouw)": "0 - 20 mm (mindestens 5 mm beim Systemaufbau)",
+      "0 - 6 mm": "0 - 6 mm",
+      "5 - 15 mm (10-25°C: 5-10 mm)": "5 - 15 mm (10-25°C: 5-10 mm)",
+      "5 - 50 mm": "5 - 50 mm",
+      "5-15mm (0-10ºC: 5-15mm; 10-25ºC: 5-10mm)": "5-15mm (0-10ºC: 5-15mm; 10-25ºC: 5-10mm)",
+      "5-50 mm": "5-50 mm",
+      "5-50mm (0-10°C); 5-20mm (10-35°C)": "5-50mm (0-10°C); 5-20mm (10-35°C)",
+      "5-50mm bij 0-10°C; 5-25mm bij 10-20°C": "5-50mm bei 0-10°C; 5-25mm bei 10-20°C",
+      "5–50 mm (bij 0–10°C); 5–20 mm (bij 10–35°C)": "5–50 mm (bei 0–10°C); 5–20 mm (bei 10–35°C)"
+    },
+    "vaste_stofgehalte": {
+      "100 vol. % (=100 gew. %)": "100 vol. % (=100 gew. %)",
+      "100 vol.% (= 100 gew.%)": "100 vol.% (= 100 gew.%)",
+      "100 vol.% (=100 gew.%)": "100 vol.% (=100 gew.%)"
+    },
+    "biobased_gehalte": {
+      "35% (OK Biobased, TüV Austria, 1 ster)": "35% (OK Biobased, TüV Austria, 1 Stern)",
+      "40% biobased grondstoffen": "40% biobasierte Rohstoffe"
+    }
+  }
+}

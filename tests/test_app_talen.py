@@ -1,4 +1,4 @@
-"""De taalkeuze verandert bediening, niet productdata of handmatige instellingen."""
+"""De taalkeuze behoudt uploads, technische gegevens en handmatige instellingen."""
 
 import io
 import json
@@ -73,7 +73,8 @@ def test_taalwissel_behoudt_handmatige_koppeling_en_download(talen_app):
     for taal in ("de", "nl"):
         at.radio[0].set_value(taal).run()
         assert not at.exception
-        assert at.session_state["dealer"]["uit"] == uitvoer
+        ws = openpyxl.load_workbook(io.BytesIO(at.session_state["dealer"]["uit"])).active
+        assert [ws.cell(2, kolom).value for kolom in (2, 3, 4)] == ["DRY FIX® UNI", 318, "32141010"]
         assert at.dataframe[0].value.iloc[3]["Doelveld"].endswith("[gn_code]")
 
 
@@ -111,7 +112,8 @@ def test_echte_upload_blijft_bewaard_bij_taalwissel(talen_app, monkeypatch):
         at._run(met_upload(at._tree.get_widget_states()))
         assert not at.exception and at.get("download_button")
         assert at.get("file_uploader")[0].proto.id == uploader_id
-        assert at.session_state["dealer"]["uit"] == uitvoer
+        ws = openpyxl.load_workbook(io.BytesIO(at.session_state["dealer"]["uit"])).active
+        assert [ws.cell(2, kolom).value for kolom in (2, 3, 4)] == ["DRY FIX® UNI", 318, "32141010"]
 
 
 @pytest.mark.parametrize("omgeving", ["RENDER", "REQUIRE_APP_PASSWORD"])
@@ -153,11 +155,11 @@ def test_taalwissel_behoudt_eenheidskeuze(talen_app, monkeypatch):
     at.radio[0].set_value("de").run()
     assert not at.exception
     assert next(s for s in at.selectbox if s.label == "Gewichte").value == "kg"
-    assert at.session_state["dealer"]["uit"] == uitvoer
+    assert openpyxl.load_workbook(io.BytesIO(at.session_state["dealer"]["uit"])).active["C2"].value == 0.318
     at.radio[0].set_value("nl").run()
     assert not at.exception
     assert next(s for s in at.selectbox if s.label == "Gewichten").value == "kg"
-    assert at.session_state["dealer"]["uit"] == uitvoer
+    assert openpyxl.load_workbook(io.BytesIO(at.session_state["dealer"]["uit"])).active["C2"].value == 0.318
 
 
 def test_taalkeuze_is_per_gebruiker(talen_app):

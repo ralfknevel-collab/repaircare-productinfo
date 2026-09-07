@@ -35,6 +35,7 @@ from dealer_invuller import (
     ontbrekende_eenheden, pas_eenheden_toe, verwerk,
 )
 from mapping import MAPPING_TIMEOUT_SECONDS, KolomMapping, Mapping, lege_mapping
+from productteksten import Productteksten
 from veldcatalogus import EENHEID_OPTIES, catalogus_voor_prompt, veld
 from vertalingen import vertaal, vertaal_melding
 
@@ -55,7 +56,7 @@ WARN = "#C0392B"
 
 
 def t(tekst: str, **waarden) -> str:
-    """Vertaal alleen bedieningstekst; productgegevens blijven in hun brontaal."""
+    """Vertaal bedieningstekst; productteksten hebben hun eigen brongebonden catalogus."""
     return vertaal(tekst, st.session_state.get("taal", "nl"), **waarden)
 
 
@@ -437,12 +438,22 @@ def toon_dealer_excel() -> None:
         with eenhedengebied:
             mapping = toon_eenheidskeuze(ws, mapping, bestand.name, sleutel)
 
+        producttaal = st.session_state.get("taal", "nl")
+        productteksten = Productteksten({})
+        if producttaal == "de":
+            try:
+                productteksten = Productteksten.laad()
+            except (OSError, ValueError):
+                st.warning(t("De Duitse productvertalingen konden niet worden geladen. "
+                             "Beschrijvende tekstvelden worden niet aangevuld; overige gegevens wel. "
+                             "Neem contact op met de beheerder."))
         broninhoud = json.dumps([artikeldata.artikelen, artikeldata.vaste, artikeldata.ruwe_kolommen],
                                ensure_ascii=False, sort_keys=True)
         bronsleutel = hashlib.sha256(broninhoud.encode("utf-8")).hexdigest()
         # Vernieuw downloads bij bronwijzigingen en na het verstrijken van een prijslijst.
         uitvoersleutel = json.dumps([bestand.name, sleutel, ws.title, mapping.naar_dict(), overschrijven, bronsleutel,
-                                    "componentmaten_v1", "doosgewichten_v1", "prijslijst_v1", date.today().isoformat()],
+                                    "componentmaten_v1", "doosgewichten_v1", "prijslijst_v1", date.today().isoformat(),
+                                    producttaal, productteksten.vingerafdruk],
                                    ensure_ascii=False, sort_keys=True)
         if staat.get("uitvoersleutel") != uitvoersleutel:
             # Nooit een oude download tonen bij gewijzigde of ongeldige instellingen.
@@ -454,7 +465,7 @@ def toon_dealer_excel() -> None:
                 try:
                     staat["uit"], staat["rapport"] = verwerk(
                         inhoud, bestand.name, mapping, artikeldata, ws.title, overschrijven,
-                        behoud_sjabloon=True,
+                        behoud_sjabloon=True, producttaal=producttaal, productteksten=productteksten,
                     )
                 except ValueError as e:
                     staat["fout"] = str(e)
@@ -465,6 +476,8 @@ def toon_dealer_excel() -> None:
             sectie(t("Resultaat"))
             st.caption(t("Tabblad: {tabblad}. Bestaande waarden blijven staan tenzij je bij Geavanceerd anders kiest.",
                          tabblad=ws.title))
+            st.caption(t("Taal voor nieuwe productteksten: {taalnaam}.",
+                         taalnaam={"nl": "Nederlands", "de": "Deutsch"}[producttaal]))
             if staat["fout"]:
                 st.warning(melding(staat["fout"]) + t(" Controleer zo nodig de instellingen bij Geavanceerd."))
                 return
@@ -494,6 +507,10 @@ def toon_dealer_excel() -> None:
             if s["eenheid_nodig"]:
                 st.warning(t("{aantal} cellen wachten op een eenheidskeuze hierboven. "
                              "De overige beschikbare gegevens zijn wel verwerkt.", aantal=s["eenheid_nodig"]))
+            if s["vertaling_ontbreekt"]:
+                st.warning(t("Voor {aantal} cellen ontbreekt een geldige Duitse vertaling van de huidige brontekst. "
+                             "Deze teksten zijn niet ingevuld. De overige gegevens zijn wel verwerkt; "
+                             "het controleoverzicht geeft uitleg.", aantal=s["vertaling_ontbreekt"]))
             naam = bestand.name.rsplit(".", 1)[0] + ("_ingevuld.xlsx" if s["ingevuld"] else "_controle.xlsx")
             st.download_button(
                 t("Download ingevuld bestand" if s["ingevuld"] else "Download bestand met controleoverzicht"),

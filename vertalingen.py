@@ -58,6 +58,11 @@ DE: dict[str, str] = {
     "Het bestand kon niet worden verwerkt. Je originele bestand is ongewijzigd.":
         "Die Datei konnte nicht verarbeitet werden. Die Originaldatei ist unverändert.",
     "Resultaat": "Ergebnis",
+    "Taal voor nieuwe productteksten: {taalnaam}.": "Sprache für neue Produkttexte: {taalnaam}.",
+    "De Duitse productvertalingen konden niet worden geladen. Beschrijvende tekstvelden worden niet aangevuld; overige gegevens wel. Neem contact op met de beheerder.":
+        "Die deutschen Produktübersetzungen konnten nicht geladen werden. Beschreibende Textfelder werden nicht ergänzt; die übrigen Daten schon. Bitte den Administrator kontaktieren.",
+    "Voor {aantal} cellen ontbreekt een geldige Duitse vertaling van de huidige brontekst. Deze teksten zijn niet ingevuld. De overige gegevens zijn wel verwerkt; het controleoverzicht geeft uitleg.":
+        "Für {aantal} Zellen fehlt eine gültige deutsche Übersetzung des aktuellen Quelltextes. Diese Texte wurden nicht eingetragen. Die übrigen Daten wurden verarbeitet; Einzelheiten stehen in der Prüfübersicht.",
     "Tabblad: {tabblad}. Bestaande waarden blijven staan tenzij je bij Geavanceerd anders kiest.":
         "Tabellenblatt: {tabblad}. Vorhandene Werte bleiben erhalten, sofern unter Erweitert nichts anderes ausgewählt wird.",
     " Controleer zo nodig de instellingen bij Geavanceerd.":

@@ -34,6 +34,7 @@ from openpyxl.utils import get_column_letter
 
 from artikeldata import Artikeldata, ComponentMaten, Match, Waarde, doosinhoud, normaliseer_code, normaliseer_ean
 from mapping import KolomMapping, Mapping, lege_mapping, vraag_mapping
+from productteksten import Productteksten, VertalingOntbreekt
 from veldcatalogus import catalogus_voor_prompt, converteer, veld
 
 SLEUTELTYPE_ARG = {
@@ -369,7 +370,7 @@ class VeldResultaat:
     eenheid: str | None
     bron: str
     regel: str | None
-    status: str  # ingevuld | leeg | bestaand | controleer | overgeslagen | onzeker | eenheid_nodig
+    status: str  # ingevuld | leeg | bestaand | controleer | overgeslagen | onzeker | eenheid_nodig | vertaling_ontbreekt
 
 
 @dataclass
@@ -389,7 +390,7 @@ class Rapport:
     def samenvatting(self) -> dict:
         via: dict[str, int] = {}
         gaten_per_kolom: dict[str, int] = {}
-        ingevuld = gaten = onzeker = eenheid_nodig = 0
+        ingevuld = gaten = onzeker = eenheid_nodig = vertaling_ontbreekt = 0
         for r in self.rijen:
             if r.match:
                 via[r.match.via] = via.get(r.match.via, 0) + 1
@@ -400,6 +401,8 @@ class Rapport:
                     onzeker += 1
                 elif v.status == "eenheid_nodig":
                     eenheid_nodig += 1
+                elif v.status == "vertaling_ontbreekt":
+                    vertaling_ontbreekt += 1
                 elif v.status == "leeg":
                     gaten += 1
                     gaten_per_kolom[v.kolom] = gaten_per_kolom.get(v.kolom, 0) + 1
@@ -408,6 +411,7 @@ class Rapport:
             "totaal": len(self.rijen), "gevonden": gevonden, "niet_gevonden": len(self.rijen) - gevonden,
             "via": via, "ingevuld": ingevuld, "gaten": gaten, "gaten_per_kolom": gaten_per_kolom,
             "onzeker": onzeker, "eenheid_nodig": eenheid_nodig,
+            "vertaling_ontbreekt": vertaling_ontbreekt,
         }
 
 
@@ -557,7 +561,13 @@ def _is_zwart(cel, zwarte_themas: set[int]) -> bool:
 
 
 def vul_in(ws, mapping: Mapping, artikeldata: Artikeldata, overschrijven: bool = False,
-           behoud_sjabloon: bool = False) -> Rapport:
+           behoud_sjabloon: bool = False, producttaal: str = "nl",
+           productteksten: Productteksten | None = None) -> Rapport:
+    if producttaal not in {"nl", "de"}:
+        raise ValueError("Onbekende producttaal; kies nl of de.")
+    teksten = productteksten if productteksten is not None else (
+        Productteksten.laad() if producttaal == "de" else Productteksten({})
+    )
     rijen = match_rijen(ws, mapping, artikeldata)
     kolomindex = koppen(ws, mapping.kopregel_index)
     overgeslagen = overgeslagen_kolommen(mapping, kolomindex)
@@ -621,6 +631,14 @@ def vul_in(ws, mapping: Mapping, artikeldata: Artikeldata, overschrijven: bool =
                 bron = "artikel niet gevonden" if r.match is None else "geen waarde in productdata"
                 r.velden.append(VeldResultaat(k.kolom, k.doelveld, None, k.eenheid, bron, None, "leeg"))
                 continue
+            # Alleen nieuwe, bruikbare invulwaarden vertalen; dealerinhoud en bron blijven intact.
+            try:
+                w = teksten.vertaal(w, k.doelveld, producttaal)
+            except VertalingOntbreekt as e:
+                regel = " ".join(deel for deel in (w.regel, str(e)) if deel)
+                r.velden.append(VeldResultaat(k.kolom, k.doelveld, cel.value, eenheid,
+                                              w.bron, regel, "vertaling_ontbreekt"))
+                continue
             cel.value = maak_waarde(w, eenheid)
             if isinstance(w.waarde, ComponentMaten):
                 _verbreed_maatkolom(ws, cel)
@@ -644,7 +662,7 @@ def schrijf_controle(wb, rapport: Rapport, behoud_sjabloon: bool = False) -> Non
     ct.append(["Samenvatting"])
     ct.append([f"Rijen: {s['totaal']}", f"Gevonden: {s['gevonden']}", f"Niet gevonden: {s['niet_gevonden']}",
                f"Ingevuld: {s['ingevuld']}", f"Gaten: {s['gaten']}", f"Onzeker: {s['onzeker']}",
-               f"Eenheid nodig: {s['eenheid_nodig']}"])
+               f"Eenheid nodig: {s['eenheid_nodig']}", f"Vertaling ontbreekt: {s['vertaling_ontbreekt']}"])
     ct.append(["Gevonden via: " + ", ".join(f"{k} {v}" for k, v in s["via"].items())])
     ct.append(["Gaten per kolom: " + ", ".join(f"{k} {v}" for k, v in s["gaten_per_kolom"].items())])
     if rapport.overgeslagen_kolommen:
@@ -692,10 +710,11 @@ def controleer_eenheden(mapping: Mapping) -> list[str]:
 
 def verwerk(inhoud: bytes, bestandsnaam: str, mapping: Mapping, artikeldata: Artikeldata,
             tabblad: str | None = None, overschrijven: bool = False,
-            behoud_sjabloon: bool = False) -> tuple[bytes, Rapport]:
+            behoud_sjabloon: bool = False, producttaal: str = "nl",
+            productteksten: Productteksten | None = None) -> tuple[bytes, Rapport]:
     wb = laad_werkboek(inhoud, bestandsnaam)
     ws = kies_tabblad(wb, tabblad)
-    rapport = vul_in(ws, mapping, artikeldata, overschrijven, behoud_sjabloon)
+    rapport = vul_in(ws, mapping, artikeldata, overschrijven, behoud_sjabloon, producttaal, productteksten)
     schrijf_controle(wb, rapport, behoud_sjabloon)
     return werkboek_naar_bytes(wb), rapport
 

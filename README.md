@@ -200,8 +200,29 @@ streamlit run app.py
 ```
 
 De app opent in je browser op het uploadscherm voor dealerbestanden.
-Met **Nederlands / Deutsch** bovenaan kies je de bedieningstaal. De productteksten,
-kolomkoppen en het controleoverzicht in Excel blijven in hun oorspronkelijke taal.
+Met **Nederlands / Deutsch** bovenaan kies je de bedieningstaal én de taal voor
+nieuw in te vullen productteksten. Bij Nederlands blijven de bronteksten behouden.
+Bij Deutsch worden productomschrijvingen en beschikbare beschrijvende velden,
+zoals kleur, verpakking en verwerkingstijd, in het Duits ingevuld. Merknamen,
+codes, getallen en technische eenheden blijven intact. De omschrijving uit de
+prijslijst blijft de leidende brontekst; de vertaling is daarvan afgeleid.
+
+De Duitse teksten staan vooraf in `data/productomschrijvingen_de.json` en
+`data/productvelden_de.json`. Vertalen tijdens het invullen doet geen
+netwerkverzoeken en heeft geen API-key nodig. Een vertaling geldt alleen voor de
+exacte brontekst en het juiste veld. Nieuwe of gewijzigde bronteksten zonder
+passende vertaling worden niet ingevuld: de app meldt dit en het controleoverzicht
+geeft per cel uitleg. Andere beschikbare gegevens worden wel ingevuld.
+Bij een bronupdate moeten de bijbehorende vertalingen dus worden aangevuld.
+
+Bestaande dealerteksten blijven standaard behouden, ook als hun taal afwijkt.
+De optie voor overschrijven geldt ook voor vertaalde teksten, maar overschrijft
+geen formules of een bestaande waarde waarvoor een geldige vertaling ontbreekt.
+Taalwisselen behoudt het uploadbestand en de gemaakte instellingen en vernieuwt
+de download. Originele kolomkoppen en de bedieningsteksten in het controleoverzicht
+worden niet vertaald. Veiligheids- en vervoersteksten (CLP/ADR), vrije bronkolommen
+en vaste bedrijfsgegevens vallen buiten de vertaling. De Duitse catalogus is
+geen vervanging voor officiële Duitstalige veiligheidsdocumenten.
 De broncontrole met informatieve meldingen staat niet meer op het hoofdscherm;
 conflicten die invullen tegenhouden blijven wel zichtbaar.
 De chatfunctie is verwijderd. De product- en veiligheidsbladen blijven als
@@ -222,11 +243,12 @@ de repository alleen na een bewuste keuze privé, of publiceer uitsluitend
 goedgekeurde brondata. Zonder de aanvullende CSV werkt de app met de
 productdatasheet en meldt hij dat de brongegevens niet volledig geladen zijn.
 
-Neem de actuele versies mee van `app.py`, `vertalingen.py`, `artikeldata.py`,
+Neem de actuele versies mee van `app.py`, `vertalingen.py`, `productteksten.py`, `artikeldata.py`,
 `prijslijst.py`, `documentdata.py`, `dealer_invuller.py`, `dealer_profielen.py`,
 `mapping.py`, `veldcatalogus.py`, `artikeldata.json`, `vaste_waarden.json`,
 `requirements.txt`, `render.yaml`, `.python-version`, `assets/` en
-`.streamlit/config.toml`. Voeg de prijs-CSV alleen toe na bovenstaande keuze.
+`.streamlit/config.toml`, `data/productomschrijvingen_de.json` en
+`data/productvelden_de.json`. Voeg de prijs-CSV alleen toe na bovenstaande keuze.
 De PDF's, originele Excel-bestanden en `kennisbank.json` zijn hiervoor niet nodig.
 Zet geen wachtwoorden, API-keys, `.env` of `.streamlit/secrets.toml` in Git.
 Commit en push pas na akkoord over de bestanden en hun publicatie.
@@ -288,9 +310,10 @@ GitHub via https://share.streamlit.io).
    ```
    > De `.gitignore` zorgt dat `.env`, `secrets.toml`, de venv en de PDF-mappen
    > NIET meegaan. Voor de online app zijn nodig: `app.py`, `requirements.txt`,
-   > `artikeldata.py`, `prijslijst.py`,
+   > `artikeldata.py`, `prijslijst.py`, `vertalingen.py`, `productteksten.py`,
    > `dealer_invuller.py`, `dealer_profielen.py`, `mapping.py`, `veldcatalogus.py`, `artikeldata.json`
-   > en `vaste_waarden.json`. Voeg `data/verkoopadviesprijzen_2026.csv` alleen toe
+   > en `vaste_waarden.json`, plus `data/productomschrijvingen_de.json` en
+   > `data/productvelden_de.json`. Voeg `data/verkoopadviesprijzen_2026.csv` alleen toe
    > als de aanvullende prijslijst ook voor die omgeving bestemd is.
    > Neem ook `assets/` en `.streamlit/config.toml`
    > mee voor het logo en de huisstijl.
